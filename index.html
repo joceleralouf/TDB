@@ -1880,19 +1880,24 @@ function buildSketch(){
   sketchBuilt=true;
   const nav=document.getElementById("sketch-nav");
   const zone=document.getElementById("sketch-panels");
+  nav.innerHTML=""; zone.innerHTML="";
+  const pairs=[];
   SKETCHES.forEach((s,i)=>{
     const b=document.createElement("button");
     b.className="chip"+(i===0?" active":"");
     b.textContent=s.t;
-    b.onclick=()=>{
-      document.querySelectorAll("#sketch-nav .chip").forEach(x=>x.classList.toggle("active",x===b));
-      document.querySelectorAll(".sketchpanel").forEach((p,j)=>p.classList.toggle("show",j===i));
-    };
-    nav.appendChild(b);
     const p=document.createElement("div");
     p.className="sketchpanel"+(i===0?" show":"");
     p.innerHTML=s.svg;
+    b.onclick=()=>{
+      pairs.forEach(pair=>{
+        pair.btn.classList.toggle("active", pair.btn===b);
+        pair.panel.classList.toggle("show", pair.btn===b);
+      });
+    };
+    nav.appendChild(b);
     zone.appendChild(p);
+    pairs.push({btn:b, panel:p});
   });
 }
 
