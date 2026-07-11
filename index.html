@@ -246,6 +246,22 @@ h2.viewtitle{
 .sketchpanel.show{display:block;animation:fadein .3s}
 .sketchpanel svg{width:100%;height:auto;display:block}
 
+/* ---------- Dashboard & progression ---------- */
+.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:30px}
+.dash-card{background:rgba(233,226,207,.07);border:1.5px solid rgba(200,129,58,.3);border-radius:12px;padding:14px 16px;text-align:center}
+.dash-num{font-family:'Fraunces',serif;font-weight:900;font-size:1.9rem;color:var(--gold);line-height:1}
+.dash-lab{font-size:.74rem;color:rgba(233,226,207,.72);margin-top:4px;text-transform:uppercase;letter-spacing:.03em}
+.dash-card.accent .dash-num{color:var(--campari)}
+.dash-card.streak .dash-num{color:var(--absinthe)}
+.navbadge{background:var(--campari);color:#fff;border-radius:999px;font-size:.68rem;padding:1px 6px;margin-left:3px;font-weight:700}
+.rev-empty{text-align:center;padding:40px 20px}
+.rev-empty .big-emoji{font-size:3rem;display:block;margin-bottom:12px}
+.rev-src{display:inline-block;font-family:'Caveat',cursive;font-size:1.05rem;color:var(--copper-2);margin-bottom:8px;transform:rotate(-1.5deg)}
+.kbd-hint{font-size:.72rem;color:rgba(233,226,207,.5);text-align:center;margin-top:10px}
+.answers button .kbd{display:inline-block;min-width:18px;text-align:center;font-size:.72rem;color:var(--copper-2);border:1px solid rgba(34,48,43,.25);border-radius:4px;padding:0 4px;margin-right:8px;font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bar-2);color:var(--chalk);border:1.5px solid var(--gold);border-radius:999px;padding:10px 20px;font-size:.85rem;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 /* ---------- Fiches de lecture ---------- */
 .fichepanel{background:var(--paper);color:var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;display:none}
 .fichepanel.show{display:block;animation:fadein .3s}
@@ -315,6 +331,7 @@ h2.viewtitle{
     <button data-view="mind" onclick="showView('mind')">Carte mentale</button>
     <button data-view="sketch" onclick="showView('sketch')">Sketchnotes</button>
     <button data-view="grandtest" onclick="showView('grandtest')" style="background:var(--campari);color:#fff;border-color:var(--campari)">★ Grand test</button>
+    <button data-view="revisions" onclick="showView('revisions')">↻ Mes erreurs</button>
   </nav>
 </header>
 
@@ -327,6 +344,8 @@ h2.viewtitle{
     <h1>Choisis une bouteille,<br>ouvre un module.</h1>
     <p class="lead">Neuf façons de faire rentrer les fiches : cartes à retourner, quiz, jeux de degrés, chronologie, carte mentale et schémas façon sketchnote. Objectif&nbsp;: 80&nbsp;% partout.</p>
   </div>
+
+  <div class="dashboard" id="dashboard"></div>
 
   <div class="shelf" id="shelf"></div>
 
@@ -372,7 +391,7 @@ h2.viewtitle{
   <div class="viewhead">
     <h2 class="viewtitle">QCM — 20 questions</h2>
     <span class="handnote">le questionnaire officiel des fiches, mélangé à chaque partie</span>
-  </div>
+  <p class="kbd-hint" style="text-align:left;margin-top:6px">⌨ Sur ordi : touches <b>1-4</b> pour répondre, <b>Entrée</b> pour continuer.</p></div>
   <div class="toolbar">
     <div class="progressline"><div id="qcm-progress"></div></div>
     <span class="scorepill" id="qcm-score">0 pt</span>
@@ -496,7 +515,7 @@ h2.viewtitle{
     <h2 class="viewtitle">Le Grand test</h2>
     <span class="handnote">tout, tout, tout : partenaires TDB26 + socle des cocktails, mélangés</span>
     <p>Le test qui pioche dans absolument toutes les banques : marques, degrés, chronologie, recettes du socle, verres, familles, variantes. Choisis ta longueur, objectif 80 %.</p>
-  </div>
+  <p class="kbd-hint" style="text-align:left;margin-top:6px">⌨ Sur ordi : touches <b>1-4</b> pour répondre, <b>Entrée</b> pour continuer.</p></div>
   <div id="gt-setup" class="panel" style="text-align:center;padding:34px 24px">
     <p style="margin-bottom:18px;font-size:1.05rem">Combien de questions pour cette session ?</p>
     <div class="toolbar" style="justify-content:center">
@@ -515,8 +534,76 @@ h2.viewtitle{
   </div>
 </section>
 
+<!-- ============ RÉVISIONS (carnet d'erreurs) ============ -->
+<section class="view" id="view-revisions">
+  <div class="viewhead">
+    <h2 class="viewtitle">Mes erreurs à revoir</h2>
+    <span class="handnote">chaque question ratée atterrit ici — rejoue-les jusqu'à les maîtriser</span>
+    <p>Ton carnet personnel : toutes tes erreurs, tous modules confondus, réunies pour être refaites. Une bonne réponse la retire du carnet. C'est ta pile « J+2 / J+7 ».</p>
+  <p class="kbd-hint" style="text-align:left;margin-top:6px">⌨ Sur ordi : touches <b>1-4</b> pour répondre, <b>Entrée</b> pour continuer.</p></div>
+  <div class="toolbar">
+    <div class="progressline"><div id="rev-progress"></div></div>
+    <span class="scorepill" id="rev-score">—</span>
+  </div>
+  <div class="panel" id="rev-panel"></div>
+</section>
+
 </main>
 <script>
+/* =================== PROGRESSION & SAUVEGARDE LOCALE =================== */
+const STORE_KEY="tdb26_progress_v1";
+const DEFAULT_STATS={best:{}, mastered:{}, streak:0, lastDay:null, totalAnswered:0, totalCorrect:0};
+function todayStr(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+function loadStats(){
+  try{const s=JSON.parse(localStorage.getItem(STORE_KEY));return s?Object.assign({},DEFAULT_STATS,s):Object.assign({},DEFAULT_STATS);}
+  catch(e){return Object.assign({},DEFAULT_STATS);}
+}
+function saveStats(){ try{localStorage.setItem(STORE_KEY,JSON.stringify(STATS));}catch(e){} }
+let STATS=loadStats();
+function pingDay(){
+  const t=todayStr();
+  if(STATS.lastDay===t) return;
+  // hier ?
+  const y=new Date();y.setDate(y.getDate()-1);
+  const ystr=y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate();
+  STATS.streak = (STATS.lastDay===ystr) ? STATS.streak+1 : 1;
+  STATS.lastDay=t;
+  saveStats();
+}
+function recordResult(module, score, total){
+  pingDay();
+  STATS.totalAnswered+=total; STATS.totalCorrect+=score;
+  if(!STATS.best[module] || score/total > STATS.best[module].pct){
+    STATS.best[module]={pct:score/total, score, total, when:todayStr()};
+  }
+  saveStats();
+  refreshDashboard();
+}
+/* ---- Carnet d'erreurs (persistant) ---- */
+let MISTAKES=[]; // {q, opts:[{t,ok}], e, src}
+(function initMistakes(){ try{const m=JSON.parse(localStorage.getItem(STORE_KEY+"_mist"));if(Array.isArray(m))MISTAKES=m;}catch(e){} })();
+function saveMistakes(){ try{localStorage.setItem(STORE_KEY+"_mist",JSON.stringify(MISTAKES));}catch(e){} updateMistakeBadge(); }
+function normKey(q){return (q.q||"").replace(/\s+/g,' ').trim().toLowerCase().slice(0,120);}
+function logMistake(src, q){
+  const correct=q.opts.find(o=>o.ok);
+  if(!correct) return;
+  const k=normKey(q);
+  if(MISTAKES.some(m=>normKey(m)===k)) { saveMistakes(); return; }
+  MISTAKES.push({q:q.q, opts:q.opts.map(o=>({t:o.t,ok:!!o.ok})), e:q.e||"", src:src});
+  saveMistakes();
+}
+function clearMistake(q){
+  const k=normKey(q);
+  MISTAKES=MISTAKES.filter(m=>normKey(m)!==k);
+  saveMistakes();
+}
+function updateMistakeBadge(){
+  const nav=document.querySelector('#mainnav button[data-view="revisions"]');
+  if(nav) nav.innerHTML='↻ Mes erreurs'+(MISTAKES.length?' <span class="navbadge">'+MISTAKES.length+'</span>':'');
+  const card=document.getElementById("dash-mistakes");
+  if(card) card.textContent=MISTAKES.length;
+}
+
 /* =================== DONNÉES =================== */
 const MODULES = [
   {id:"fiches", name:"Fiches de révision", desc:"Tout l'essentiel à lire, rangé par thème : marques, femmes, degrés, socle, lexique.", deg:"à lire d'abord", icon:"book"},
@@ -770,7 +857,7 @@ function renderSocleQuiz(){
   document.getElementById("ponts-progress").style.width=(100*st.idx/st.qs.length)+"%";
   document.getElementById("ponts-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.idx>=st.qs.length){
-    const pct=Math.round(100*st.score/st.qs.length);
+    const pct=Math.round(100*st.score/st.qs.length); recordResult("Socle",st.score,st.qs.length);
     panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
       '<p style="margin:10px 0 20px">'+(pct>=80?"Le référentiel est en place — le jury peut envoyer les questions techniques.":"Passe par les fiches éclair, puis retente un tirage.")+'</p>'+
       '<button class="btn btn-copper" onclick="startSocleQuiz()">Nouveau tirage (12 questions)</button></div>';
@@ -779,14 +866,14 @@ function renderSocleQuiz(){
   }
   const q=st.qs[st.idx];
   let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
-  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"><span class="kbd">'+(i+1)+'</span>'+o.t+'</button>';});
   html+='</div><div class="feedback" id="ponts-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="ponts-next" style="display:none">Suivant →</button></div>';
   panel.innerHTML=html;
   panel.querySelectorAll(".answers button").forEach(btn=>{
     btn.onclick=()=>{
       const good=q.opts[+btn.dataset.i].ok;
       panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
-      if(!good) btn.classList.add("wrong"); else st.score++;
+      if(!good){ btn.classList.add("wrong"); logMistake("Socle",q); } else { st.score++; clearMistake(q); }
       const fb=document.getElementById("ponts-fb");
       fb.className="feedback show "+(good?"good":"bad");
       fb.innerHTML='<span class="handnote">'+(good?"dans le mille !":"pas tout à fait…")+'</span> '+q.e;
@@ -896,6 +983,8 @@ function showView(id){
   if(id==="sketch" && !sketchBuilt) buildSketch();
   if(id==="fiches" && !fichesBuilt) buildFiches();
   if(id==="socleplus" && !socleplusBuilt) buildSoclePlus();
+  if(id==="revisions") startRevisions();
+  if(id==="home") refreshDashboard();
 }
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 
@@ -987,7 +1076,7 @@ function renderQuiz(key){
   document.getElementById(key+"-progress").style.width=(100*st.idx/st.qs.length)+"%";
   document.getElementById(key+"-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.idx>=st.qs.length){
-    const pct=Math.round(100*st.score/st.qs.length);
+    const pct=Math.round(100*st.score/st.qs.length); recordResult(key==="qcm"?"QCM":"Quiz",st.score,st.qs.length);
     panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
       '<p style="margin:10px 0 20px">'+(pct>=80?"Objectif 80 % atteint — service impeccable. 🍸":"Pas encore 80 % : note tes erreurs et refais-les à J+2.")+'</p>'+
       '<button class="btn btn-copper" onclick="startQuiz(\''+key+'\','+"QCM"+')">Rejouer (nouveau mélange)</button></div>';
@@ -996,7 +1085,7 @@ function renderQuiz(key){
   }
   const q=st.qs[st.idx];
   let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
-  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"><span class="kbd">'+(i+1)+'</span>'+o.t+'</button>';});
   html+='</div><div class="feedback" id="'+key+'-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="'+key+'-next" style="display:none">Suivant →</button></div>';
   panel.innerHTML=html;
   panel.querySelectorAll(".answers button").forEach(btn=>{
@@ -1006,7 +1095,7 @@ function renderQuiz(key){
         b.disabled=true;
         if(q.opts[+b.dataset.i].ok) b.classList.add("correct");
       });
-      if(!good) btn.classList.add("wrong"); else st.score++;
+      if(!good){ btn.classList.add("wrong"); logMistake(key==="qcm"?"QCM":"Quiz",q); } else { st.score++; clearMistake(q); }
       const fb=document.getElementById(key+"-fb");
       fb.className="feedback show "+(good?"good":"bad");
       fb.innerHTML='<span class="handnote">'+(good?"exact !":"raté…")+'</span> '+q.e;
@@ -1028,7 +1117,7 @@ function renderVF(){
   document.getElementById("vf-progress").style.width=(100*st.idx/st.qs.length)+"%";
   document.getElementById("vf-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.idx>=st.qs.length){
-    const pct=Math.round(100*st.score/st.qs.length);
+    const pct=Math.round(100*st.score/st.qs.length); recordResult("Vrai/Faux",st.score,st.qs.length);
     panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
       '<p style="margin:10px 0 20px">'+(pct>=80?"Les pièges ne te font plus peur.":"Relis les fiches des questions ratées, puis rejoue.")+'</p>'+
       '<button class="btn btn-copper" onclick="startVF()">Rejouer</button></div>';
@@ -1041,7 +1130,8 @@ function renderVF(){
     '<div class="feedback" id="vf-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">affirmation '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="vf-next" style="display:none">Suivant →</button></div>';
   const answer=(v)=>{
     const good=v===q.r;
-    if(good) st.score++;
+    const asMcq={q:"Vrai ou faux ? « "+q.q+" »", opts:[{t:"Vrai",ok:q.r===true},{t:"Faux",ok:q.r===false}], e:"C\u2019était "+(q.r?"VRAI":"FAUX")+". "+q.e};
+    if(good){ st.score++; clearMistake(asMcq); } else { logMistake("Vrai/Faux",asMcq); }
     document.getElementById("vf-true").disabled=true;
     document.getElementById("vf-false").disabled=true;
     const fb=document.getElementById("vf-fb");
@@ -1070,6 +1160,7 @@ function renderDeg(){
   document.getElementById("deg-progress").style.width=(100*st.idx/st.qs.length)+"%";
   document.getElementById("deg-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.idx>=st.qs.length){
+    recordResult("Degrés",st.score,st.qs.length);
     panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
       '<p style="margin:10px 0 20px">'+(st.score>=10?"Tu peux les réciter au jury les yeux fermés.":"Répète le mémo « degrés pièges » à voix haute, puis rejoue.")+'</p>'+
       '<button class="btn btn-copper" onclick="startDeg()">Nouveau tirage (12 produits)</button></div>';
@@ -1085,7 +1176,7 @@ function renderDeg(){
     btn.onclick=()=>{
       const good=q.opts[+btn.dataset.i].ok;
       panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
-      if(!good) btn.classList.add("wrong"); else st.score++;
+      if(!good){ btn.classList.add("wrong"); logMistake("Degrés",q); } else { st.score++; clearMistake(q); }
       const fb=document.getElementById("deg-fb");
       fb.className="feedback show "+(good?"good":"bad");
       fb.innerHTML='<span class="handnote">'+(good?"santé !":"aïe…")+'</span> '+q.e;
@@ -1107,6 +1198,7 @@ function nextChrono(){
   document.getElementById("chrono-progress").style.width=(100*st.round/st.rounds)+"%";
   document.getElementById("chrono-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.round>=st.rounds){
+    recordResult("Chronologie",st.score,st.rounds*4);
     panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+(st.rounds*4)+'</div>'+
       '<p style="margin:10px 0 20px">'+(st.score>=16?"La frise est dans ta tête, de 1749 à 2024.":"Relis la chronologie des fondations, puis rejoue.")+'</p>'+
       '<button class="btn btn-copper" onclick="startChrono()">Rejouer (5 manches)</button></div>';
@@ -1578,52 +1670,101 @@ const SP_MODES=[
  {id:"famille", label:"👨‍👩‍👧 La famille"},
  {id:"garniture", label:"🍒 La garniture"},
 ];
-// familles socle (déductibles du référentiel)
-const SP_FAMILLES={
- "Piña Colada":"Colada","Fizz":"Fizz","Mint Julep":"Julep","Old-Fashioned":"Old-Fashioned",
- "Gin Basil Smash":"Smash","Mai Tai":"Tiki","Sour":"Sour","Daiquiri":"Sour"
+// familles socle : cocktail → {famille, définition}. On teste par la définition, pas par le nom.
+const SP_FAM_DEF={
+ "Colada":"long drink au shaker/blender : eau-de-vie + crème de coco + jus de fruit",
+ "Fizz":"long drink au shaker : eau-de-vie + sucre + citron + eau gazeuse",
+ "Julep":"short drink en timbale : eau-de-vie vieillie + sucre + menthe fraîche",
+ "Old-Fashioned":"short drink direct au verre : eau-de-vie vieillie + sucre + aromatic bitters",
+ "Smash":"short drink au shaker : eau-de-vie + herbe aromatique + sucre + agrume",
+ "Tiki":"long drink : rhum(s) + sucre (ou sirop d'épices) + agrume + plusieurs jus de fruits",
+ "Sour":"short drink au shaker : spiritueux + sucre + agrume (souvent blanc d'œuf)"
 };
-const SP_FAM_POOL=["Colada","Fizz","Julep","Old-Fashioned","Smash","Tiki","Sour"];
+// exemple de référence par famille (celui cité dans le socle)
+const SP_FAM_EX={Colada:"Piña Colada",Fizz:"Gin Fizz",Julep:"Mint Julep","Old-Fashioned":"Rye Whiskey Old-Fashioned",Smash:"Gin Basil Smash",Tiki:"Mai Tai",Sour:"Whiskey Sour"};
+const SP_FAM_POOL=Object.keys(SP_FAM_DEF);
 const SP_VERRES=[...new Set(SOCLE.map(c=>c.verre.replace(/ \(.*\)/,"").replace(" givrée au sel","").replace(" givré au sel","")))];
-function spQuestions(mode,n){
+function spQuestions(mode,n,avoid){
+  avoid=avoid||new Set();
   const qs=[];
   if(mode==="guess"){
-    shuffle(SOCLE).slice(0,n).forEach(c=>{
+    shuffle(SOCLE).forEach(c=>{
       const ings=c.ing.filter(i=>i[0]!=="Sel au céleri").slice(0,3).map(i=>i[1]+" "+i[0].toLowerCase()).join(", ");
       const wrong=shuffle(SOCLE.filter(x=>x.n!==c.n)).slice(0,3).map(x=>x.n);
-      qs.push({q:"Quel cocktail du socle contient : "+ings+" … ?",
+      qs.push({k:"guess:"+c.n, q:"Quel cocktail du socle contient : "+ings+" … ?",
         opts:shuffle([{t:c.n,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
         e:c.n+" — recette : "+c.ing.map(i=>i[1]+" "+i[0].toLowerCase()).join(" · ")+"."});
     });
   }
   if(mode==="verre"){
-    shuffle(SOCLE).slice(0,n).forEach(c=>{
+    shuffle(SOCLE).forEach(c=>{
       const v=c.verre.replace(/ \(.*\)/,"").replace(" givrée au sel","").replace(" givré au sel","");
       const wrong=shuffle(SP_VERRES.filter(x=>x!==v)).slice(0,3);
-      qs.push({q:"Dans quel verre sert-on le "+c.n+" ?",
+      qs.push({k:"verre:"+c.n, q:"Dans quel verre sert-on le "+c.n+" ?",
         opts:shuffle([{t:v,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
         e:c.n+" se sert en verre "+c.verre+"."});
     });
   }
   if(mode==="famille"){
-    const keys=Object.keys(SP_FAMILLES);
-    shuffle(keys).forEach(k=>{
-      const fam=SP_FAMILLES[k];
+    // sens 1 : à partir de la DÉFINITION, retrouver la famille (le nom n'apparaît jamais)
+    shuffle(SP_FAM_POOL).forEach(fam=>{
       const wrong=shuffle(SP_FAM_POOL.filter(x=>x!==fam)).slice(0,3);
-      qs.push({q:"À quelle famille appartient le "+k+" ?",
+      qs.push({k:"famdef:"+fam, q:"De quelle famille s'agit-il ? « "+SP_FAM_DEF[fam]+" »",
         opts:shuffle([{t:fam,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
-        e:k+" appartient à la famille « "+fam+" »."});
+        e:"C'est la famille « "+fam+" ». Exemple : "+SP_FAM_EX[fam]+"."});
+    });
+    // sens 2 : quel cocktail du socle illustre la famille — on retire l'homonyme évident
+    Object.keys(SP_FAM_EX).forEach(fam=>{
+      const members=SOCLE.map(c=>c.n).filter(n=>{
+        const nl=n.toLowerCase(), fl=fam.toLowerCase();
+        return !nl.includes(fl) && !(fam==="Julep"&&nl.includes("julep")) && !(fam==="Colada"&&nl.includes("colada"));
+      });
+      // bonne réponse = membre socle non homonyme ; on prend un cocktail réellement de cette famille
+      const trueByFam={Colada:"Piña Colada",Fizz:"Fizz",Julep:"Mint Julep","Old-Fashioned":"Old-Fashioned",Smash:"Gin Basil Smash",Tiki:"Mai Tai",Sour:"Sour"};
+      // on ne garde ce sens que pour les familles dont le membre n'est PAS homonyme trivial
+      if(["Smash","Tiki","Julep","Colada"].includes(fam)){
+        const good=trueByFam[fam];
+        const wrong=shuffle(SOCLE.map(c=>c.n).filter(nm=>nm!==good && SP_FAM_EX[fam]!==nm)).slice(0,3);
+        qs.push({k:"famex:"+fam, q:"Lequel de ces cocktails appartient à la famille « "+fam+" » ("+SP_FAM_DEF[fam]+") ?",
+          opts:shuffle([{t:good,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+          e:good+" est le représentant de la famille « "+fam+" » dans le socle."});
+      }
+    });
+    // sens 3 : l'ingrédient/élément signature qui définit la famille
+    const FAM_SIGN={
+      Colada:["la crème de coco",["le blanc d'œuf","le vermouth","les aromatic bitters"]],
+      Fizz:["l'eau gazeuse",["la crème de coco","le curaçao","le sirop d'orgeat"]],
+      Julep:["la menthe fraîche",["le blanc d'œuf","le triple sec","la crème de coco"]],
+      "Old-Fashioned":["les aromatic bitters",["le blanc d'œuf","la crème de coco","le curaçao"]],
+      Smash:["une herbe aromatique",["la crème de coco","les aromatic bitters","le velvet falernum"]],
+      Tiki:["plusieurs jus de fruits + rhum(s)",["le blanc d'œuf seul","le vermouth","la gentiane"]],
+      Sour:["souvent du blanc d'œuf (émulsifiant)",["la crème de coco","le curaçao","le vin effervescent"]]
+    };
+    shuffle(Object.keys(FAM_SIGN)).forEach(fam=>{
+      const [good,wrong]=FAM_SIGN[fam];
+      qs.push({k:"famsign:"+fam, q:"Quel élément caractérise la famille « "+fam+" » ?",
+        opts:shuffle([{t:good,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+        e:"La famille « "+fam+" » se reconnaît à : "+good+". "+SP_FAM_DEF[fam]+"."});
     });
   }
   if(mode==="garniture"){
-    shuffle(SOCLE.filter(c=>c.g&&c.g!=="aucune")).slice(0,n).forEach(c=>{
-      const wrong=shuffle(SOCLE.filter(x=>x.n!==c.n&&x.g&&x.g!=="aucune")).slice(0,3).map(x=>x.g);
-      qs.push({q:"Quelle est la garniture du "+c.n+" ?",
+    shuffle(SOCLE.filter(c=>c.g&&c.g!=="aucune")).forEach(c=>{
+      const wrong=shuffle(SOCLE.filter(x=>x.n!==c.n&&x.g&&x.g!=="aucune"&&x.g!==c.g)).slice(0,3).map(x=>x.g);
+      qs.push({k:"garn:"+c.n, q:"Quelle est la garniture du "+c.n+" ?",
         opts:shuffle([{t:c.g,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
         e:c.n+" — garniture : "+c.g+"."});
     });
   }
-  return shuffle(qs).slice(0,n);
+  // écarte celles déjà maîtrisées cette session, puis complète si le stock est épuisé
+  let fresh=qs.filter(q=>!avoid.has(q.k));
+  if(fresh.length<n) fresh=fresh.concat(shuffle(qs.filter(q=>avoid.has(q.k))));
+  return shuffle(fresh).slice(0,n);
+}
+function spPoolSize(mode){
+  const map={guess:SOCLE.length, verre:SOCLE.length,
+    famille:SP_FAM_POOL.length + ["Smash","Tiki","Julep","Colada"].length + 7,
+    garniture:SOCLE.filter(c=>c.g&&c.g!=="aucune").length};
+  return map[mode]||10;
 }
 let spMode="guess";
 function buildSoclePlus(){
@@ -1638,8 +1779,11 @@ function buildSoclePlus(){
   });
   startSP();
 }
+const spMastered={guess:new Set(),verre:new Set(),famille:new Set(),garniture:new Set()};
 function startSP(){
-  quizStates.sp={qs:spQuestions(spMode,10), idx:0, score:0};
+  const avoid=spMastered[spMode];
+  const size=Math.min(10, spPoolSize(spMode)); // ne pas demander plus de questions qu'il n'en existe
+  quizStates.sp={qs:spQuestions(spMode,size,avoid), idx:0, score:0};
   renderSP();
 }
 function renderSP(){
@@ -1648,23 +1792,30 @@ function renderSP(){
   document.getElementById("sp-progress").style.width=(100*st.idx/st.qs.length)+"%";
   document.getElementById("sp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.idx>=st.qs.length){
-    const pct=Math.round(100*st.score/st.qs.length);
+    const pct=Math.round(100*st.score/st.qs.length); recordResult("Socle+",st.score,st.qs.length);
+    const total=spPoolSize(spMode), done=spMastered[spMode].size;
+    const cleared=done>=total;
     panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
-      '<p style="margin:10px 0 20px">'+(pct>=80?"Nickel — change d'exercice ou relance.":"Retourne aux fiches éclair du Socle, puis rejoue.")+'</p>'+
-      '<button class="btn btn-copper" onclick="startSP()">Rejouer</button></div>';
+      '<p style="margin:10px 0 6px">'+(pct>=80?"Nickel — change d'exercice ou relance.":"Retourne aux fiches éclair du Socle, puis rejoue.")+'</p>'+
+      '<p class="handnote" style="color:var(--copper-2);margin-bottom:18px">'+(cleared?"tu as vu tout le stock de cet exercice 🎉":done+" / "+total+" questions maîtrisées dans cet exercice")+'</p>'+
+      '<button class="btn btn-copper" onclick="startSP()">'+(cleared?"Nouvelle série (remise à zéro)":"Continuer (nouvelles questions)")+'</button>'+
+      (cleared?' <button class="btn btn-ghost" onclick="spMastered[spMode].clear();startSP()">Tout remélanger</button>':'')+
+      '</div>';
+    if(cleared) spMastered[spMode].clear();
     document.getElementById("sp-progress").style.width="100%";
     return;
   }
   const q=st.qs[st.idx];
   let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
-  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"><span class="kbd">'+(i+1)+'</span>'+o.t+'</button>';});
   html+='</div><div class="feedback" id="sp-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="sp-next" style="display:none">Suivant →</button></div>';
   panel.innerHTML=html;
   panel.querySelectorAll(".answers button").forEach(btn=>{
     btn.onclick=()=>{
       const good=q.opts[+btn.dataset.i].ok;
       panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
-      if(!good) btn.classList.add("wrong"); else st.score++;
+      if(!good){ btn.classList.add("wrong"); if(q.k) spMastered[spMode].delete(q.k); logMistake("Socle+",q); }
+      else { st.score++; if(q.k) spMastered[spMode].add(q.k); clearMistake(q); }
       const fb=document.getElementById("sp-fb");
       fb.className="feedback show "+(good?"good":"bad");
       fb.innerHTML='<span class="handnote">'+(good?"exact !":"raté…")+'</span> '+q.e;
@@ -1717,7 +1868,7 @@ function renderGrandTest(){
   document.getElementById("gt-progress").style.width=(100*st.idx/st.qs.length)+"%";
   document.getElementById("gt-score").textContent=st.score+" pt"+(st.score>1?"s":"");
   if(st.idx>=st.qs.length){
-    const pct=Math.round(100*st.score/st.qs.length);
+    const pct=Math.round(100*st.score/st.qs.length); recordResult("Grand test",st.score,st.qs.length);
     let verdict;
     if(pct>=90) verdict="Score de champion — tu es prêt(e) pour le concours. 🏆";
     else if(pct>=80) verdict="Objectif 80 % atteint. Solide !";
@@ -1733,14 +1884,14 @@ function renderGrandTest(){
   }
   const q=st.qs[st.idx];
   let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
-  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"><span class="kbd">'+(i+1)+'</span>'+o.t+'</button>';});
   html+='</div><div class="feedback" id="gt-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="gt-next" style="display:none">Suivant →</button></div>';
   panel.innerHTML=html;
   panel.querySelectorAll(".answers button").forEach(btn=>{
     btn.onclick=()=>{
       const good=q.opts[+btn.dataset.i].ok;
       panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
-      if(!good) btn.classList.add("wrong"); else st.score++;
+      if(!good){ btn.classList.add("wrong"); logMistake("Grand test",q); } else { st.score++; clearMistake(q); }
       const fb=document.getElementById("gt-fb");
       fb.className="feedback show "+(good?"good":"bad");
       fb.innerHTML='<span class="handnote">'+(good?"oui !":"non…")+'</span> '+q.e;
@@ -1750,6 +1901,112 @@ function renderGrandTest(){
   });
   document.getElementById("gt-next").onclick=()=>{st.idx++;renderGrandTest();};
 }
+
+
+/* =================== TABLEAU DE BORD =================== */
+function refreshDashboard(){
+  const el=document.getElementById("dashboard");
+  if(!el) return;
+  const modules=["QCM","Vrai/Faux","Degrés","Chronologie","Socle","Socle+","Grand test"];
+  const bestCount=modules.filter(m=>STATS.best[m]).length;
+  const avg = STATS.totalAnswered ? Math.round(100*STATS.totalCorrect/STATS.totalAnswered) : 0;
+  const gt = STATS.best["Grand test"];
+  el.innerHTML=
+    '<div class="dash-card streak"><div class="dash-num">'+(STATS.streak||0)+'</div><div class="dash-lab">jour'+((STATS.streak||0)>1?"s":"")+' de suite</div></div>'+
+    '<div class="dash-card"><div class="dash-num">'+avg+'%</div><div class="dash-lab">réussite globale</div></div>'+
+    '<div class="dash-card accent"><div class="dash-num" id="dash-mistakes">'+MISTAKES.length+'</div><div class="dash-lab">erreurs à revoir</div></div>'+
+    '<div class="dash-card"><div class="dash-num">'+(gt?Math.round(gt.pct*100)+'%':'—')+'</div><div class="dash-lab">record grand test</div></div>'+
+    '<div class="dash-card"><div class="dash-num">'+bestCount+'/'+modules.length+'</div><div class="dash-lab">modules entamés</div></div>';
+}
+
+/* =================== CARNET D'ERREURS =================== */
+let revState=null;
+function startRevisions(){
+  const panel=document.getElementById("rev-panel");
+  document.getElementById("rev-progress").style.width="0%";
+  if(!MISTAKES.length){
+    document.getElementById("rev-score").textContent="—";
+    panel.innerHTML='<div class="rev-empty"><span class="big-emoji">🧉</span><p style="font-size:1.1rem;font-weight:600">Carnet vide — rien à revoir !</p><p style="margin-top:8px;color:rgba(34,48,43,.7)">Tes erreurs des quiz apparaîtront ici automatiquement. File t\'entraîner, puis reviens réviser tes points faibles.</p></div>';
+    return;
+  }
+  revState={qs:shuffle(MISTAKES.map(m=>({q:m.q,opts:shuffle(m.opts.map(o=>({t:o.t,ok:o.ok}))),e:m.e,src:m.src}))), idx:0, score:0, start:MISTAKES.length};
+  renderRev();
+}
+function renderRev(){
+  const st=revState, panel=document.getElementById("rev-panel");
+  document.getElementById("rev-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("rev-score").textContent=MISTAKES.length+" en attente";
+  if(st.idx>=st.qs.length){
+    const cleared=st.start-MISTAKES.length;
+    panel.innerHTML='<div class="result-panel"><div class="big">'+cleared+' / '+st.start+'</div>'+
+      '<p style="margin:10px 0 8px">'+(MISTAKES.length===0?"Carnet vidé — chapeau ! 🎩":"Il reste "+MISTAKES.length+" erreur"+(MISTAKES.length>1?"s":"")+" à dompter.")+'</p>'+
+      '<p class="handnote" style="color:var(--copper-2);margin-bottom:18px">'+(MISTAKES.length===0?"reviens après un nouveau quiz":"repasse-les autant de fois qu'il faut")+'</p>'+
+      (MISTAKES.length?'<button class="btn btn-copper" onclick="startRevisions()">Refaire mes erreurs</button>':'<button class="btn btn-copper" onclick="showView(\'grandtest\')">Tenter le Grand test</button>')+'</div>';
+    document.getElementById("rev-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q"><span class="rev-src">'+(q.src||"erreur")+'</span><br>Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"><span class="kbd">'+(i+1)+'</span>'+o.t+'</button>';});
+  html+='</div><div class="feedback" id="rev-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">'+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="rev-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
+      if(good){ st.score++; btn.classList.add("correct"); clearMistake(q); }
+      else btn.classList.add("wrong");
+      const fb=document.getElementById("rev-fb");
+      fb.className="feedback show "+(good?"good":"bad");
+      fb.innerHTML='<span class="handnote">'+(good?"maîtrisée, elle sort du carnet !":"pas encore — elle reste à revoir")+'</span> '+q.e;
+      document.getElementById("rev-score").textContent=MISTAKES.length+" en attente";
+      document.getElementById("rev-next").style.display="";
+    };
+  });
+  document.getElementById("rev-next").onclick=()=>{st.idx++;renderRev();};
+}
+
+/* =================== TOAST (feedback discret) =================== */
+let toastEl=null, toastTimer=null;
+function toast(msg){
+  if(!toastEl){ toastEl=document.createElement("div"); toastEl.className="toast"; document.body.appendChild(toastEl); }
+  toastEl.textContent=msg; toastEl.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>toastEl.classList.remove("show"),2200);
+}
+// Notifier les nouveaux jours de série
+(function(){
+  const before=STATS.streak;
+  // pingDay est appelé au 1er quiz ; on ne notifie pas au chargement.
+})();
+
+/* =================== RACCOURCIS CLAVIER =================== */
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA") return;
+  const activeView=document.querySelector("section.view.active");
+  if(!activeView) return;
+  // 1-4 → répondre ; Entrée/Espace → suivant ; F → retourner flashcard
+  if(["1","2","3","4"].includes(e.key)){
+    const btns=activeView.querySelectorAll(".answers button:not([disabled]), .vf-buttons button:not([disabled])");
+    const idx=+e.key-1;
+    if(btns[idx]){ e.preventDefault(); btns[idx].click(); }
+  }
+  if(e.key==="Enter"||e.key===" "){
+    const next=activeView.querySelector('.quiz-footer button:not([style*="display: none"]):not([style*="display:none"])');
+    // bouton "suivant" visible
+    const nextBtns=[...activeView.querySelectorAll('.quiz-footer button')].filter(b=>b.style.display!=="none");
+    if(nextBtns.length){ e.preventDefault(); nextBtns[0].click(); }
+    else if(activeView.id==="view-flash"){ e.preventDefault(); const fc=document.getElementById("flashcard"); if(fc) fc.click(); }
+  }
+  // Flashcards : J = je sais, R = à revoir
+  if(activeView.id==="view-flash"){
+    if(e.key==="j"||e.key==="J"){ const b=document.getElementById("fc-know"); if(b&&b.style.display!=="none"){e.preventDefault();b.click();} }
+    if(e.key==="r"||e.key==="R"){ const b=document.getElementById("fc-again"); if(b){e.preventDefault();b.click();} }
+  }
+});
+
+/* =================== INIT =================== */
+updateMistakeBadge();
+refreshDashboard();
 
 </script>
 </body>
