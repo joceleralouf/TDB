@@ -615,7 +615,7 @@ const MODULES = [
   {id:"ponts", name:"Cocktails du Socle", desc:"Les 36 recettes officielles : doses, méthodes, TAV, variantes. Quiz + fiches éclair.", deg:"référentiel 2025", icon:"bridge"},
   {id:"socleplus", name:"Socle+", desc:"4 exercices ciblés : devine le cocktail, son verre, sa famille, sa garniture.", deg:"100 % socle", icon:"target"},
   {id:"mind", name:"Carte mentale", desc:"Toute la liste partenaires en un coup d'œil, nœud par nœud.", deg:"vue d'ensemble", icon:"mind"},
-  {id:"sketch", name:"Sketchnotes", desc:"Flor vs oxydatif, règles du pisco, proof américain… en schémas dessinés.", deg:"6 schémas", icon:"sketch"},
+  {id:"sketch", name:"Sketchnotes", desc:"Méthodes, familles, verres, TAV, techniques… 26 schémas dessinés.", deg:"26 schémas", icon:"sketch"},
   {id:"grandtest", name:"Le Grand test", desc:"Tout, tout, tout : partenaires + socle mélangés. 15, 30 ou 50 questions.", deg:"l'épreuve totale", icon:"trophy"},
 ];
 const ICONS = {
@@ -800,17 +800,17 @@ const SOCLE = [
  {n:"Tequila Sunrise", cat:"Long", type:"All day", tav:13, met:"Direct au verre", verre:"Highball", ing:[["Jus d\u2019orange","80 ml"],["Tequila","40 ml"],["Sirop de grenadine (sans mélanger)","1 trait"]], g:"demi-tranche d\u2019orange + cerise + agitateur", hist:"Première version au Mexique vers 1930 ; version actuelle de 1972, adoptée par les Rolling Stones en tournée.", varn:"Le trait de grenadine crée le dégradé « lever de soleil ».", tdb:"Tequila : Calle 23 Blanco."},
 ];
 const SOCLE_VARIANTES = [
- {q:"Le BOULEVARDIER remplace, dans le Negroni :", o:["Le gin par du bourbon","Le bitter par du café","Le vermouth rouge par du dry","Le gin par du prosecco"], r:0, e:"Boulevardier = bourbon + bitter + vermouth rouge. (Au TDB26 : Wild Turkey 101 + Campari + Antica Formula.)"},
+ {q:"Le BOULEVARDIER remplace, dans le Negroni :", o:["Le gin par du bourbon","Le bitter par du café","Le vermouth rouge par du dry","Le gin par du prosecco"], r:0, e:"Boulevardier = bourbon + bitter + vermouth rouge."},
  {q:"Le NEGRONI SBAGLIATO remplace le gin par :", o:["Du prosecco","De la vodka","Du champagne","De la gentiane"], r:0, e:"Sbagliato = « raté » : le prosecco prend la place du gin."},
  {q:"Le GIBSON est un Dry Martini garni :", o:["D\u2019un oignon grelot","D\u2019une olive noire","D\u2019un zeste d\u2019orange","D\u2019une cerise"], r:0, e:"Gibson = Dry Martini + oignon grelot. La garniture classique reste olive verte ou zeste de citron."},
- {q:"Dans le DIRTY MARTINI du socle, les 15 ml de vermouth dry deviennent :", o:["15 ml de saumure d\u2019olive","15 ml de jus de citron","15 ml de sherry fino","30 ml de vermouth rouge"], r:0, e:"15 ml de saumure d\u2019olive remplacent le vermouth dry. (Version TDB26 : un trait d\u2019Oli\u2019Still Manguin.)"},
+ {q:"Dans le DIRTY MARTINI du socle, les 15 ml de vermouth dry deviennent :", o:["15 ml de saumure d\u2019olive","15 ml de jus de citron","15 ml de sherry fino","30 ml de vermouth rouge"], r:0, e:"15 ml de saumure d\u2019olive remplacent le vermouth dry."},
  {q:"Le ROB ROY est un Manhattan réalisé avec :", o:["Du scotch whisky","Du rye canadien","Du cognac","Du rhum vieux"], r:0, e:"Rob Roy : aromatic bitters + 15 ml vermouth rouge + 55 ml scotch whisky + cerise."},
  {q:"La TOMMY\u2019S MARGARITA remplace le triple sec par :", o:["Du sirop d\u2019agave","Du Grand Marnier","Du sirop de sucre","Du jus d\u2019orange"], r:0, e:"Tommy\u2019s = tequila + citron vert + sirop d\u2019agave. La Cadillac, elle, monte en gamme avec du Grand Marnier."},
  {q:"Le WHITE LADY est un Sidecar où le cognac devient :", o:["Du gin","De la vodka","Du calvados","Du rhum blanc"], r:0, e:"White Lady : 40 gin + 20 triple sec + 10 citron — même squelette que le Sidecar."},
  {q:"Le TOM COLLINS est un Fizz :", o:["Préparé directement au verre","Servi sans glace","Frappé au blender","Complété au champagne"], r:0, e:"Tom Collins = même composition que le Fizz, mais réalisé directement au verre Highball sur glace."},
  {q:"Le RED SNAPPER remplace la vodka du Bloody Mary par :", o:["Du gin","De la tequila","Du mezcal","Du consommé de bœuf"], r:0, e:"Red Snapper = gin. Bloody Maria = tequila, Bull Shot = consommé de bœuf, Virgin Mary = sans alcool."},
  {q:"Le ROSSINI est un Bellini à la :", o:["Fraise","Framboise","Pêche jaune","Mangue"], r:0, e:"Rossini = fraise ; Fellini = framboise ; Mimosa = jus d\u2019orange frais."},
- {q:"Le CHILCANO DE PISCO est une variante officielle du :", o:["Moscow Mule","Dark and Stormy","Fizz","Paloma"], r:0, e:"Variante du Moscow Mule : pisco + ginger beer, l\u2019amargo chuncho remplaçant l\u2019aromatic bitters. (TDB26 : Cuatro Gallos Italia + Fever-Tree.)"},
+ {q:"Le CHILCANO DE PISCO est une variante officielle du :", o:["Moscow Mule","Dark and Stormy","Fizz","Paloma"], r:0, e:"Variante du Moscow Mule : pisco + ginger beer, l\u2019amargo chuncho remplaçant l\u2019aromatic bitters."},
  {q:"Le CARDINALE remplace, dans le Negroni :", o:["Le vermouth rouge par du vermouth dry","Le gin par du bourbon","Le bitter par de la gentiane","Le vermouth par du sherry"], r:0, e:"Cardinale = gin + bitter + vermouth DRY. White Negroni = vermouth blanc + gentiane + gin."},
  {q:"Le HEMINGWAY SPECIAL est une variante du :", o:["Daiquiri","Mojito","Sour","Sidecar"], r:0, e:"Daiquiri Hemingway : 40 ron + 20 pamplemousse + 10 citron vert + 5 maraschino."},
  {q:"La CAIPIROVSKA remplace la cachaça par :", o:["De la vodka","Du ron cubain","Du pisco","Du rhum agricole"], r:0, e:"Caipirovska = vodka ; Caipirissima = ron cubain."},
@@ -905,7 +905,6 @@ function renderSocleCards(){
     '<ul>'+c.ing.map(i=>'<li><b>'+i[1]+'</b> '+i[0].toLowerCase()+'</li>').join('')+'</ul>'+
     '<div class="meta"><b>Méthode :</b> '+c.met+' · <b>Verre :</b> '+c.verre+'<br><b>'+(c.cat==="Short"?"Short drink":"Long drink")+'</b> · '+c.type+' · <b>Garniture :</b> '+c.g+'<br>'+c.hist+'</div>'+
     (c.varn?'<div class="variantes"><b>Variantes :</b> '+c.varn+'</div>':'')+
-    (c.tdb?'<div class="variantes" style="background:rgba(200,129,58,.16)"><b style="color:#a5651f">💡 '+c.tdb+'</b></div>':'')+
     '</div>').join('');
 }
 (function(){
@@ -1450,6 +1449,432 @@ const SKETCHES=[
 <text x="450" y="200" text-anchor="middle" ${SK_FONT} font-size="20" fill="#b23a2b">12° d'écart !</text>
 <text x="450" y="360" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">+ le Zero 0,0 % = le seul amaretto sans alcool du concours</text>
 </svg>`},
+,
+{id:"methodes", t:"Les 3 méthodes", svg:`
+<svg viewBox="0 0 900 420" role="img" aria-label="Les trois méthodes de réalisation">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LES 3 MÉTHODES DU SOCLE</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">quelle technique pour quel type d'ingrédient ?</text>
+<g><rect x="60" y="90" width="240" height="290" rx="14" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<path d="M120 150 h50 v70 a10 10 0 0 1 -10 10 h-30 a10 10 0 0 1 -10 -10 z M185 150 h50 v85 a12 12 0 0 1 -12 12 h-26 a12 12 0 0 1 -12 -12 z" fill="#c0c4c8" stroke="#22302b" stroke-width="2.5"/>
+<text x="180" y="130" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="20" fill="#22302b">SHAKER</text>
+<text x="180" y="280" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">mélanger + émulsionner</text>
+<text x="180" y="300" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">refroidir vite</text>
+<text x="180" y="335" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">dès qu'il y a jus,</text>
+<text x="180" y="356" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">crème, sirop, œuf</text></g>
+<g><rect x="330" y="90" width="240" height="290" rx="14" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<path d="M400 150 h100 v90 a14 14 0 0 1 -14 14 h-72 a14 14 0 0 1 -14 -14 z" fill="none" stroke="#22302b" stroke-width="2.5"/>
+<path d="M410 240 h80 M410 230 h80" stroke="#7fbfe0" stroke-width="3"/>
+<text x="450" y="130" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="19" fill="#22302b">VERRE À MÉLANGE</text>
+<text x="450" y="285" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">mélanger + refroidir</text>
+<text x="450" y="305" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">avec dilution maîtrisée</text>
+<text x="450" y="340" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">100 % alcools limpides</text>
+<text x="450" y="361" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">(Martini, Manhattan, Negroni*)</text></g>
+<g><rect x="600" y="90" width="240" height="290" rx="14" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<path d="M680 150 h80 v100 a10 10 0 0 1 -10 10 h-60 a10 10 0 0 1 -10 -10 z" fill="none" stroke="#22302b" stroke-width="2.5"/>
+<path d="M690 165 l60 0 M690 185 l60 0 M690 205 l60 0" stroke="#7fbfe0" stroke-width="2.5"/>
+<text x="720" y="130" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="18" fill="#22302b">DIRECT AU VERRE</text>
+<text x="720" y="290" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">tout se mélange</text>
+<text x="720" y="310" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">facilement dans le verre</text>
+<text x="720" y="345" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">Mojito, Americano,</text>
+<text x="720" y="366" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">Spritz, highballs</text></g>
+<text x="450" y="410" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">*le Negroni du socle se fait direct au verre — mais beaucoup le montent au verre à mélange en carrière</text>
+</svg>`},
+{id:"3s", t:"L'équilibre : les 3 S", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="La règle des trois S">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">L'ÉQUILIBRE D'UNE CRÉATION — les 3 S</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">le trépied qui tient tout cocktail debout</text>
+<polygon points="450,110 250,320 650,320" fill="none" stroke="#c8813a" stroke-width="3"/>
+<g><circle cx="450" cy="110" r="42" fill="#b23a2b"/><text x="450" y="105" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="17" fill="#fff">STRONG</text><text x="450" y="124" text-anchor="middle" ${SK_BODY} font-size="12" fill="#fff">la force</text></g>
+<g><circle cx="250" cy="320" r="42" fill="#e2b45a"/><text x="250" y="315" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="17" fill="#22302b">SWEET</text><text x="250" y="334" text-anchor="middle" ${SK_BODY} font-size="12" fill="#22302b">le sucré</text></g>
+<g><circle cx="650" cy="320" r="42" fill="#9fbf6b"/><text x="650" y="315" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="17" fill="#22302b">SOUR</text><text x="650" y="334" text-anchor="middle" ${SK_BODY} font-size="12" fill="#22302b">l'acidité</text></g>
+<text x="450" y="180" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">eau-de-vie / spiritueux : le corps</text>
+<text x="235" y="250" ${SK_BODY} font-size="13" fill="#22302b" text-anchor="end">liqueur, sirop,</text>
+<text x="235" y="268" ${SK_BODY} font-size="13" fill="#22302b" text-anchor="end">fruit, sucre</text>
+<text x="665" y="250" ${SK_BODY} font-size="13" fill="#22302b">agrume, verjus,</text>
+<text x="665" y="268" ${SK_BODY} font-size="13" fill="#22302b">solution acide</text>
+<text x="450" y="372" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">max 6 ingrédients · verser du moins cher au plus cher · doses en ml</text>
+</svg>`},
+{id:"short-long", t:"Short vs Long drink", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Short drink contre long drink">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">SHORT vs LONG DRINK</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">c'est la contenance qui tranche : 100 ml (10 cl)</text>
+<g><path d="M230 130 q-8 0 -8 8 l14 120 q1 12 13 12 h30 q12 0 13 -12 l14 -120 q0 -8 -8 -8 z" fill="#eadfc4" stroke="#22302b" stroke-width="3"/>
+<path d="M228 175 h84 l-9 78 q-1 8 -9 8 h-48 q-8 0 -9 -8 z" fill="#c98a3f" opacity=".7"/>
+<text x="270" y="115" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="20" fill="#22302b">SHORT</text>
+<text x="270" y="300" text-anchor="middle" ${SK_BODY} font-size="15" fill="#22302b">≤ 100 ml · puissant · sans glace ou peu</text>
+<text x="270" y="325" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Martini, Daiquiri, Negroni, Sour…</text></g>
+<g><rect x="600" y="120" width="90" height="180" rx="8" fill="#eadfc4" stroke="#22302b" stroke-width="3"/>
+<rect x="606" y="150" width="78" height="144" fill="#7fbfe0" opacity=".5"/>
+<path d="M610 175 h70 M610 200 h70 M610 225 h70 M610 250 h70" stroke="#fff" stroke-width="3" opacity=".6"/>
+<text x="645" y="112" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="20" fill="#22302b">LONG</text>
+<text x="645" y="325" text-anchor="middle" ${SK_BODY} font-size="15" fill="#22302b">≥ 100 ml · allongé · plein de glace</text>
+<text x="645" y="350" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Mojito, Spritz, Mule, highballs…</text></g>
+<text x="450" y="220" text-anchor="middle" ${SK_FONT} font-size="30" fill="#b23a2b">10 cl</text>
+<path d="M410 230 h80" stroke="#b23a2b" stroke-width="3" stroke-dasharray="6 5"/>
+</svg>`},
+{id:"types-service", t:"Before / After / All day", svg:`
+<svg viewBox="0 0 900 360" role="img" aria-label="Les types de cocktails selon le moment">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LES 3 TYPES — quand les servir ?</text>
+<line x1="70" y1="120" x2="830" y2="120" stroke="#22302b" stroke-width="3"/>
+<g><circle cx="200" cy="120" r="9" fill="#b23a2b"/><text x="200" y="100" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="17" fill="#22302b">BEFORE DINNER</text>
+<text x="200" y="160" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">apéritif</text><text x="200" y="180" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">amer / sec</text>
+<text x="200" y="212" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Negroni, Americano,</text><text x="200" y="232" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Manhattan, Bamboo, Spritz</text></g>
+<g><circle cx="450" cy="120" r="9" fill="#9fbf6b"/><text x="450" y="100" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="17" fill="#22302b">ALL DAY</text>
+<text x="450" y="160" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">tout moment</text><text x="450" y="180" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">fruité / désaltérant</text>
+<text x="450" y="212" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Mojito, Margarita, Daiquiri,</text><text x="450" y="232" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Cosmo, Piña Colada…</text></g>
+<g><circle cx="700" cy="120" r="9" fill="#7d5aa5"/><text x="700" y="100" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="17" fill="#22302b">AFTER DINNER</text>
+<text x="700" y="160" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">digestif</text><text x="700" y="180" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">liquoreux / puissant</text>
+<text x="700" y="212" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Espresso Martini</text></g>
+<text x="450" y="300" text-anchor="middle" ${SK_FONT} font-size="19" fill="#b23a2b">☀ apéro … journée … digestif 🌙</text>
+<text x="450" y="335" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">le seul After dinner du socle = l'Espresso Martini</text>
+</svg>`},
+{id:"tav", t:"Calculer le TAV", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="Calcul du titre alcoolique d'un cocktail">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">CALCULER LE TAV — l'Americano</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">(Σ des volumes × degrés) ÷ contenance totale</text>
+<g ${SK_BODY} font-size="16" fill="#22302b">
+<text x="120" y="115">20 ml vermouth rouge à 14,5 %</text><text x="640" y="115" font-weight="700" fill="#a5651f">20 × 14,5 = 290</text>
+<text x="120" y="150">50 ml bitter à 25 %</text><text x="640" y="150" font-weight="700" fill="#a5651f">50 × 25 = 1250</text>
+<text x="120" y="185">50 ml eau gazeuse à 0 %</text><text x="640" y="185" font-weight="700" fill="#a5651f">50 × 0 = 0</text>
+</g>
+<line x1="120" y1="205" x2="800" y2="205" stroke="#22302b" stroke-width="2"/>
+<text x="120" y="240" ${SK_BODY} font-weight="700" font-size="17" fill="#22302b">contenance = 120 ml</text>
+<text x="640" y="240" ${SK_BODY} font-weight="700" font-size="17" fill="#b23a2b">total = 1540</text>
+<rect x="250" y="270" width="400" height="60" rx="12" fill="#e2b45a" stroke="#22302b" stroke-width="2.5"/>
+<text x="450" y="308" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="24" fill="#22302b">1540 ÷ 120 = 12,83 → 13 %</text>
+<text x="450" y="370" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">l'eau, les jus et sodas comptent pour 0 % mais gonflent la contenance !</text>
+</svg>`},
+{id:"famille-shortdrinks", t:"Familles : short drinks", svg:`
+<svg viewBox="0 0 900 440" role="img" aria-label="Familles de short drinks">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">FAMILLES — côté SHORT</text>
+<g><rect x="50" y="70" width="255" height="110" rx="12" fill="#f3e9c8" stroke="#b23a2b" stroke-width="2.5"/>
+<text x="70" y="100" ${SK_BODY} font-weight="700" font-size="18" fill="#b23a2b">SOUR</text>
+<text x="70" y="125" ${SK_BODY} font-size="14" fill="#22302b">spiritueux + sucre + agrume</text>
+<text x="70" y="145" ${SK_BODY} font-size="14" fill="#22302b">(+ souvent blanc d'œuf)</text>
+<text x="70" y="168" ${SK_FONT} font-size="16" fill="#a5651f">Sour, Daiquiri, Margarita, Sidecar</text></g>
+<g><rect x="325" y="70" width="255" height="110" rx="12" fill="#f3e9c8" stroke="#c8813a" stroke-width="2.5"/>
+<text x="345" y="100" ${SK_BODY} font-weight="700" font-size="18" fill="#a5651f">OLD-FASHIONED</text>
+<text x="345" y="125" ${SK_BODY} font-size="14" fill="#22302b">eau-de-vie vieillie</text>
+<text x="345" y="145" ${SK_BODY} font-size="14" fill="#22302b">+ sucre + aromatic bitters</text>
+<text x="345" y="168" ${SK_FONT} font-size="16" fill="#a5651f">Old-Fashioned</text></g>
+<g><rect x="600" y="70" width="255" height="110" rx="12" fill="#f3e9c8" stroke="#4f8f5b" stroke-width="2.5"/>
+<text x="620" y="100" ${SK_BODY} font-weight="700" font-size="18" fill="#4f8f5b">SMASH</text>
+<text x="620" y="125" ${SK_BODY} font-size="14" fill="#22302b">eau-de-vie + herbe</text>
+<text x="620" y="145" ${SK_BODY} font-size="14" fill="#22302b">+ sucre + agrume</text>
+<text x="620" y="168" ${SK_FONT} font-size="16" fill="#a5651f">Gin Basil Smash</text></g>
+<g><rect x="180" y="210" width="255" height="110" rx="12" fill="#f3e9c8" stroke="#7d5aa5" stroke-width="2.5"/>
+<text x="200" y="240" ${SK_BODY} font-weight="700" font-size="18" fill="#7d5aa5">JULEP</text>
+<text x="200" y="265" ${SK_BODY} font-size="14" fill="#22302b">eau-de-vie vieillie</text>
+<text x="200" y="285" ${SK_BODY} font-size="14" fill="#22302b">+ sucre + menthe (timbale)</text>
+<text x="200" y="308" ${SK_FONT} font-size="16" fill="#a5651f">Mint Julep</text></g>
+<g><rect x="470" y="210" width="255" height="110" rx="12" fill="#f3e9c8" stroke="#22302b" stroke-width="2.5"/>
+<text x="490" y="240" ${SK_BODY} font-weight="700" font-size="18" fill="#22302b">MARTINI / DUO</text>
+<text x="490" y="265" ${SK_BODY} font-size="14" fill="#22302b">spiritueux + vermouth</text>
+<text x="490" y="285" ${SK_BODY} font-size="14" fill="#22302b">au verre à mélange</text>
+<text x="490" y="308" ${SK_FONT} font-size="16" fill="#a5651f">Dry Martini, Manhattan, Bamboo</text></g>
+<text x="450" y="360" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">reconnaître la famille = deviner méthode, verre et équilibre d'un coup</text>
+<text x="450" y="400" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">un « twist » = une famille connue dont on change un ingrédient</text>
+</svg>`},
+{id:"famille-longdrinks", t:"Familles : long drinks", svg:`
+<svg viewBox="0 0 900 420" role="img" aria-label="Familles de long drinks">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">FAMILLES — côté LONG</text>
+<g><rect x="50" y="70" width="255" height="120" rx="12" fill="#f3e9c8" stroke="#c8813a" stroke-width="2.5"/>
+<text x="70" y="100" ${SK_BODY} font-weight="700" font-size="18" fill="#a5651f">FIZZ / COLLINS</text>
+<text x="70" y="125" ${SK_BODY} font-size="14" fill="#22302b">eau-de-vie + sucre</text>
+<text x="70" y="145" ${SK_BODY} font-size="14" fill="#22302b">+ citron + eau gazeuse</text>
+<text x="70" y="172" ${SK_FONT} font-size="16" fill="#a5651f">Fizz (Collins = direct au verre)</text></g>
+<g><rect x="325" y="70" width="255" height="120" rx="12" fill="#f3e9c8" stroke="#b23a2b" stroke-width="2.5"/>
+<text x="345" y="100" ${SK_BODY} font-weight="700" font-size="18" fill="#b23a2b">MULE / BUCK</text>
+<text x="345" y="125" ${SK_BODY} font-size="14" fill="#22302b">spiritueux + citron vert</text>
+<text x="345" y="145" ${SK_BODY} font-size="14" fill="#22302b">+ ginger beer</text>
+<text x="345" y="172" ${SK_FONT} font-size="16" fill="#a5651f">Moscow Mule, Dark & Stormy</text></g>
+<g><rect x="600" y="70" width="255" height="120" rx="12" fill="#f3e9c8" stroke="#4f8f5b" stroke-width="2.5"/>
+<text x="620" y="100" ${SK_BODY} font-weight="700" font-size="18" fill="#4f8f5b">HIGHBALL</text>
+<text x="620" y="125" ${SK_BODY} font-size="14" fill="#22302b">1 alcool + 1 soda</text>
+<text x="620" y="145" ${SK_BODY} font-size="14" fill="#22302b">allongé sur glace</text>
+<text x="620" y="172" ${SK_FONT} font-size="16" fill="#a5651f">Horse's Neck, Paloma, Tequila Sunrise</text></g>
+<g><rect x="180" y="220" width="255" height="120" rx="12" fill="#f3e9c8" stroke="#e2a03a" stroke-width="2.5"/>
+<text x="200" y="250" ${SK_BODY} font-weight="700" font-size="18" fill="#a5651f">TIKI</text>
+<text x="200" y="275" ${SK_BODY} font-size="14" fill="#22302b">rhum(s) + sucre/orgeat</text>
+<text x="200" y="295" ${SK_BODY} font-size="14" fill="#22302b">+ agrume + jus de fruits</text>
+<text x="200" y="322" ${SK_FONT} font-size="16" fill="#a5651f">Mai Tai, Piña Colada, Planter's Punch</text></g>
+<g><rect x="470" y="220" width="255" height="120" rx="12" fill="#f3e9c8" stroke="#7d5aa5" stroke-width="2.5"/>
+<text x="490" y="250" ${SK_BODY} font-weight="700" font-size="18" fill="#7d5aa5">SPARKLING</text>
+<text x="490" y="275" ${SK_BODY} font-size="14" fill="#22302b">base + vin effervescent</text>
+<text x="490" y="295" ${SK_BODY} font-size="14" fill="#22302b">/ champagne</text>
+<text x="490" y="322" ${SK_FONT} font-size="16" fill="#a5651f">French 75, Bellini, Spritz, Champagne C.</text></g>
+<text x="450" y="380" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">le duo gagnant du long drink : une base forte + un allongeur</text>
+</svg>`},
+{id:"dryshake", t:"Le dry shake", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="La technique du dry shake">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LE DRY SHAKE — mousse parfaite</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">pour émulsionner le blanc d'œuf / l'aquafaba (Sour…)</text>
+<g><circle cx="160" cy="150" r="34" fill="#e9dcae" stroke="#22302b" stroke-width="3"/>
+<text x="160" y="156" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="22" fill="#22302b">1</text>
+<text x="160" y="215" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">frapper SANS glace</text>
+<text x="160" y="235" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">→ l'émulsion prend</text></g>
+<path d="M215 150 h60" stroke="#c8813a" stroke-width="3" marker-end="url(#a1)"/>
+<g><circle cx="340" cy="150" r="34" fill="#e9dcae" stroke="#22302b" stroke-width="3"/>
+<text x="340" y="156" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="22" fill="#22302b">2</text>
+<text x="340" y="215" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">ajouter la glace</text>
+<text x="340" y="235" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">frapper à nouveau</text></g>
+<path d="M395 150 h60" stroke="#c8813a" stroke-width="3" marker-end="url(#a1)"/>
+<g><circle cx="520" cy="150" r="34" fill="#e9dcae" stroke="#22302b" stroke-width="3"/>
+<text x="520" y="156" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="22" fill="#22302b">3</text>
+<text x="520" y="215" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">→ refroidir + diluer</text>
+<text x="520" y="235" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">passer dans le verre</text></g>
+<g><rect x="640" y="105" width="180" height="150" rx="10" fill="#fdfbf4" stroke="#22302b" stroke-width="2.5"/>
+<text x="730" y="135" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">REVERSE dry shake</text>
+<text x="730" y="165" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">1) avec glace</text>
+<text x="730" y="185" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">2) sans glace</text>
+<text x="730" y="215" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">→ mousse plus dense,</text>
+<text x="730" y="233" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">plus stable</text></g>
+<text x="450" y="330" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">sans émulsifiant ? on sert le Sour en verre Martini</text>
+<defs><marker id="a1" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#c8813a"/></marker></defs>
+</svg>`},
+{id:"verres", t:"Les verres de service", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="Les verres de service">
+<text x="450" y="34" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="26" fill="#22302b">LES VERRES DU SOCLE</text>
+<g stroke="#22302b" stroke-width="2.5" fill="none">
+<path d="M70 120 l40 0 l-16 45 l0 40 l-8 0 l0 -40 z"/><text x="90" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">MARTINI</text><text x="90" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Dry Martini</text>
+<path d="M180 120 q0 40 22 42 q22 -2 22 -42 M202 162 l0 43 M188 205 l28 0"/><text x="202" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">COUPE</text><text x="202" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Daiquiri, Sidecar</text>
+<path d="M300 120 q-4 28 18 32 q22 -4 18 -32 z M318 152 l0 53 M304 205 l28 0"/><text x="318" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">NICK & NORA</text><text x="318" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Manhattan, Bamboo</text>
+<rect x="410" y="120" width="42" height="86" rx="3"/><text x="431" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">ROCKS</text><text x="431" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Negroni, Old-F., Bramble</text>
+<rect x="520" y="112" width="34" height="96" rx="3"/><text x="537" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">HIGHBALL</text><text x="537" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Mojito, Americano…</text>
+<path d="M620 112 l24 0 l-3 96 l-18 0 z"/><text x="632" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">FLÛTE</text><text x="632" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Bellini, French 75</text>
+<path d="M710 118 q0 34 22 36 q22 -2 22 -36 z M732 156 l0 48 M716 204 l32 0"/><text x="732" y="220" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">VERRE À VIN</text><text x="732" y="238" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Spritz</text>
+<path d="M810 120 q-6 44 24 46 q30 -2 24 -46 M834 166 l0 40 M816 206 l36 0" transform="scale(0.85) translate(140 20)"/></g>
+<g stroke="#22302b" stroke-width="2.5" fill="none">
+<path d="M120 280 l0 60 q0 8 8 8 l24 0 q8 0 8 -8 l0 -60 M162 295 q14 0 14 14 q0 14 -14 14"/><text x="145" y="372" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">TIMBALE MULE</text><text x="145" y="390" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Moscow Mule</text>
+<path d="M300 280 l0 68 q0 6 6 6 l30 0 q6 0 6 -6 l0 -68 z"/><text x="321" y="372" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">TIMBALE JULEP</text><text x="321" y="390" text-anchor="middle" ${SK_FONT} font-size="13" fill="#a5651f">Mint Julep</text></g>
+<text x="640" y="330" text-anchor="middle" ${SK_FONT} font-size="19" fill="#b23a2b">le verre trahit la famille :</text>
+<text x="640" y="356" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">coupe/martini = shaken clair · rocks = spiritueux</text>
+<text x="640" y="376" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">highball/flûte = allongé · timbale = julep ou mule</text>
+</svg>`},
+{id:"citrus", t:"Jus & garnitures agrumes", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Quel agrume pour quel cocktail">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">CITRON JAUNE vs CITRON VERT</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">se tromper d'agrume = casser l'équilibre</text>
+<g><circle cx="230" cy="170" r="70" fill="#f0e05a" stroke="#22302b" stroke-width="3"/>
+<path d="M230 170 l0 -55 M230 170 l48 -28 M230 170 l48 28 M230 170 l-48 28 M230 170 l-48 -28 M230 170 l0 55" stroke="#d9c73a" stroke-width="2"/>
+<text x="230" y="176" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="16" fill="#22302b">JAUNE</text>
+<text x="230" y="270" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">plus vif, plus « pâtissier »</text>
+<text x="230" y="300" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Whiskey Sour, Bramble,</text>
+<text x="230" y="320" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">French 75, Sidecar, Penicillin</text></g>
+<g><circle cx="670" cy="170" r="70" fill="#7fbf4d" stroke="#22302b" stroke-width="3"/>
+<path d="M670 170 l0 -55 M670 170 l48 -28 M670 170 l48 28 M670 170 l-48 28 M670 170 l-48 -28 M670 170 l0 55" stroke="#5c9c33" stroke-width="2"/>
+<text x="670" y="176" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="16" fill="#fff">VERT</text>
+<text x="670" y="270" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">plus amer, tropical</text>
+<text x="670" y="300" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Daiquiri, Margarita, Mojito,</text>
+<text x="670" y="320" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Caipirinha, Cosmo, Mule, Mai Tai</text></g>
+<text x="450" y="360" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">repère : rhum/tequila/cachaça → vert · whisky/cognac/gin classique → jaune</text>
+</svg>`},
+{id:"floats", t:"Float, build & ordre", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Le float et l'ordre de montage">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LE FLOAT — verser sans mélanger</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">l'ingrédient posé en dernier, en surface</text>
+<g><rect x="120" y="100" width="90" height="200" rx="6" fill="none" stroke="#22302b" stroke-width="3"/>
+<rect x="126" y="130" width="78" height="164" fill="#7fbfe0" opacity=".4"/>
+<rect x="126" y="106" width="78" height="26" fill="#8a3b2b" opacity=".8"/>
+<path d="M165 90 q-8 -12 0 -20" stroke="#22302b" stroke-width="2" fill="none"/>
+<text x="250" y="120" ${SK_FONT} font-size="17" fill="#b23a2b">← le float posé doucement</text>
+<text x="250" y="145" ${SK_BODY} font-size="14" fill="#22302b">sur le dos d'une cuillère</text>
+<text x="165" y="325" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">Dark & Stormy (black rum)</text></g>
+<g ${SK_BODY} font-size="15" fill="#22302b">
+<text x="480" y="180" font-weight="700" fill="#a5651f">Les floats du socle :</text>
+<text x="480" y="208">• Dark & Stormy → black rum (Black Seal)</text>
+<text x="480" y="232">• Bramble → crème de mûre</text>
+<text x="480" y="256">• Penicillin → whisky tourbé</text>
+<text x="480" y="280">• Tequila Sunrise → grenadine (dégradé)</text>
+<text x="480" y="304">• Planter's Punch → rhum ambré</text>
+</g>
+<text x="450" y="352" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">on verse toujours du moins cher au plus cher</text>
+</svg>`},
+{id:"bulles", t:"Cocktails à bulles", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Les cocktails effervescents du socle">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">ATTENTION AUX BULLES 🫧</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">l'effervescent ne se frappe JAMAIS — il se verse en dernier</text>
+<g ${SK_BODY} font-size="15" fill="#22302b">
+<text x="120" y="110" font-weight="700" fill="#b23a2b">Champagne / vin effervescent</text>
+<text x="140" y="135">Bellini · Champagne Cocktail · French 75 · Spritz</text>
+<text x="120" y="175" font-weight="700" fill="#b23a2b">Eau gazeuse / soda</text>
+<text x="140" y="200">Americano · Mojito · Fizz · Tom Collins · Paloma · Spritz</text>
+<text x="120" y="240" font-weight="700" fill="#b23a2b">Ginger beer / ginger ale</text>
+<text x="140" y="265">Moscow Mule · Dark & Stormy · Horse's Neck</text>
+</g>
+<circle cx="760" cy="150" r="8" fill="#7fbfe0" opacity=".5"/><circle cx="785" cy="120" r="5" fill="#7fbfe0" opacity=".5"/><circle cx="745" cy="115" r="4" fill="#7fbfe0" opacity=".5"/><circle cx="775" cy="175" r="6" fill="#7fbfe0" opacity=".5"/>
+<text x="450" y="310" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">le French 75 se frappe SANS le champagne, ajouté à la fin</text>
+<text x="450" y="345" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">rafraîchir l'allonge à l'avance (sauf effervescents, gardés au frais)</text>
+</svg>`},
+{id:"glace", t:"Types de glace", svg:`
+<svg viewBox="0 0 900 360" role="img" aria-label="Quelle glace pour quel cocktail">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LA GLACE — pas au hasard</text>
+<g><rect x="90" y="90" width="200" height="130" rx="10" fill="#f3e9c8" stroke="#22302b" stroke-width="2.5"/>
+<rect x="120" y="120" width="35" height="35" fill="#cbe6f2" stroke="#22302b" stroke-width="2"/><rect x="165" y="120" width="35" height="35" fill="#cbe6f2" stroke="#22302b" stroke-width="2"/><rect x="145" y="160" width="35" height="35" fill="#cbe6f2" stroke="#22302b" stroke-width="2"/>
+<text x="190" y="130" ${SK_BODY} font-weight="700" font-size="16" fill="#22302b">CUBES</text>
+<text x="190" y="245" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">fonte lente · la majorité</text>
+<text x="190" y="264" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">highballs, Negroni, Old-F.</text></g>
+<g><rect x="350" y="90" width="200" height="130" rx="10" fill="#f3e9c8" stroke="#22302b" stroke-width="2.5"/>
+<g fill="#cbe6f2" stroke="#22302b" stroke-width="1.5"><circle cx="390" cy="130" r="9"/><circle cx="415" cy="150" r="8"/><circle cx="440" cy="128" r="9"/><circle cx="465" cy="152" r="8"/><circle cx="405" cy="175" r="9"/><circle cx="450" cy="178" r="8"/></g>
+<text x="450" y="130" ${SK_BODY} font-weight="700" font-size="16" fill="#22302b">PILÉE</text>
+<text x="450" y="245" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">dilue vite · rafraîchit fort</text>
+<text x="450" y="264" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Julep, Caipirinha, Bramble, Mai Tai, Swizzle</text></g>
+<g><rect x="610" y="90" width="200" height="130" rx="10" fill="#f3e9c8" stroke="#22302b" stroke-width="2.5"/>
+<rect x="680" y="115" width="60" height="85" fill="#cbe6f2" stroke="#22302b" stroke-width="2"/>
+<text x="710" y="130" ${SK_BODY} font-weight="700" font-size="16" fill="#22302b" text-anchor="middle">BLOC</text>
+<text x="710" y="245" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">fonte minimale · élégant</text>
+<text x="710" y="264" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Old-Fashioned « premium »</text></g>
+<text x="450" y="320" text-anchor="middle" ${SK_FONT} font-size="19" fill="#b23a2b">glace pilée = dilution rapide → pour les puissants ou sucrés à équilibrer</text>
+</svg>`},
+{id:"whisky", t:"Familles de whisky", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="Les familles de whisky">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LE WHISKY — s'y retrouver</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">bourbon, scotch, rye… ne pas confondre au jury</text>
+<g ${SK_BODY} fill="#22302b">
+<rect x="60" y="85" width="380" height="70" rx="10" fill="#f3e9c8" stroke="#c8813a" stroke-width="2.5"/>
+<text x="80" y="112" font-weight="700" font-size="17" fill="#a5651f">BOURBON (USA)</text>
+<text x="80" y="138" font-size="14">≥ 51 % maïs · fûts de chêne NEUFS brûlés · doux, vanillé</text>
+<rect x="60" y="165" width="380" height="70" rx="10" fill="#f3e9c8" stroke="#b23a2b" stroke-width="2.5"/>
+<text x="80" y="192" font-weight="700" font-size="17" fill="#b23a2b">RYE (USA/Canada)</text>
+<text x="80" y="218" font-size="14">≥ 51 % seigle · plus épicé, sec · le Manhattan d'origine</text>
+<rect x="460" y="85" width="380" height="70" rx="10" fill="#f3e9c8" stroke="#4f8f5b" stroke-width="2.5"/>
+<text x="480" y="112" font-weight="700" font-size="17" fill="#4f8f5b">SCOTCH (Écosse)</text>
+<text x="480" y="138" font-size="14">orge · souvent tourbé (fumé) · le Rob Roy, le Penicillin</text>
+<rect x="460" y="165" width="380" height="70" rx="10" fill="#f3e9c8" stroke="#7d5aa5" stroke-width="2.5"/>
+<text x="480" y="192" font-weight="700" font-size="17" fill="#7d5aa5">BLEND</text>
+<text x="480" y="218" font-size="14">assemblage grain + malt · souple · base du Penicillin</text>
+</g>
+<text x="450" y="285" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">« whiskey » (e) = Irlande & USA · « whisky » = Écosse, Japon, reste</text>
+<text x="450" y="325" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">Manhattan & Old-Fashioned du socle : whiskey américain</text>
+<text x="450" y="360" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">tourbé = « peaté » : arômes de fumée, feu de tourbe (Islay)</text>
+</svg>`},
+{id:"rhum", t:"Les rhums", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Les familles de rhum">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LE RHUM — agricole vs traditionnel</text>
+<g><rect x="60" y="75" width="380" height="120" rx="10" fill="#f3e9c8" stroke="#9fbf6b" stroke-width="2.5"/>
+<text x="80" y="105" ${SK_BODY} font-weight="700" font-size="18" fill="#4f8f5b">AGRICOLE (pur jus de canne)</text>
+<text x="80" y="132" ${SK_BODY} font-size="14" fill="#22302b">jus de canne frais · végétal, herbacé</text>
+<text x="80" y="155" ${SK_BODY} font-size="14" fill="#22302b">Antilles françaises (AOC Martinique)</text>
+<text x="80" y="180" ${SK_FONT} font-size="16" fill="#a5651f">Mai Tai (agricole), Planter's Punch</text></g>
+<g><rect x="460" y="75" width="380" height="120" rx="10" fill="#f3e9c8" stroke="#c8813a" stroke-width="2.5"/>
+<text x="480" y="105" ${SK_BODY} font-weight="700" font-size="18" fill="#a5651f">TRADITIONNEL (mélasse)</text>
+<text x="480" y="132" ${SK_BODY} font-size="14" fill="#22302b">mélasse · rond, sucré, épicé</text>
+<text x="480" y="155" ${SK_BODY} font-size="14" fill="#22302b">Cuba, Jamaïque, Bermudes…</text>
+<text x="480" y="180" ${SK_FONT} font-size="16" fill="#a5651f">Daiquiri, Mojito (cubain), Piña Colada</text></g>
+<g ${SK_BODY} font-size="14" fill="#22302b">
+<text x="450" y="240" text-anchor="middle" font-weight="700" fill="#b23a2b">couleurs :</text>
+<text x="450" y="265" text-anchor="middle">blanc (non vieilli) · ambré/paille (court passage bois) · vieux (≥ 3 ans)</text>
+<text x="450" y="290" text-anchor="middle">black rum = mélasse très foncé, corsé — indispensable au Dark & Stormy</text>
+</g>
+<text x="450" y="340" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">cachaça = « cousine » brésilienne (pur jus) → Caipirinha</text>
+</svg>`},
+{id:"agave", t:"Tequila & agave", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Tequila mezcal et agave">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LES SPIRITUEUX D'AGAVE</text>
+<g><path d="M200 220 q-6 -90 0 -110 q6 90 0 110 M200 210 q-40 -70 -55 -95 q45 55 55 95 M200 210 q40 -70 55 -95 q-45 55 -55 95 M200 215 q-70 -40 -95 -50 q75 30 95 50 M200 215 q70 -40 95 -50 q-75 30 -95 50" fill="#7f9c5a" stroke="#4f7a3a" stroke-width="2"/>
+<text x="200" y="255" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">le cœur d'agave = la « piña »</text></g>
+<g ${SK_BODY} font-size="15" fill="#22302b">
+<text x="380" y="110" font-weight="700" fill="#a5651f">TEQUILA</text>
+<text x="380" y="134">agave bleu · région de Jalisco</text>
+<text x="380" y="156">blanco / reposado (2-12 mois) / añejo (1-3 ans)</text>
+<text x="380" y="178" ${SK_FONT} font-size="15" fill="#a5651f">Margarita, Paloma, Tequila Sunrise</text>
+<text x="380" y="225" font-weight="700" fill="#b23a2b">MEZCAL</text>
+<text x="380" y="249">tous agaves · cuisson en four de terre</text>
+<text x="380" y="271">→ le fameux goût FUMÉ</text>
+</g>
+<text x="450" y="330" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">« 100 % agave » sur l'étiquette = pas de sucres ajoutés (mixto)</text>
+<text x="450" y="362" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">la Paloma du socle exige une tequila blanco 100 % agave</text>
+</svg>`},
+{id:"bitters", t:"Bitters & amers", svg:`
+<svg viewBox="0 0 900 360" role="img" aria-label="Le rôle des bitters">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LES BITTERS — le sel du barman</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">quelques gouttes qui lient et relèvent</text>
+<g><rect x="120" y="95" width="60" height="150" rx="6" fill="#8a2b2b" stroke="#22302b" stroke-width="2.5"/>
+<rect x="135" y="80" width="30" height="20" fill="#5c1c1c" stroke="#22302b" stroke-width="2"/>
+<text x="150" y="175" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="13" fill="#fff">AROM.</text>
+<text x="150" y="270" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">aromatic bitters</text>
+<text x="150" y="288" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Old-F., Manhattan,</text>
+<text x="150" y="306" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Champagne C., Swizzle</text></g>
+<g ${SK_BODY} font-size="15" fill="#22302b">
+<text x="260" y="120" font-weight="700" fill="#b23a2b">« trait » (dash) = 3 à 5 gouttes</text>
+<text x="260" y="150">• aromatic bitters → épices, écorces (le grand classique)</text>
+<text x="260" y="180">• orange bitters → le Bamboo, twists d'agrumes</text>
+<text x="260" y="215" font-weight="700" fill="#b23a2b">à ne pas confondre avec les AMERS-liqueurs :</text>
+<text x="260" y="245">• le bitter du Negroni / Americano = un amer rouge se buvant en dose</text>
+<text x="260" y="275">• les bitters « en gouttes » ne s'utilisent jamais en dose</text>
+</g>
+<text x="450" y="335" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">bitter (dose, amer rouge) ≠ bitters (traits, aromatiques)</text>
+</svg>`},
+{id:"garnitures", t:"L'art de la garniture", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Les garnitures et leur rôle">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LA GARNITURE — utile, pas décorative</text>
+<text x="450" y="60" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">elle annonce le goût et parfume</text>
+<g><path d="M150 110 q30 -20 60 0 q-10 40 -30 55 q-20 -15 -30 -55z" fill="#f0d94a" stroke="#22302b" stroke-width="2"/>
+<text x="180" y="195" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="15" fill="#22302b">ZESTE EXPRIMÉ</text>
+<text x="180" y="217" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">on presse l'écorce</text>
+<text x="180" y="234" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">→ huiles essentielles</text>
+<text x="180" y="256" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Martini, Cosmo, French 75</text></g>
+<g><circle cx="450" cy="135" r="30" fill="#b3202a" stroke="#22302b" stroke-width="2"/><path d="M450 105 q6 -12 -2 -18" stroke="#4f7a3a" stroke-width="3" fill="none"/>
+<text x="450" y="195" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="15" fill="#22302b">CERISE À L'E-D-V</text>
+<text x="450" y="217" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">gourmandise + couleur</text>
+<text x="450" y="239" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Manhattan, Old-F., Sour, Aviation</text></g>
+<g><path d="M690 110 l40 0 l-6 60 l-28 0z" fill="#7fbf4d" stroke="#22302b" stroke-width="2"/>
+<text x="710" y="195" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="15" fill="#22302b">TRANCHE / QUARTIER</text>
+<text x="710" y="217" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">à presser ou décorer</text>
+<text x="710" y="239" text-anchor="middle" ${SK_FONT} font-size="14" fill="#a5651f">Mojito, Mule, Paloma…</text></g>
+<text x="450" y="300" text-anchor="middle" ${SK_FONT} font-size="18" fill="#b23a2b">Horse's Neck : le long zeste en spirale = « le cou du cheval »</text>
+<text x="450" y="335" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">« exprimer » = libérer les huiles du zeste au-dessus du verre</text>
+</svg>`},
+{id:"twists", t:"L'arbre des twists", svg:`
+<svg viewBox="0 0 900 440" role="img" aria-label="Les variantes classiques par cocktail">
+<text x="450" y="34" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="26" fill="#22302b">L'ARBRE DES TWISTS</text>
+<text x="450" y="58" text-anchor="middle" ${SK_FONT} font-size="18" fill="#a5651f">un classique + un changement = une variante à connaître</text>
+<g ${SK_BODY} font-size="14" fill="#22302b">
+<text x="70" y="100" font-weight="700" font-size="16" fill="#b23a2b">NEGRONI</text>
+<text x="90" y="122">├ gin→prosecco = Sbagliato</text>
+<text x="90" y="142">├ gin→bourbon = Boulevardier</text>
+<text x="90" y="162">├ v.rouge→dry = Cardinale</text>
+<text x="90" y="182">└ blanc+gentiane = White Negroni</text>
+<text x="70" y="222" font-weight="700" font-size="16" fill="#b23a2b">DRY MARTINI</text>
+<text x="90" y="244">├ vodka = Vodkatini</text>
+<text x="90" y="264">├ oignon = Gibson</text>
+<text x="90" y="284">├ v.rouge+maraschino = Martinez</text>
+<text x="90" y="304">└ saumure d'olive = Dirty Martini</text>
+<text x="490" y="100" font-weight="700" font-size="16" fill="#b23a2b">MARGARITA</text>
+<text x="510" y="122">└ agave à la place du triple sec = Tommy's</text>
+<text x="490" y="155" font-weight="700" font-size="16" fill="#b23a2b">SIDECAR</text>
+<text x="510" y="177">└ gin à la place du cognac = White Lady</text>
+<text x="490" y="210" font-weight="700" font-size="16" fill="#b23a2b">BLOODY MARY</text>
+<text x="510" y="232">├ gin = Red Snapper</text>
+<text x="510" y="252">├ tequila = Bloody Maria</text>
+<text x="510" y="272">└ sans alcool = Virgin Mary</text>
+<text x="490" y="305" font-weight="700" font-size="16" fill="#b23a2b">MOSCOW MULE</text>
+<text x="510" y="327">├ cognac = French Mule</text>
+<text x="510" y="347">└ pisco = Chilcano de Pisco</text>
+</g>
+<text x="450" y="400" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">Daiquiri → Hemingway Special (pamplemousse + maraschino)</text>
+<text x="450" y="426" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">Manhattan → Rob Roy (scotch) · Bellini → Rossini (fraise) / Fellini (framboise)</text>
+</svg>`},
+{id:"lexique", t:"Gestes & lexique", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="Le vocabulaire des gestes de bar">
+<text x="450" y="36" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LES GESTES — le bon mot</text>
+<g ${SK_BODY} font-size="15" fill="#22302b">
+<text x="70" y="90" font-weight="700" fill="#a5651f">MIRER</text><text x="230" y="90">inspecter le verre (propreté)</text>
+<text x="70" y="120" font-weight="700" fill="#a5651f">RAFRAÎCHIR</text><text x="230" y="120">refroidir le verre avec de la glace</text>
+<text x="70" y="150" font-weight="700" fill="#a5651f">FRAPPER</text><text x="230" y="150">agiter énergiquement au shaker</text>
+<text x="70" y="180" font-weight="700" fill="#a5651f">PASSER</text><text x="230" y="180">filtrer avec la passoire</text>
+<text x="70" y="210" font-weight="700" fill="#a5651f">DOUBLE PASSAGE</text><text x="230" y="210">+ passoire fine (retenir pulpe/glace)</text>
+<text x="70" y="240" font-weight="700" fill="#a5651f">EXPRIMER</text><text x="230" y="240">presser un zeste au-dessus du verre</text>
+<text x="70" y="270" font-weight="700" fill="#a5651f">GIVRER</text><text x="230" y="270">décorer le bord (sucre/sel)</text>
+<text x="70" y="300" font-weight="700" fill="#a5651f">PILER</text><text x="230" y="300">écraser doucement (menthe, sucre)</text>
+<text x="560" y="90" font-weight="700" fill="#b23a2b">CUBAN ROLL</text><text x="560" y="110" font-size="13">transvaser de timbale à timbale</text>
+<text x="560" y="145" font-weight="700" fill="#b23a2b">FLOAT</text><text x="560" y="165" font-size="13">verser en surface sans mélanger</text>
+<text x="560" y="200" font-weight="700" fill="#b23a2b">MESURE</text><text x="560" y="220" font-size="13">= 40 ml (standard français)</text>
+<text x="560" y="255" font-weight="700" fill="#b23a2b">TRAIT / DASH</text><text x="560" y="275" font-size="13">3 à 5 gouttes</text>
+<text x="560" y="310" font-weight="700" fill="#b23a2b">BAR SPOON</text><text x="560" y="330" font-size="13">≈ 5 ml, la cuillère de bar</text>
+</g>
+<text x="450" y="380" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">le bon vocabulaire au jury = des points faciles à prendre</text>
+</svg>`}
 ];
 function buildSketch(){
   sketchBuilt=true;
