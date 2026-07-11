@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TDB26 · Le Carnet de Révision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Caveat:wght@500;700&family=Karla:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bar:#16302a;          /* vert bouteille profond */
+  --bar-2:#0e211d;        /* fond de cave */
+  --paper:#f4ecd9;        /* étiquette crème */
+  --paper-2:#eadfc4;
+  --ink:#22302b;          /* encre */
+  --copper:#c8813a;       /* cuivre d'alambic */
+  --copper-2:#a5651f;
+  --campari:#b23a2b;      /* rouge bitter */
+  --absinthe:#9fbf6b;     /* vert anisé */
+  --chalk:#e9e2cf;        /* craie */
+  --gold:#e2b45a;
+  --ok:#4f8f5b;
+  --ko:#b23a2b;
+  --radius:14px;
+  --shadow:0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Karla',sans-serif;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, rgba(200,129,58,.12), transparent 60%),
+    radial-gradient(900px 500px at 0% 100%, rgba(159,191,107,.07), transparent 60%),
+    var(--bar);
+  color:var(--chalk);
+  min-height:100vh;
+  line-height:1.5;
+}
+/* ---------- Header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(14,33,29,.92);backdrop-filter:blur(8px);
+  border-bottom:2px solid rgba(200,129,58,.35);
+  padding:10px 18px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.logo{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:var(--chalk)}
+.logo .tdb{
+  font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;
+  color:var(--gold);letter-spacing:.02em;
+}
+.logo .sub{font-family:'Caveat',cursive;font-size:1.15rem;color:var(--absinthe);transform:rotate(-2deg)}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+nav button{
+  font-family:'Karla',sans-serif;font-weight:700;font-size:.8rem;
+  background:transparent;color:var(--chalk);
+  border:1.5px solid rgba(233,226,207,.25);border-radius:999px;
+  padding:7px 13px;cursor:pointer;transition:.18s;
+}
+nav button:hover{border-color:var(--gold);color:var(--gold)}
+nav button.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+nav button:focus-visible{outline:3px solid var(--absinthe);outline-offset:2px}
+
+main{max-width:1050px;margin:0 auto;padding:26px 18px 90px}
+section.view{display:none;animation:fadein .35s ease}
+section.view.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,3rem);color:var(--paper);line-height:1.1}
+h2.viewtitle{
+  font-family:'Fraunces',serif;font-weight:900;font-size:clamp(1.5rem,3.5vw,2.2rem);
+  color:var(--gold);margin-bottom:4px;
+}
+.handnote{font-family:'Caveat',cursive;font-size:1.25rem;color:var(--absinthe)}
+.viewhead{margin-bottom:22px}
+.viewhead p{color:rgba(233,226,207,.75);max-width:640px;margin-top:6px}
+
+/* ---------- Accueil : l'étagère ---------- */
+.hero{margin-bottom:34px}
+.hero .kicker{
+  font-family:'Caveat',cursive;color:var(--copper);font-size:1.5rem;
+  transform:rotate(-1.5deg);display:inline-block;
+}
+.hero p.lead{color:rgba(233,226,207,.8);max-width:600px;margin-top:10px}
+.shelf{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));
+  gap:18px;padding-bottom:14px;border-bottom:10px solid #3a2a1a;
+  border-image:linear-gradient(90deg,#4a3722,#6b4e2e,#4a3722) 1;
+  position:relative;
+}
+.label-card{
+  background:var(--paper);color:var(--ink);
+  border-radius:6px 6px var(--radius) var(--radius);
+  padding:18px 16px 14px;cursor:pointer;border:none;text-align:left;
+  box-shadow:var(--shadow);position:relative;
+  transition:transform .18s, box-shadow .18s;
+  font-family:'Karla',sans-serif;
+  display:flex;flex-direction:column;gap:8px;min-height:170px;
+}
+.label-card::before{ /* goulot */
+  content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  width:34px;height:14px;background:inherit;border-radius:5px 5px 0 0;
+  background:var(--paper);
+}
+.label-card::after{ /* liseré étiquette */
+  content:"";position:absolute;inset:6px;border:1.5px dashed rgba(34,48,43,.35);
+  border-radius:4px 4px 10px 10px;pointer-events:none;
+}
+.label-card:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 14px 26px rgba(0,0,0,.45)}
+.label-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.label-card .icon{width:44px;height:44px}
+.label-card .name{font-family:'Fraunces',serif;font-weight:900;font-size:1.12rem;color:var(--ink)}
+.label-card .desc{font-size:.82rem;color:rgba(34,48,43,.75);flex:1}
+.label-card .deg{
+  font-family:'Caveat',cursive;font-size:1.05rem;color:var(--copper-2);
+  align-self:flex-end;transform:rotate(-2deg);
+}
+.label-card .badge{
+  position:absolute;top:-8px;right:10px;background:var(--campari);color:#fff;
+  font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 9px;
+  box-shadow:0 3px 8px rgba(0,0,0,.3);
+}
+
+/* ---------- Composants génériques ---------- */
+.panel{
+  background:var(--paper);color:var(--ink);border-radius:var(--radius);
+  padding:24px;box-shadow:var(--shadow);
+}
+.btn{
+  font-family:'Karla',sans-serif;font-weight:700;font-size:.95rem;
+  border:none;border-radius:999px;padding:11px 22px;cursor:pointer;transition:.15s;
+}
+.btn:focus-visible{outline:3px solid var(--campari);outline-offset:2px}
+.btn-copper{background:var(--copper);color:#fff}
+.btn-copper:hover{background:var(--copper-2)}
+.btn-ghost{background:transparent;color:var(--ink);border:2px solid rgba(34,48,43,.3)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-green{background:var(--ok);color:#fff}
+.btn-red{background:var(--campari);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.chip{
+  font-size:.78rem;font-weight:700;border-radius:999px;padding:6px 13px;cursor:pointer;
+  background:rgba(233,226,207,.1);color:var(--chalk);border:1.5px solid rgba(233,226,207,.3);
+  transition:.15s;
+}
+.chip.active{background:var(--absinthe);color:var(--ink);border-color:var(--absinthe)}
+.progressline{
+  height:8px;background:rgba(233,226,207,.15);border-radius:999px;overflow:hidden;
+  flex:1;min-width:120px;
+}
+.progressline > div{height:100%;background:linear-gradient(90deg,var(--copper),var(--gold));width:0%;transition:width .3s}
+.scorepill{
+  font-family:'Fraunces',serif;font-weight:900;color:var(--gold);font-size:1rem;white-space:nowrap;
+}
+
+/* ---------- Flashcards ---------- */
+.flashzone{display:flex;flex-direction:column;align-items:center;gap:18px}
+.flashcard{
+  width:min(560px,100%);height:330px;perspective:1400px;cursor:pointer;border:none;background:none;padding:0;
+}
+.flashcard .inner{
+  position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d;
+}
+.flashcard.flipped .inner{transform:rotateY(180deg)}
+.face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:30px;text-align:center;box-shadow:var(--shadow);
+}
+.face.front{background:var(--paper);color:var(--ink)}
+.face.front::after{content:"";position:absolute;inset:9px;border:1.5px dashed rgba(34,48,43,.3);border-radius:9px;pointer-events:none}
+.face.back{background:var(--bar-2);color:var(--chalk);transform:rotateY(180deg);border:2px solid var(--copper)}
+.face .cat{
+  font-family:'Caveat',cursive;font-size:1.2rem;color:var(--copper-2);
+  position:absolute;top:16px;left:22px;transform:rotate(-2deg);
+}
+.face.back .cat{color:var(--absinthe)}
+.face .q{font-family:'Fraunces',serif;font-weight:600;font-size:1.35rem;line-height:1.3}
+.face .a{font-size:1rem;line-height:1.55}
+.face .flip-hint{position:absolute;bottom:14px;font-size:.75rem;opacity:.55}
+.flash-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.flash-count{font-family:'Caveat',cursive;font-size:1.3rem;color:var(--gold)}
+
+/* ---------- Quiz (QCM / VF / Degrés / Ponts) ---------- */
+.quiz-q{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem;margin-bottom:18px;line-height:1.35;
+}
+.answers{display:grid;gap:10px}
+.answers button{
+  text-align:left;font-family:'Karla',sans-serif;font-size:.98rem;font-weight:600;
+  background:#fff;color:var(--ink);border:2px solid rgba(34,48,43,.2);
+  border-radius:10px;padding:13px 16px;cursor:pointer;transition:.15s;
+}
+.answers button:hover:not(:disabled){border-color:var(--copper);transform:translateX(4px)}
+.answers button:focus-visible{outline:3px solid var(--campari);outline-offset:2px}
+.answers button.correct{background:#e3f0e4;border-color:var(--ok);color:#25502e}
+.answers button.wrong{background:#f6e3e0;border-color:var(--ko);color:#7c2418}
+.feedback{
+  margin-top:16px;padding:14px 16px;border-radius:10px;font-size:.92rem;display:none;
+}
+.feedback.show{display:block;animation:fadein .25s ease}
+.feedback.good{background:#e3f0e4;color:#25502e;border-left:5px solid var(--ok)}
+.feedback.bad{background:#f6e3e0;color:#7c2418;border-left:5px solid var(--ko)}
+.feedback .handnote{color:inherit;font-size:1.15rem}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:12px;flex-wrap:wrap}
+.result-panel{text-align:center;padding:40px 24px}
+.result-panel .big{font-family:'Fraunces',serif;font-weight:900;font-size:3rem;color:var(--copper)}
+.vf-buttons{display:flex;gap:14px;justify-content:center;margin-top:8px}
+.vf-buttons button{flex:1;max-width:200px;font-size:1.15rem;padding:16px}
+
+/* ---------- Chrono (ordre) ---------- */
+.chrono-pool,.chrono-slots{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.chrono-chip{
+  font-weight:700;background:#fff;border:2px solid rgba(34,48,43,.25);border-radius:10px;
+  padding:10px 14px;cursor:pointer;transition:.15s;font-size:.9rem;
+}
+.chrono-chip:hover{border-color:var(--copper)}
+.chrono-chip.placed{opacity:.35;pointer-events:none}
+.chrono-slot{
+  min-width:150px;min-height:44px;border:2px dashed rgba(34,48,43,.35);border-radius:10px;
+  padding:9px 12px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.5);
+}
+.chrono-slot .num{font-family:'Caveat',cursive;color:var(--copper-2);font-size:1.15rem}
+.chrono-slot.good{border-style:solid;border-color:var(--ok);background:#e3f0e4}
+.chrono-slot.bad{border-style:solid;border-color:var(--ko);background:#f6e3e0}
+
+/* ---------- Carte mentale ---------- */
+.mindwrap{background:var(--bar-2);border-radius:var(--radius);padding:10px;box-shadow:var(--shadow)}
+.mindwrap svg{width:100%;height:auto;display:block}
+.mind-node{cursor:pointer;transition:.15s}
+.mind-node:hover circle,.mind-node:hover rect{filter:brightness(1.2)}
+.mind-info{
+  margin-top:16px;background:var(--paper);color:var(--ink);border-radius:var(--radius);
+  padding:20px;display:none;box-shadow:var(--shadow);
+}
+.mind-info.show{display:block;animation:fadein .25s}
+.mind-info h3{font-family:'Fraunces',serif;font-weight:900;color:var(--copper-2);margin-bottom:8px}
+.mind-info ul{padding-left:20px;font-size:.92rem}
+.mind-info li{margin-bottom:5px}
+
+/* ---------- Sketchnotes ---------- */
+.sketch-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.sketchpanel{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;display:none}
+.sketchpanel.show{display:block;animation:fadein .3s}
+.sketchpanel svg{width:100%;height:auto;display:block}
+
+/* ---------- Fiches de lecture ---------- */
+.fichepanel{background:var(--paper);color:var(--ink);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;display:none}
+.fichepanel.show{display:block;animation:fadein .3s}
+.fiche-lead{font-family:'Caveat',cursive;font-size:1.3rem;color:var(--copper-2);margin-bottom:14px}
+.fiche-note{margin-top:14px;font-size:.85rem;font-style:italic;color:rgba(34,48,43,.7);border-left:3px solid var(--copper);padding-left:10px}
+.fiche-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.fiche-block h4{font-family:'Fraunces',serif;font-weight:900;color:var(--copper-2);font-size:1.02rem;margin:4px 0 8px;padding-bottom:4px;border-bottom:2px solid rgba(200,129,58,.3)}
+.fiche-block ul{list-style:none;font-size:.87rem}
+.fiche-block li{padding:5px 0;border-bottom:1px dashed rgba(34,48,43,.14);line-height:1.45}
+.fiche-block li b{color:var(--campari)}
+.timeline{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 18px}
+.tl-row{display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px dashed rgba(34,48,43,.14)}
+.tl-year{font-family:'Fraunces',serif;font-weight:900;color:var(--copper-2);min-width:44px}
+.tl-lab{font-size:.85rem}
+.tav-demo{max-width:520px;margin:0 auto}
+.tav-line,.tav-tot{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;font-size:.92rem;border-bottom:1px dashed rgba(34,48,43,.2)}
+.tav-line b,.tav-tot b{font-family:'Fraunces',serif;color:var(--copper-2);white-space:nowrap}
+.tav-tot{border-top:2px solid var(--ink);border-bottom:none;font-weight:700;margin-top:4px}
+.tav-res{text-align:center;margin-top:16px;font-size:1.2rem}
+.tav-res b{font-family:'Fraunces',serif;font-weight:900;color:var(--campari)}
+
+/* ---------- Fiches Socle ---------- */
+#socle-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.socle-card{background:var(--paper);color:var(--ink);border-radius:12px;padding:16px;box-shadow:var(--shadow);position:relative}
+.socle-card h3{font-family:'Fraunces',serif;font-weight:900;font-size:1.08rem;color:var(--copper-2);margin-bottom:2px}
+.socle-card .profil{font-family:'Caveat',cursive;font-size:1.05rem;color:var(--ok);margin-bottom:8px;display:block}
+.socle-card ul{list-style:none;font-size:.85rem;margin-bottom:8px}
+.socle-card ul li{padding:2px 0;border-bottom:1px dashed rgba(34,48,43,.15)}
+.socle-card ul li b{color:var(--campari)}
+.socle-card .meta{font-size:.74rem;color:rgba(34,48,43,.75);line-height:1.6}
+.socle-card .meta b{color:var(--ink)}
+.socle-card .tav{position:absolute;top:12px;right:14px;font-family:'Fraunces',serif;font-weight:900;color:var(--campari);font-size:1.05rem}
+.socle-card .variantes{margin-top:8px;font-size:.76rem;background:rgba(159,191,107,.18);border-radius:8px;padding:7px 9px}
+.socle-card .variantes b{color:#4f7a3a}
+
+/* ---------- Divers ---------- */
+.footer-note{
+  text-align:center;margin-top:60px;font-family:'Caveat',cursive;
+  color:rgba(233,226,207,.5);font-size:1.2rem;
+}
+@media (max-width:640px){
+  .flashcard{height:380px}
+  nav{width:100%;justify-content:flex-start}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#" onclick="showView('home');return false;">
+    <span class="tdb">TDB26</span>
+    <span class="sub">le carnet de révision</span>
+  </a>
+  <nav id="mainnav">
+    <button data-view="home" class="active" onclick="showView('home')">Accueil</button>
+    <button data-view="fiches" onclick="showView('fiches')">Fiches</button>
+    <button data-view="flash" onclick="showView('flash')">Flashcards</button>
+    <button data-view="qcm" onclick="showView('qcm')">QCM</button>
+    <button data-view="vf" onclick="showView('vf')">Vrai/Faux</button>
+    <button data-view="deg" onclick="showView('deg')">Degrés</button>
+    <button data-view="chrono" onclick="showView('chrono')">Chronologie</button>
+    <button data-view="ponts" onclick="showView('ponts')">Socle</button>
+    <button data-view="socleplus" onclick="showView('socleplus')">Socle+</button>
+    <button data-view="mind" onclick="showView('mind')">Carte mentale</button>
+    <button data-view="sketch" onclick="showView('sketch')">Sketchnotes</button>
+    <button data-view="grandtest" onclick="showView('grandtest')" style="background:var(--campari);color:#fff;border-color:var(--campari)">★ Grand test</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ ACCUEIL ============ -->
+<section class="view active" id="view-home">
+  <div class="hero">
+    <span class="kicker">Trophée du Bar 2026 — produits partenaires</span>
+    <h1>Choisis une bouteille,<br>ouvre un module.</h1>
+    <p class="lead">Neuf façons de faire rentrer les fiches : cartes à retourner, quiz, jeux de degrés, chronologie, carte mentale et schémas façon sketchnote. Objectif&nbsp;: 80&nbsp;% partout.</p>
+  </div>
+
+  <div class="shelf" id="shelf"></div>
+
+  <p class="footer-note">« Para todo mal, mezcal ; para todo bien, también. » — révise un module par jour, refais tes erreurs à J+2 et J+7.</p>
+</section>
+
+<!-- ============ FLASHCARDS ============ -->
+<section class="view" id="view-flash">
+  <div class="viewhead">
+    <h2 class="viewtitle">Flashcards</h2>
+    <span class="handnote">retourne la carte, puis sois honnête : je sais / à revoir</span>
+    <p>Les cartes « à revoir » reviennent dans la pile jusqu'à ce que tu les maîtrises. Filtre par famille si tu veux cibler.</p>
+  </div>
+  <div class="toolbar" id="flash-filters"></div>
+  <div class="toolbar">
+    <div class="progressline"><div id="flash-progress"></div></div>
+    <span class="scorepill" id="flash-score">0 / 0</span>
+  </div>
+  <div class="flashzone">
+    <button class="flashcard" id="flashcard" aria-label="Retourner la carte">
+      <div class="inner">
+        <div class="face front">
+          <span class="cat" id="fc-cat-f"></span>
+          <div class="q" id="fc-q"></div>
+          <span class="flip-hint">clique pour retourner</span>
+        </div>
+        <div class="face back">
+          <span class="cat" id="fc-cat-b"></span>
+          <div class="a" id="fc-a"></div>
+        </div>
+      </div>
+    </button>
+    <div class="flash-actions">
+      <button class="btn btn-red" id="fc-again">↻ À revoir</button>
+      <button class="btn btn-green" id="fc-know">✓ Je sais</button>
+    </div>
+    <span class="flash-count" id="fc-remaining"></span>
+  </div>
+</section>
+
+<!-- ============ QCM ============ -->
+<section class="view" id="view-qcm">
+  <div class="viewhead">
+    <h2 class="viewtitle">QCM — 20 questions</h2>
+    <span class="handnote">le questionnaire officiel des fiches, mélangé à chaque partie</span>
+  </div>
+  <div class="toolbar">
+    <div class="progressline"><div id="qcm-progress"></div></div>
+    <span class="scorepill" id="qcm-score">0 pt</span>
+  </div>
+  <div class="panel" id="qcm-panel"></div>
+</section>
+
+<!-- ============ VRAI/FAUX ============ -->
+<section class="view" id="view-vf">
+  <div class="viewhead">
+    <h2 class="viewtitle">Vrai ou Faux — 15 affirmations</h2>
+    <span class="handnote">attention, il y a des pièges volontaires…</span>
+  </div>
+  <div class="toolbar">
+    <div class="progressline"><div id="vf-progress"></div></div>
+    <span class="scorepill" id="vf-score">0 pt</span>
+  </div>
+  <div class="panel" id="vf-panel"></div>
+</section>
+
+<!-- ============ DEGRÉS ============ -->
+<section class="view" id="view-deg">
+  <div class="viewhead">
+    <h2 class="viewtitle">Degrés pièges</h2>
+    <span class="handnote">Bianco 16° ou 28° ? Fusion 55° ou 45° ? Prouve-le.</span>
+    <p>Le jury adore ces questions. 12 produits tirés au sort à chaque partie.</p>
+  </div>
+  <div class="toolbar">
+    <div class="progressline"><div id="deg-progress"></div></div>
+    <span class="scorepill" id="deg-score">0 pt</span>
+  </div>
+  <div class="panel" id="deg-panel"></div>
+</section>
+
+<!-- ============ CHRONOLOGIE ============ -->
+<section class="view" id="view-chrono">
+  <div class="viewhead">
+    <h2 class="viewtitle">Chronologie des maisons</h2>
+    <span class="handnote">clique les maisons de la plus ancienne à la plus récente</span>
+  </div>
+  <div class="toolbar">
+    <div class="progressline"><div id="chrono-progress"></div></div>
+    <span class="scorepill" id="chrono-score">0 pt</span>
+  </div>
+  <div class="panel" id="chrono-panel"></div>
+</section>
+
+<!-- ============ PONTS ============ -->
+<section class="view" id="view-ponts">
+  <div class="viewhead">
+    <h2 class="viewtitle">Cocktails du Socle</h2>
+    <span class="handnote">le référentiel officiel 2025 : doses, méthodes, TAV, variantes</span>
+    <p>Les 36 cocktails de référence (APEB / Éducation nationale). Deux modes : le quiz qui tire des questions au hasard, et les fiches éclair pour réviser les recettes exactes.</p>
+  </div>
+  <div class="toolbar" id="socle-modes">
+    <button class="chip active" id="socle-mode-quiz">🎯 Quiz recettes</button>
+    <button class="chip" id="socle-mode-browse">📖 Fiches éclair</button>
+  </div>
+  <div id="socle-quizwrap">
+    <div class="toolbar">
+      <div class="progressline"><div id="ponts-progress"></div></div>
+      <span class="scorepill" id="ponts-score">0 pt</span>
+    </div>
+    <div class="panel" id="ponts-panel"></div>
+  </div>
+  <div id="socle-browsewrap" style="display:none">
+    <div class="toolbar" id="socle-filters"></div>
+    <div id="socle-cards"></div>
+  </div>
+</section>
+
+<!-- ============ CARTE MENTALE ============ -->
+<section class="view" id="view-mind">
+  <div class="viewhead">
+    <h2 class="viewtitle">Carte mentale</h2>
+    <span class="handnote">clique un nœud pour dérouler l'essentiel</span>
+  </div>
+  <div class="mindwrap" id="mindwrap"></div>
+  <div class="mind-info" id="mind-info"></div>
+</section>
+
+<!-- ============ SKETCHNOTES ============ -->
+<section class="view" id="view-sketch">
+  <div class="viewhead">
+    <h2 class="viewtitle">Sketchnotes & schémas</h2>
+    <span class="handnote">les mécanismes qui reviennent toujours en question jury</span>
+  </div>
+  <div class="sketch-nav" id="sketch-nav"></div>
+  <div id="sketch-panels"></div>
+</section>
+
+<!-- ============ FICHES (lecture) ============ -->
+<section class="view" id="view-fiches">
+  <div class="viewhead">
+    <h2 class="viewtitle">Fiches de révision</h2>
+    <span class="handnote">tout l'essentiel à lire, rangé par thème — révise avant de te tester</span>
+    <p>Les infos qui font gagner des points, condensées. Clique un thème, lis à voix haute, puis file te tester dans les autres modules.</p>
+  </div>
+  <div class="sketch-nav" id="fiches-nav"></div>
+  <div id="fiches-panels"></div>
+</section>
+
+<!-- ============ SOCLE + (exercices) ============ -->
+<section class="view" id="view-socleplus">
+  <div class="viewhead">
+    <h2 class="viewtitle">Socle+ — exercices ciblés</h2>
+    <span class="handnote">4 jeux 100 % cocktails du référentiel</span>
+    <p>Devine le cocktail, retrouve son verre, sa famille, sa garniture. Choisis un exercice.</p>
+  </div>
+  <div class="toolbar" id="socleplus-modes"></div>
+  <div class="toolbar">
+    <div class="progressline"><div id="sp-progress"></div></div>
+    <span class="scorepill" id="sp-score">0 pt</span>
+  </div>
+  <div class="panel" id="sp-panel"></div>
+</section>
+
+<!-- ============ GRAND TEST ============ -->
+<section class="view" id="view-grandtest">
+  <div class="viewhead">
+    <h2 class="viewtitle">Le Grand test</h2>
+    <span class="handnote">tout, tout, tout : partenaires TDB26 + socle des cocktails, mélangés</span>
+    <p>Le test qui pioche dans absolument toutes les banques : marques, degrés, chronologie, recettes du socle, verres, familles, variantes. Choisis ta longueur, objectif 80 %.</p>
+  </div>
+  <div id="gt-setup" class="panel" style="text-align:center;padding:34px 24px">
+    <p style="margin-bottom:18px;font-size:1.05rem">Combien de questions pour cette session ?</p>
+    <div class="toolbar" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="startGrandTest(15)">Rapide · 15</button>
+      <button class="btn btn-copper" onclick="startGrandTest(30)">Complet · 30</button>
+      <button class="btn btn-ghost" onclick="startGrandTest(50)">Marathon · 50</button>
+    </div>
+    <p class="handnote" style="color:var(--copper-2);margin-top:16px">chaque session est un tirage neuf</p>
+  </div>
+  <div id="gt-quizwrap" style="display:none">
+    <div class="toolbar">
+      <div class="progressline"><div id="gt-progress"></div></div>
+      <span class="scorepill" id="gt-score">0 pt</span>
+    </div>
+    <div class="panel" id="gt-panel"></div>
+  </div>
+</section>
+
+</main>
+<script>
+/* =================== DONNÉES =================== */
+const MODULES = [
+  {id:"fiches", name:"Fiches de révision", desc:"Tout l'essentiel à lire, rangé par thème : marques, femmes, degrés, socle, lexique.", deg:"à lire d'abord", icon:"book"},
+  {id:"flash", name:"Flashcards", desc:"39 cartes à retourner, avec pile « à revoir » qui insiste jusqu'à la maîtrise.", deg:"mémoire active", icon:"card"},
+  {id:"qcm", name:"QCM", desc:"Les 20 questions officielles des fiches, mélangées, avec explications.", deg:"20 questions", icon:"quiz"},
+  {id:"vf", name:"Vrai / Faux", desc:"15 affirmations piégées : Blanchette verte ? Chinola = mangue ?", deg:"15 pièges", icon:"vf"},
+  {id:"deg", name:"Degrés pièges", desc:"Le grand jeu des degrés : 16°, 28°, 55°… ne confonds plus jamais.", deg:"à réciter", icon:"deg"},
+  {id:"chrono", name:"Chronologie", desc:"Remets les maisons dans l'ordre, de 1749 à 2024.", deg:"1749 → 2024", icon:"chrono"},
+  {id:"ponts", name:"Cocktails du Socle", desc:"Les 36 recettes officielles : doses, méthodes, TAV, variantes. Quiz + fiches éclair.", deg:"référentiel 2025", icon:"bridge"},
+  {id:"socleplus", name:"Socle+", desc:"4 exercices ciblés : devine le cocktail, son verre, sa famille, sa garniture.", deg:"100 % socle", icon:"target"},
+  {id:"mind", name:"Carte mentale", desc:"Toute la liste partenaires en un coup d'œil, nœud par nœud.", deg:"vue d'ensemble", icon:"mind"},
+  {id:"sketch", name:"Sketchnotes", desc:"Flor vs oxydatif, règles du pisco, proof américain… en schémas dessinés.", deg:"6 schémas", icon:"sketch"},
+  {id:"grandtest", name:"Le Grand test", desc:"Tout, tout, tout : partenaires + socle mélangés. 15, 30 ou 50 questions.", deg:"l'épreuve totale", icon:"trophy"},
+];
+const ICONS = {
+  book:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M24 12c-4-3-10-3-14-2v26c4-1 10-1 14 2 4-3 10-3 14-2V10c-4-1-10-1-14 2z" fill="#fff" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M24 12v28" stroke="#c8813a" stroke-width="2.5"/><path d="M13 18h6M13 24h6M29 18h6M29 24h6" stroke="#22302b" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  target:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="#22302b" stroke-width="2.5"/><circle cx="24" cy="24" r="10" fill="none" stroke="#c8813a" stroke-width="2.5"/><circle cx="24" cy="24" r="3.5" fill="#b23a2b"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6" stroke="#22302b" stroke-width="2" stroke-linecap="round"/></svg>',
+  trophy:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M16 8h16v10a8 8 0 0 1-16 0z" fill="#e2b45a" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M16 11H10v4a6 6 0 0 0 6 6M32 11h6v4a6 6 0 0 1-6 6" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M24 26v6M18 38h12M20 32h8v6h-8z" fill="#c8813a" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/></svg>',
+  card:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><rect x="6" y="10" width="28" height="30" rx="4" fill="none" stroke="#c8813a" stroke-width="2.5" transform="rotate(-6 20 25)"/><rect x="14" y="8" width="28" height="30" rx="4" fill="#fff" stroke="#22302b" stroke-width="2.5"/><path d="M20 18h16M20 24h16M20 30h10" stroke="#22302b" stroke-width="2" stroke-linecap="round"/></svg>',
+  quiz:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M18 19c0-4 3-6 6-6s6 2 6 5c0 4-5 4-5 8" stroke="#c8813a" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="25" cy="32" r="2" fill="#c8813a"/></svg>',
+  vf:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M8 26l6 6L26 18" stroke="#4f8f5b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 16l10 12M40 16L30 28" stroke="#b23a2b" stroke-width="4" stroke-linecap="round"/></svg>',
+  deg:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><rect x="19" y="6" width="10" height="26" rx="5" fill="none" stroke="#22302b" stroke-width="2.5"/><circle cx="24" cy="36" r="8" fill="#b23a2b" stroke="#22302b" stroke-width="2.5"/><path d="M24 30V16" stroke="#b23a2b" stroke-width="4" stroke-linecap="round"/></svg>',
+  chrono:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M6 32h36" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="32" r="4" fill="#c8813a"/><circle cx="24" cy="32" r="4" fill="#9fbf6b"/><circle cx="36" cy="32" r="4" fill="#b23a2b"/><path d="M12 26v-8M24 26V12M36 26v-6" stroke="#22302b" stroke-width="2" stroke-linecap="round"/></svg>',
+  bridge:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M6 34h36" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><path d="M10 34c0-10 6-16 14-16s14 6 14 16" stroke="#c8813a" stroke-width="3" fill="none"/><path d="M17 34v-8M24 34V18M31 34v-8" stroke="#22302b" stroke-width="2"/></svg>',
+  mind:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="24" r="6" fill="#c8813a"/><circle cx="9" cy="12" r="4" fill="#9fbf6b"/><circle cx="39" cy="12" r="4" fill="#b23a2b"/><circle cx="9" cy="38" r="4" fill="#e2b45a"/><circle cx="39" cy="38" r="4" fill="#22302b"/><path d="M20 21l-8-7M28 21l8-7M20 27l-8 9M28 27l8 9" stroke="#22302b" stroke-width="2"/></svg>',
+  sketch:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M8 38L34 12l4 4L12 42l-6 2z" fill="#e2b45a" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M31 15l4 4" stroke="#22302b" stroke-width="2.5"/><path d="M10 14c4-3 8 3 12 0" stroke="#c8813a" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>',
+};
+
+/* ---- FLASHCARDS ---- */
+const FLASH = [
+ {c:"Non alcool", q:"Adriatico : année, lieu, amande, signature ?", a:"2019, par Jean-Robert Bellanger (ex-Red Bull), dans les Pouilles. Amande Filippo Cea (séchée 7 jours au soleil, 60 % d'huile) + pincée de sel de Margherita di Savoia. 2× moins de sucre qu'un amaretto classique. Le Zero = le seul amaretto 0,0 % du concours."},
+ {c:"Non alcool", q:"Giffard : fondation et invention fondatrice ?", a:"1885 à Angers par Émile Giffard, pharmacien. Il invente la Menthe-Pastille pendant une canicule pour rafraîchir les clients du Grand Hôtel. Maison familiale, 5e génération, 80+ pays."},
+ {c:"Non alcool", q:"Les DEUX gammes sans alcool Giffard, et leur différence technique ?", a:"1) « Giffard Sans Alcool » = technique shrub : macération dans du vinaigre de vin (l'acidité remplace la structure de l'alcool). 2) « Bases Cocktail » = 4 ans de R&D, spiritueux miroirs : Aperitif Bitter, Woody Malt (whisky), Smoky Agave (mezcal), Herbal + Juniper (gin), Cold Cane (rhum), Ruby Grape (vermouth)."},
+ {c:"Non alcool", q:"Fever-Tree : fondation, nom, quinine ?", a:"2004 à Londres par Charles Rolls (relanceur du gin Plymouth) et Tim Warrillow. « Fever tree » = l'arbre à fièvre = le quinquina, dont l'écorce donne la quinine naturelle, sourcée en RD Congo. Devise : « si les 3/4 de votre G&T sont du tonic, choisissez le meilleur »."},
+ {c:"Non alcool", q:"Quel tonic Fever-Tree pour le Roku, et pourquoi ?", a:"Le Mediterranean : herbes de Méditerranée (thym, romarin), amertume plus douce — parfait pour les gins floraux. L'Indian reste l'étalon quinine du G&T classique."},
+ {c:"Non alcool", q:"Ponthier : fondation, spécialité historique, labels ?", a:"1946 à Objat (Corrèze) par André Ponthier, ex-négociant en fruits. D'abord n°1 de la châtaigne (marrons cuits sous vide), puis purées surgelées et 1res purées réfrigérées. B Corp, label « Pure Trace » (variété + origine sur chaque recette)."},
+ {c:"Non alcool", q:"Figue de Barbarie (purée Ponthier) : c'est quoi, et quel pont TDB ?", a:"Le fruit du cactus opuntia — magenta, notes melon-pastèque. Pont évident avec Fiba de BOWS (eau-de-vie de figue de Barbarie) : l'accord « cactus sur cactus »."},
+ {c:"Non alcool", q:"PCB Création : fondation et gamme Ingredium ?", a:"1992 à Benfeld (Alsace) par Nathalie et Pierre Bach. Ingredium = 2019, 5 familles : Texturants & Amidons · Acides & Sels · Émulsifiants & Stabilisants · Sucres & Dérivés · Clean Label."},
+ {c:"Apéritifs", q:"Combier : fondation et deux fiertés historiques ?", a:"1834 à Saumur par Jean-Baptiste Combier, confiseur. Créateur du 1er triple sec au monde (« L'Original »). Salle des alambics signée des ateliers Eiffel. Plus ancienne distillerie du Val de Loire."},
+ {c:"Apéritifs", q:"Blanchette vs L'Entêté : différences complètes ?", a:"Blanchette 60° = blanche, style suisse, recréation de la recette 1899, non colorée. L'Entêté 62° = verte, chlorophylle 100 % naturelle, 9 ingrédients, nommée en hommage à l'entêtement de Franck Choisne (relance 2004, mention « absinthe » réautorisée en 2011)."},
+ {c:"Apéritifs", q:"Absinthe : les deux dates légales à connaître ?", a:"Interdite en France en 1915. Mention « absinthe » de nouveau autorisée en 2011 — grâce notamment au combat de Franck Choisne (Combier). Sainte trinité : grande absinthe + anis vert + fenouil."},
+ {c:"Apéritifs", q:"Campari : création, couleur, degré français ?", a:"1860 par Gaspare Campari à Novare, puis Milan (Caffè Camparino, 1915). Rouge issu de la cochenille jusqu'en 2006. Titre 25° en France (varie de 20,5° à 28,5° selon les pays)."},
+ {c:"Apéritifs", q:"Le Negroni : où, quand, qui ?", a:"Florence, 1919 : le comte Camillo Negroni demande au Caffè Casoni de corser son Americano au gin. Version 100 % TDB : Roku + Campari + Carpano."},
+ {c:"Apéritifs", q:"La Ina : les 3 styles de sherry et leurs degrés ?", a:"Fino La Ina 15° : Palomino de Macharnudo (albariza), élevage sous flor ≈ 5 ans → sec, salin, amande. Oloroso Rio Viejo 20° : muté plus haut, pas de flor → oxydatif, noix, tabac. PX Viña 25 17° : raisins passerillés au soleil (soleo) → liquoreux (~400 g/L). Soleras 1919 (Pedro Domecq), chez Lustau depuis 2008."},
+ {c:"Apéritifs", q:"Noilly Prat : ce qui rend la production unique au monde ?", a:"Vins Picpoul de Pinet + Clairette élevés 1 an EN PLEIN AIR dans « l'Enclos » à Marseillan (soleil, vent, embruns → oxydation façon madère). Puis macération de ~20 plantes avec « dodinage » quotidien (brassage manuel à la pale). Recette 1813 de Joseph Noilly."},
+ {c:"Apéritifs", q:"Noilly Dry vs Ambré ?", a:"Dry 18° = LE vermouth du Dry Martini, sec, salin (chouchou de Julia Child). Ambré 16° = recette confidentielle longtemps réservée à la boutique de Marseillan — miel, vanille, cannelle."},
+ {c:"Apéritifs", q:"Carpano : pourquoi c'est LA référence historique du vermouth ?", a:"Antonio Benedetto Carpano INVENTE le vermouth moderne à Turin en 1786 (adopté par le roi Victor-Amédée III). Antica Formula 16,5° = recette d'origine, signature vanille de Madagascar. Classico 16° = fraîcheur, service en volume. Punt e Mes = 1870."},
+ {c:"Eaux-de-vie", q:"BOWS : acronyme, fondateur, lieux ?", a:"Brave Occitan Wild Spirit. Fondée en 2016 par Benoît Garcia, d'abord dans son jardin à Montauban (alambic Lagorsse 900 L qu'il a dessiné), puis ferme-distillerie à Laure-Minervois depuis 2022. Zéro filtration, embouteillage par gravité."},
+ {c:"Eaux-de-vie", q:"Fiba : décompose le nom et donne le pitch.", a:"FIgue de BArbarie, 45°. L'esprit mezcalero appliqué au cactus du Sud de la France : végétal, légèrement fumé-terreux. Le « mezcal français » — unique en France."},
+ {c:"Eaux-de-vie", q:"Oli'Still de Manguin : lieu, procédé, profil ?", a:"Île de la Barthelasse (Avignon), alambics depuis 1957 (célèbre Poire Manguin ; Claude Manguin = fils du peintre Henri Manguin). Olive distillée depuis 2014 : macération d'olives de Provence + alambic charentais à repasse. 40° — truffe, olive noire, finale saline. Remplace la saumure du Dirty Martini."},
+ {c:"Eaux-de-vie", q:"Roku : que signifie le nom, et quels sont les 6 botaniques ?", a:"Roku = « six ». Fleur de sakura, feuille de sakura, thé sencha, thé gyokuro, poivre sanshō, zeste de yuzu — chacun récolté selon le shun (moment d'apogée). + 8 botaniques classiques = 14. Osaka, 2017, Suntory (1899). Bouteille hexagonale."},
+ {c:"Eaux-de-vie", q:"Benleioc : nom, particularité de brassage, les deux versions ?", a:"BEN(oît) + LEI (loyauté) + OC (Occitanie). Whiskies de brassins type STOUT (bières noires torréfiées) — une 1re en Europe. Affinage en fûts de Pacherenc. Sorgho 45° (céréale rare, clin d'œil baijiu) / Tourbé 45° (~53 ppm)."},
+ {c:"Eaux-de-vie", q:"Wild Turkey : origine du nom et les deux références ?", a:"Site distillant depuis 1869 (frères Ripy). Nom né en 1940 : Thomas McCarthy apporte du bourbon à une chasse au dindon sauvage. 101 Proof = 50,5° (flagship, 6-8 ans) / 81 Proof = 40,5° (2011, Eddie Russell). Proof américain = degré × 2. Alligator char n°4."},
+ {c:"Eaux-de-vie", q:"Qui est Jimmy Russell ?", a:"Maître distillateur de Wild Turkey depuis 1954 — le plus ancien maître distillateur en activité au monde, surnommé « le Bouddha du bourbon ». Son fils Eddie est co-master distiller, Bruce (3e génération) est déjà là."},
+ {c:"Eaux-de-vie", q:"Isautier : fondation, superlatifs, femmes clés ?", a:"1845 à Saint-Pierre — plus ancienne distillerie ET entreprise de La Réunion, 7e génération. Antoinette Isautier dirige dès 1865 ! Maître de chai actuelle : Marie Ferrand. Pionnier des rhums arrangés (années 1970)."},
+ {c:"Eaux-de-vie", q:"Double Agent Fusion : procédé exact et degré ?", a:"Innovation de Marie Ferrand : co-fermentation de 36 h de mélasse ET pur jus de canne (50/50), distillation en colonne, 2 ans et demi de repos en cuve. Ni traditionnel ni agricole : un agent double. 55° — brioche, menthe-réglisse, touche saline."},
+ {c:"Eaux-de-vie", q:"Appleton Estate : date, concept, et que signifie l'âge sur l'étiquette ?", a:"1749, Nassau Valley (Jamaïque) — estate rum complet : canne, eau calcaire, pot stills à double retort, vieillissement tropical (3× plus rapide) et assemblage sur place. L'âge = celui du PLUS JEUNE rhum de l'assemblage."},
+ {c:"Eaux-de-vie", q:"Qui est Joy Spence ?", a:"Master blender d'Appleton depuis 1997 — la PREMIÈRE femme master blender de toute l'industrie des spiritueux. Chimiste de formation, 40+ ans dans la maison. Anecdote incontournable en concours."},
+ {c:"Eaux-de-vie", q:"Calle 23 : fondatrice, signature technique, origine du nom ?", a:"Sophie Decobecq, ingénieure française en génie biologique. Agaves de Los Altos de Jalisco, cuisson douce en autoclave, et SES PROPRES LEVURES créées à partir de l'agave. Nom = une vieille plaque de rue vue à Guadalajara le jour où la recette fut au point."},
+ {c:"Eaux-de-vie", q:"Calle 23 : durées de vieillissement Reposado et Añejo ?", a:"Reposado = 8 mois en ex-bourbon (légal : 2 mois à 1 an). Añejo = 16 mois en ex-bourbon (légal : 1 à 3 ans). Blanco = non vieilli. Tous à 40°."},
+ {c:"Eaux-de-vie", q:"Nuestra Soledad : famille, concept, hommage du nom ?", a:"Casa Cortés : famille zapotèque de Santiago Matatlán, 6 générations depuis 1840 (aussi El Jolgorio). Concept single village : 100 % espadín, chaque cuvée = un village des Valles Centrales. Nom = la Virgen de la Soledad, patronne d'Oaxaca. Four de terre + tahona + fermentation sauvage."},
+ {c:"Eaux-de-vie", q:"Les règles d'or du pisco péruvien ?", a:"Distillation UNIQUE, directement au degré final (38-48°) : aucun ajout d'eau. JAMAIS de bois : repos min. 3 mois en cuve inerte. Puro = 1 cépage / Acholado = assemblage / Mosto Verde = moût partiellement fermenté."},
+ {c:"Eaux-de-vie", q:"Quebranta vs Italia (Cuatro Gallos) ?", a:"Quebranta = NON aromatique (banane, fruits secs, cacao) → le Pisco Sour (Morris' Bar, Lima, ~1920). Italia = aromatique muscaté (jasmin, litchi) → Chilcano avec Fever-Tree Ginger Ale. Vallée d'Ica, quatre frères, 8 cépages."},
+ {c:"Eaux-de-vie", q:"Dartigalongue : superlatifs et logique de la gamme ?", a:"1838 à Nogaro = plus ancienne maison d'armagnac ; plus vieux millésime authentifié : 1848. Gamme « leçon de bois », tous 43° : Un-Oaked = zéro bois (Blanche d'Armagnac) / Single-Oaked = un fût / Double-Oaked = deux fûts NEUFS gascons chauffe forte → profil bourbon-friendly."},
+ {c:"Eaux-de-vie", q:"Merlet : les 3 références et leur définition ?", a:"Saint-Sauvant, 1850, 5e génération (Gilles + Pierre & Luc). VS 40° = 2 ans min. Brothers Blend 40° = 4 ans min, Fins Bois majoritaires + 1/5 Grande Champagne. Eau de Vigne 40° = « la Blanche », eau-de-vie de vin NON vieillie (Ugni Blanc/Colombard)."},
+ {c:"Eaux-de-vie", q:"Sab's : qui, où, et la différence marc / fine ?", a:"Mathieu Sabbagh, Beaune, 2019 (rachat distillerie Pigneret) — un des derniers bouilleurs ambulants de France. MARC = distillé des peaux/pépins/rafles (cousin de la grappa). FINE = distillée de vin ou de lies. Le Blanc 43° (inox 1 an) / Le Marc 46° (4 ans fûts 228 L + finish 6 mois fût de cognac)."},
+ {c:"Liqueurs", q:"Gabriel Boudier : ville, famille, deux productions célèbres ?", a:"Dijon, 1874, famille Battault depuis 1936. Roi de la crème de cassis de Dijon (baies Noir de Bourgogne). Produit aussi la liqueur Kota de Nico de Soto et le Saffron Gin. Kir = chanoine Félix Kir, maire de Dijon."},
+ {c:"Liqueurs", q:"Adriatico Bianco vs Classico — LE piège du questionnaire ?", a:"Classico « Roasted » 28° : amandes TORRÉFIÉES, ambré, vanille-cacao-sel → Godfather, Amaretto Sour. Bianco « Crushed » 16° : amandes CRUES concassées, « lait d'amande » alcoolisé, blanc, vegan → Piña Colada, float sur Porn Star. 12 points d'écart !"},
+ {c:"Liqueurs", q:"Algebra : pourquoi « extra-dry », et les 3 ingrédients ?", a:"100 g/L de sucre = le MINIMUM légal européen pour l'appellation « liqueur » → impossible de faire plus sec (standards : 250-330 g/L). Café de spécialité Has Bean + rhums Caraïbes/Amérique du Sud + sucre de canne. 19°, Londres, Yves Cosentino. La Décaf = l'espresso martini de 23 h."},
+ {c:"Liqueurs", q:"Bénédictine : date, légende, que signifie D.O.M. ?", a:"1863 à Fécamp par Alexandre Le Grand — légende de la recette du moine Dom Bernardo Vincelli (1510). 27 plantes et épices, fractions distillées séparément. D.O.M. = Deo Optimo Maximo. Palais Bénédictine + sa « salle des contrefaçons ». Cocktails : Singapore Sling, Vieux Carré, B&B."},
+ {c:"Liqueurs", q:"Chinola : que signifie le nom, et le concept ?", a:"« Chinola » = fruit de la passion en dominicain. 2014, péninsule de Samaná. Vine-to-bottle : fruits transformés dans les 24 h après récolte, alcool neutre de canne, zéro arôme artificiel. Passion / Mango / Pineapple, tous 21°. Étiquette bleue = pierre larimar."},
+ {c:"Liqueurs", q:"Grand Marnier : composition et anecdote Ritz ?", a:"1880, Louis-Alexandre Marnier Lapostolle. Cognac (51 % dans le Cordon Rouge) + essence d'orange amère bigarade des Caraïbes. César Ritz baptise la liqueur (« un grand nom pour une grande liqueur ») ; en échange, Marnier Lapostolle aide à financer l'Hôtel Ritz."},
+ {c:"Liqueurs", q:"Kota : quoi, qui, quand, degré ?", a:"Liqueur de pandan — « la vanille d'Asie » (vanille, amande grillée, riz au lait, finale herbacée). Collaboration Nico de Soto (Danico, Mace, Wacky Wombat) × Gabriel Boudier. Lancée été 2024, 18°, feuilles fraîches de Thaïlande. LA nouveauté du concours."},
+ {c:"Liqueurs", q:"Marie Brizard : pourquoi c'est la doyenne, et la légende ?", a:"1755 à Bordeaux — la plus ancienne maison du concours, fondée par une femme, Marie Brizard (fille de tonnelier). Légende : un marin antillais guéri de la fièvre lui confie la recette de la liqueur d'anis. Anisette 25°."},
+ {c:"Transversal", q:"Les 6 femmes du TDB26 (fil rouge storytelling) ?", a:"Marie Brizard (fondatrice, 1755) · Antoinette Isautier (dirigeante dès 1865) · Joy Spence (Appleton, 1re master blender, 1997) · Sophie Decobecq (Calle 23) · Marie Ferrand (Isautier, créatrice du Fusion) · Virginie Dartigalongue (6e génération)."},
+ {c:"Transversal", q:"Les 4 marques du groupe Campari au TDB26 ?", a:"Campari · Wild Turkey (2009) · Appleton Estate (2012) · Grand Marnier (2016). Un seul contact France : 01 49 24 20 20."},
+ {c:"Transversal", q:"Vintage Spirit Garage distribue quelles marques ?", a:"La Ina, Calle 23, Nuestra Soledad, Cuatro Gallos, Dartigalongue et Kota. (Mezcal Brothers : BOWS + Chinola · Dugas : Carpano · Solinest : Fever-Tree · Bacardi-Martini : Noilly + Bénédictine.)"},
+];
+
+/* ---- QCM ---- */
+const QCM = [
+ {q:"Le tout premier triple sec au monde a été créé par :", o:["Cointreau","Combier","Giffard","Marie Brizard"], r:1, e:"Combier, 1834, Saumur — créé pour fourrer les bonbons de la confiserie Combier-Destre."},
+ {q:"La salle des alambics de la distillerie Combier est attribuée :", o:["Aux ateliers Eiffel","À Viollet-le-Duc","Aux frères Perret","À Vauban"], r:0, e:"La salle des alambics du XIXe est signée des ateliers Eiffel."},
+ {q:"Le Negroni est né :", o:["À Milan en 1860","À Turin en 1786","À Florence en 1919","À Venise en 1948"], r:2, e:"Florence, 1919 : le comte Camillo Negroni corse son Americano au gin au Caffè Casoni."},
+ {q:"La solera du fino La Ina a été fondée en 1919 par :", o:["Lustau","González Byass","Pedro Domecq","Osborne"], r:2, e:"Pedro Domecq ; soleras et marque passées chez Lustau en 2008."},
+ {q:"Rio Viejo est un sherry de style :", o:["Fino","Manzanilla","Oloroso","Amontillado"], r:2, e:"Oloroso : élevage oxydatif sans flor, sec mais ample (noix, tabac), 20°."},
+ {q:"Les vins de base de Noilly Prat sont issus des cépages :", o:["Ugni Blanc et Colombard","Picpoul et Clairette","Palomino et PX","Chardonnay et Aligoté"], r:1, e:"Picpoul (de Pinet) et Clairette, vins blancs secs du Languedoc. Ugni Blanc/Colombard = l'Eau de Vigne Merlet !"},
+ {q:"La note signature de l'Antica Formula est :", o:["La rhubarbe","La vanille de Madagascar","Le safran","Le quinquina"], r:1, e:"La vanille de Madagascar — signature de la recette historique de 1786."},
+ {q:"Lequel n'est PAS un botanique japonais du Roku ?", o:["Thé sencha","Poivre sanshō","Ginseng","Feuille de sakura"], r:2, e:"Le ginseng. Les six : fleur + feuille de sakura, sencha, gyokuro, sanshō, yuzu."},
+ {q:"Le nom « Wild Turkey » vient :", o:["Du fondateur Thomas Turkey","D'une chasse au dindon sauvage en 1940","D'une rivière du Kentucky","D'un cocktail de 1919"], r:1, e:"1940 : Thomas McCarthy apporte du bourbon à une chasse au dindon sauvage."},
+ {q:"Le rhum Isautier Double Agent Fusion est obtenu par :", o:["Assemblage de deux rhums finis","Co-fermentation de 36 h de mélasse et pur jus","Double distillation","Finish en fût de cognac"], r:1, e:"Co-fermentation 36 h mélasse + pur jus (50/50), colonne, puis 2,5 ans de repos en cuve."},
+ {q:"Joy Spence est devenue master blender d'Appleton en :", o:["1988","1997","2005","2012"], r:1, e:"1997 — première femme master blender de toute l'industrie des spiritueux."},
+ {q:"Le nom « Calle 23 » vient :", o:["Du 23e essai de recette","D'une plaque de rue à Guadalajara","De l'adresse de la distillerie","Du 23e anniversaire de Sophie"], r:1, e:"Une vieille plaque de rue aperçue à Guadalajara le jour où la recette fut validée."},
+ {q:"Nuestra Soledad rend hommage à :", o:["Un village d'agaves","La grand-mère des Cortés","La Vierge de la Solitude, patronne d'Oaxaca","Une chanson zapotèque"], r:2, e:"La Virgen de la Soledad, sainte patronne de la ville d'Oaxaca."},
+ {q:"Laquelle de ces affirmations sur le pisco péruvien est VRAIE ?", o:["Il vieillit 6 mois en fût","Il est distillé deux fois","Il est réduit à l'eau de source","Il est distillé directement à son degré final, sans eau ajoutée"], r:3, e:"Distillation unique, à degré : ni eau ajoutée, ni bois — repos min. 3 mois en contenant inerte."},
+ {q:"Le plus vieux millésime authentifié de l'armagnac, conservé chez Dartigalongue, date de :", o:["1813","1838","1848","1900"], r:2, e:"1848, conservé au « Paradis » de Nogaro."},
+ {q:"Le Merlet Brothers Blend assemble majoritairement :", o:["De la Grande Champagne + 1/5 de Fins Bois","Des Fins Bois + 1/5 de Grande Champagne","Des Borderies pures","Du Bois Ordinaire"], r:1, e:"Majorité Fins Bois + 1/5 Grande Champagne, eaux-de-vie de 4 ans minimum."},
+ {q:"Le finish du Sab's « Le Marc » se fait en :", o:["Fût de sauternes","Fût de cognac","Fût de porto","Amphore"], r:1, e:"Fût de cognac (6 mois), après 4 ans en petits fûts bourguignons de 228 L."},
+ {q:"Les feuilles de pandan de Kota proviennent :", o:["Du Vietnam","Des Philippines","De Thaïlande","D'Indonésie"], r:2, e:"Thaïlande — feuilles fraîches macérées puis distillées chez Boudier."},
+ {q:"Le café d'Algebra est torréfié par :", o:["Monmouth","Has Bean","Square Mile","Merling"], r:1, e:"Has Bean (Londres), café de spécialité en sourcing équitable. Merling = le torréfacteur du C² de Merlet !"},
+ {q:"Le Grand Marnier Cordon Rouge contient :", o:["30 % de cognac","51 % de cognac","70 % de cognac","Aucun cognac"], r:1, e:"51 % de cognac dans le Cordon Rouge, marié à la bigarade des Caraïbes."},
+];
+
+/* ---- VRAI/FAUX ---- */
+const VF = [
+ {q:"Fiba est une eau-de-vie de figue de Barbarie (cactus).", r:true, e:"Fiba = FIgue de BArbarie, 45°, l'esprit mezcal appliqué au cactus occitan."},
+ {q:"Les whiskies Benleioc sont issus de brassins de type stout, une première en Europe.", r:true, e:"Brassins noirs très torréfiés type stout — revendiqué comme une première européenne."},
+ {q:"La Blanchette de Combier doit sa couleur verte à la chlorophylle.", r:false, e:"La Blanchette est BLANCHE (non colorée) ; c'est L'Entêté qui est verte, colorée à la chlorophylle."},
+ {q:"L'absinthe a été interdite en France en 1915 et la mention « absinthe » réautorisée en 2011.", r:true, e:"Interdiction 1915 ; mention légale à nouveau en 2011, grâce notamment à Franck Choisne."},
+ {q:"Le Calle 23 Reposado vieillit 16 mois en fût ex-bourbon.", r:false, e:"Reposado = 8 mois ; c'est l'Añejo qui fait 16 mois (ex-bourbon du Kentucky)."},
+ {q:"L'Oli'Still de Manguin est distillé en alambic charentais à repasse.", r:true, e:"Macération lente d'olives de Provence puis alambic charentais à repasse, sélection des cœurs."},
+ {q:"La quinine de Fever-Tree est sourcée en République Démocratique du Congo.", r:true, e:"Quinine naturelle de RDC — le quinquina est « l'arbre à fièvre » qui a donné son nom à la marque."},
+ {q:"« Chinola » signifie « mangue » en République dominicaine.", r:false, e:"Chinola = FRUIT DE LA PASSION en dominicain."},
+ {q:"Le PX Viña 25 titre plus haut en alcool que l'oloroso Rio Viejo.", r:false, e:"PX Viña 25 = 17° ; Oloroso Rio Viejo = 20°. (Le fino est à 15°.)"},
+ {q:"Antoinette Isautier dirigeait la maison Isautier dès 1865.", r:true, e:"Une femme à la tête de la distillerie dès 1865 — 20 ans après la fondation."},
+ {q:"La gamme Ingredium de PCB a été lancée en 2019.", r:true, e:"Ingredium naît en 2019 (PCB elle-même date de 1992)."},
+ {q:"Ponthier a démarré comme entreprise de négoce de fruits frais en 1946.", r:true, e:"André Ponthier et son épouse, négociants en fruits frais, jusqu'à 80 ha de pommiers."},
+ {q:"Le marc de Bourgogne est obtenu en distillant du vin.", r:false, e:"Le marc distille les résidus de pressurage (peaux, pépins, rafles). Vin/lies = la FINE."},
+ {q:"Le mash bill de Wild Turkey est riche en blé.", r:false, e:"Riche en SEIGLE : ~75 % maïs / 13 % seigle / 12 % orge maltée."},
+ {q:"Le Noilly Prat Ambré a longtemps été vendu uniquement à la boutique de Marseillan.", r:true, e:"L'Ambré fut longtemps une exclusivité de la boutique de Marseillan."},
+];
+
+/* ---- DEGRÉS ---- */
+const DEGREES = [
+ {n:"Blanchette (Combier)", d:"60°"},{n:"L'Entêté (Combier)", d:"62°"},
+ {n:"Isautier Double Agent Fusion", d:"55°"},{n:"Isautier Barrik", d:"40°"},{n:"Isautier 5 ans", d:"45°"},
+ {n:"Wild Turkey 81 Proof", d:"40,5°"},{n:"Wild Turkey 101 Proof", d:"50,5°"},
+ {n:"La Ina Fino", d:"15°"},{n:"Viña 25 (PX)", d:"17°"},{n:"Rio Viejo (Oloroso)", d:"20°"},
+ {n:"Noilly Prat Ambré", d:"16°"},{n:"Noilly Prat Dry", d:"18°"},
+ {n:"Carpano Classico", d:"16°"},{n:"Carpano Antica Formula", d:"16,5°"},
+ {n:"Adriatico Bianco « Crushed »", d:"16°"},{n:"Adriatico Classico « Roasted »", d:"28°"},
+ {n:"Kota", d:"18°"},{n:"Algebra Extra-Dry", d:"19°"},{n:"Chinola (les 3)", d:"21°"},
+ {n:"Campari (France)", d:"25°"},{n:"Marie Brizard", d:"25°"},
+ {n:"Fiba (BOWS)", d:"45°"},{n:"Benleioc Sorgho / Tourbé", d:"45°"},
+ {n:"Roku Original", d:"43°"},{n:"Appleton 8 Years Old", d:"43°"},{n:"Appleton Signature", d:"40°"},
+ {n:"Sab's Le Blanc", d:"43°"},{n:"Sab's Le Marc", d:"46°"},
+ {n:"Dartigalongue (les 3 Oaked)", d:"43°"},{n:"Calle 23 (les 3)", d:"40°"},
+ {n:"Oli'Still (Manguin)", d:"40°"},{n:"Nuestra Soledad Valles", d:"40°"},
+ {n:"Grand Marnier Cordon Rouge", d:"40°"},{n:"Bénédictine", d:"40°"},
+];
+const DEG_POOL = ["15°","16°","16,5°","17°","18°","19°","20°","21°","25°","28°","40°","40,5°","43°","45°","46°","50,5°","55°","60°","62°"];
+
+/* ---- CHRONOLOGIE ---- */
+const CHRONO = [
+ {n:"Appleton Estate", y:1749},{n:"Marie Brizard", y:1755},{n:"Carpano (invente le vermouth)", y:1786},
+ {n:"Noilly (recette)", y:1813},{n:"Combier", y:1834},{n:"Dartigalongue", y:1838},
+ {n:"Famille Cortés (mezcal)", y:1840},{n:"Isautier", y:1845},{n:"Merlet", y:1850},
+ {n:"Campari", y:1860},{n:"Bénédictine", y:1863},{n:"Site Wild Turkey", y:1869},
+ {n:"Gabriel Boudier", y:1874},{n:"Grand Marnier", y:1880},{n:"Giffard", y:1885},
+ {n:"Suntory", y:1899},{n:"Soleras La Ina", y:1919},{n:"Ponthier", y:1946},
+ {n:"PCB Création", y:1992},{n:"Calle 23", y:2003},{n:"Fever-Tree", y:2004},
+ {n:"Chinola", y:2014},{n:"BOWS", y:2016},{n:"Roku", y:2017},{n:"Adriatico", y:2019},{n:"Kota", y:2024},
+];
+
+/* ---- SOCLE DES COCKTAILS DE RÉFÉRENCE (édition 2025) ---- */
+const SOCLE = [
+ // ---------- SHORT DRINKS ----------
+ {n:"Aviation", cat:"Short", type:"All day", tav:28, met:"Shaker", verre:"Nick & Nora", ing:[["Gin","40 ml"],["Maraschino","15 ml"],["Crème de violette","5 ml"],["Jus de citron","10 ml"]], g:"cerise à l\u2019eau-de-vie", hist:"Publié dans « Recipes for Mixed Drinks » de Hugo Ensslin, New York, 1916.", varn:"", tdb:""},
+ {n:"Bamboo", cat:"Short", type:"Before dinner", tav:15, met:"Verre à mélange", verre:"Nick & Nora", ing:[["Sherry fino","35 ml"],["Vermouth dry","35 ml"],["Bitters orange","2 traits"]], g:"zeste de citron exprimé", hist:"Malaisie 1878, popularisé au Japon par Louis Eppinger vers 1900. Cuban roll possible.", varn:"Les ratios sherry/vermouth varient selon les rééditions.", tdb:"Au TDB26 : La Ina Fino + Noilly Dry."},
+ {n:"Bramble", cat:"Short", type:"All day", tav:25, met:"Direct au verre", verre:"Rocks (glace pilée)", ing:[["Gin","40 ml"],["Jus de citron","15 ml"],["Sirop de sucre","5 ml"],["Crème de mûre (float)","10 ml"]], g:"demi-tranche de citron + 2 mûres", hist:"Créé par Dick Bradsell au Fred\u2019s Club, Londres, années 1980.", varn:"", tdb:"Crème de mûre : gamme Gabriel Boudier."},
+ {n:"Caipirinha", cat:"Short", type:"All day", tav:40, met:"Direct au verre", verre:"Rocks (glace pilée)", ing:[["Cachaça","40 ml"],["Citron vert en morceaux","1/2"],["Sucre poudre","1 bar spoon"]], g:"aucune", hist:"Cocktail national du Brésil, recette publiée pour la première fois à l\u2019été 1948.", varn:"CAIPIROVSKA : vodka. CAIPIRISSIMA : ron cubain.", tdb:""},
+ {n:"Cosmopolitan", cat:"Short", type:"All day", tav:27, met:"Shaker", verre:"Coupe", ing:[["Vodka","30 ml"],["Nectar de cranberry","20 ml"],["Triple sec","15 ml"],["Jus de citron vert","5 ml"]], g:"zeste de citron vert exprimé", hist:"Toby Cecchini, restaurant Odéon, New York, 1988.", varn:"", tdb:""},
+ {n:"Daiquiri", cat:"Short", type:"All day", tav:27, met:"Shaker", verre:"Coupe", ing:[["Ron cubain 3 años","40 ml"],["Jus de citron vert","20 ml"],["Sucre poudre","1 bar spoon"]], g:"aucune", hist:"Attribué à Jennings S. Cox, mine de Daiquiri (Cuba), vers 1900.", varn:"HEMINGWAY SPECIAL : 40 ron + 20 pamplemousse + 10 citron vert + 5 maraschino.", tdb:"Twist TDB26 : Kota en sucre (le daiquiri signature du Danico)."},
+ {n:"Dry Martini", cat:"Short", type:"Before dinner", tav:35, met:"Verre à mélange", verre:"Martini", ing:[["Gin","55 ml"],["Vermouth dry","15 ml"]], g:"olive verte ou zeste de citron", hist:"Évolution du Martinez (1884). Première recette publiée par Frank Newman, « American Bar », Paris, 1904.", varn:"VODKATINI (vodka) · TEQUINI (tequila) · GIBSON (oignon grelot) · MARTINEZ · DIRTY : 15 ml de saumure d\u2019olive remplacent le vermouth.", tdb:"Au TDB26 : Roku + Noilly Dry, ou saumure remplacée par l\u2019Oli\u2019Still."},
+ {n:"Espresso Martini", cat:"Short", type:"After dinner", tav:27, met:"Shaker", verre:"Coupe", ing:[["Vodka","30 ml"],["Café espresso","25 ml"],["Liqueur de café","10 ml"],["Sirop de sucre","5 ml"]], g:"3 grains de café sur la mousse", hist:"Dick Bradsell, Soho Brasserie, Londres, 1983.", varn:"", tdb:"Liqueur de café TDB26 : Algebra Extra-Dry (ou Décaf à 23 h)."},
+ {n:"Gin Basil Smash", cat:"Short", type:"All day", tav:25, met:"Shaker", verre:"Rocks", ing:[["Gin","50 ml"],["Jus de citron","20 ml"],["Sirop de sucre","15 ml"],["Feuilles de basilic","10"]], g:"tête de basilic frais", hist:"Jörg Meyer, Le Lion – Café de Paris, Hambourg, 2008.", varn:"", tdb:""},
+ {n:"Manhattan", cat:"Short", type:"Before dinner", tav:35, met:"Verre à mélange", verre:"Nick & Nora", ing:[["Whiskey américain","50 ml"],["Vermouth rouge","20 ml"],["Aromatic bitters","2 traits"]], g:"cerise à l\u2019eau-de-vie", hist:"Attribué à Georges Black, Manhattan Inn, New York, vers 1880. Considéré comme le premier cocktail apéritif.", varn:"ROB ROY : 55 ml scotch whisky + 15 ml vermouth rouge.", tdb:"Au TDB26 : Wild Turkey 101 + Carpano Antica Formula."},
+ {n:"Margarita", cat:"Short", type:"All day", tav:34, met:"Shaker", verre:"Coupe givrée au sel", ing:[["Tequila","40 ml"],["Triple sec","20 ml"],["Jus de citron vert","10 ml"]], g:"rim de sel fin (proposé à la commande)", hist:"Apparaît fin des années 1930 ; nom définitif publié et adopté aux États-Unis en 1953.", varn:"TOMMY\u2019S MARGARITA : le sirop d\u2019agave remplace le triple sec.", tdb:"Au TDB26 : Calle 23 Blanco ; Cadillac au Grand Marnier ; Mango Margarita au Chinola."},
+ {n:"Mint Julep", cat:"Short", type:"All day", tav:40, met:"Direct au verre", verre:"Timbale Julep (glace pilée)", ing:[["Eau-de-vie brune","50 ml"],["Sucre poudre","2 bar spoon"],["Feuilles de menthe","10"]], g:"tête de menthe + paille courte", hist:"Première recette avec glace publiée en Virginie, 1807. Recette originelle : cognac ou whiskey américain.", varn:"", tdb:"Au TDB26 : Wild Turkey 101, ou armagnac Dartigalongue."},
+ {n:"Negroni", cat:"Short", type:"Before dinner", tav:26, met:"Direct au verre", verre:"Rocks", ing:[["Gin","30 ml"],["Bitter","30 ml"],["Vermouth rouge","30 ml"]], g:"demi-tranche d\u2019orange", hist:"Plusieurs recettes populaires à Paris fin des années 1920 ; recette et nom publiés en Italie en 1947.", varn:"SBAGLIATO : prosecco à la place du gin · BOULEVARDIER : bourbon · CARDINALE : vermouth dry · WHITE NEGRONI : vermouth blanc + gentiane + gin.", tdb:"Au TDB26 : Roku + Campari + Carpano."},
+ {n:"Old-Fashioned", cat:"Short", type:"All day", tav:40, met:"Direct au verre", verre:"Rocks", ing:[["Eau-de-vie brune","50 ml"],["Sucre brun","1 morceau"],["Aromatic bitters","2 traits"]], g:"zeste d\u2019orange exprimé + cerise", hist:"Première recette mise au point aux États-Unis en 1806. Verser 20 ml, mélanger, puis les 30 ml restants.", varn:"Toutes les eaux-de-vie vieillies conviennent ; l\u2019originelle privilégie le whiskey américain.", tdb:"Au TDB26 : Wild Turkey 101, Dartigalongue Double-Oaked ou Appleton 8 ans."},
+ {n:"Penicillin", cat:"Short", type:"All day", tav:25, met:"Shaker", verre:"Rocks", ing:[["Blend whisky","40 ml"],["Whisky tourbé (float)","10 ml"],["Jus de citron","20 ml"],["Sirop de miel","10 ml"],["Jus de gingembre frais","10 ml"]], g:"lamelle de gingembre", hist:"Sam Ross, Milk & Honey, New York, 2005.", varn:"Le jus de gingembre peut être remplacé par 3 tranches pilées.", tdb:"Float tourbé TDB26 : Benleioc Tourbé (~53 ppm)."},
+ {n:"Pornstar Martini", cat:"Short", type:"All day", tav:18, met:"Shaker", verre:"Coupe", ing:[["Vodka vanille","30 ml"],["Purée fruit de la passion","30 ml"],["Liqueur fruit de la passion","20 ml"],["Sirop de vanille","10 ml"]], g:"demi-passion + shot de champagne", hist:"Douglas Ankra, bar Townhouse, Londres, 2002.", varn:"Le sirop de vanille peut devenir 1 bar spoon de sucre vanillé.", tdb:"Au TDB26 : Chinola Passion + purée passion Ponthier + float d\u2019Adriatico Bianco."},
+ {n:"Sidecar", cat:"Short", type:"All day", tav:36, met:"Shaker", verre:"Coupe", ing:[["Cognac","40 ml"],["Triple sec","20 ml"],["Jus de citron","10 ml"]], g:"aucune", hist:"Première publication : Robert Vermeire, « Cocktails – How to Mix Them », Londres, 1922. Hommage à un officier venant au bar en side-car.", varn:"WHITE LADY : le gin remplace le cognac.", tdb:"Au TDB26 : Merlet VS ou Brothers Blend."},
+ {n:"Sour", cat:"Short", type:"All day", tav:28, met:"Shaker (dry shake)", verre:"Rocks", ing:[["Spiritueux","50 ml"],["Jus de citron","20 ml"],["Blanc d\u2019œuf ou aquafaba","20 ml"],["Sucre poudre","1 bar spoon"]], g:"cerise à l\u2019eau-de-vie", hist:"Variante du Whiskey Sour paru dans « The Bartender\u2019s Guide » dès 1862. Reverse dry shake possible.", varn:"Sans émulsifiant : servir en verre Martini. Tous les spiritueux conviennent.", tdb:"Pisco Sour : Cuatro Gallos Quebranta. Amaretto Sour : Adriatico Classico."},
+ // ---------- LONG DRINKS ----------
+ {n:"Americano", cat:"Long", type:"Before dinner", tav:13, met:"Direct au verre", verre:"Highball", ing:[["Bitter","50 ml"],["Vermouth rouge","20 ml"],["Eau gazeuse","50 ml"]], g:"demi-tranches orange + citron", hist:"Créé au Gaspare Campari\u2019s, Milan, 1860. D\u2019abord nommé Milano-Torino, rebaptisé pour la clientèle américaine.", varn:"", tdb:"Au TDB26 : Campari + Carpano Classico."},
+ {n:"Bellini", cat:"Long", type:"All day", tav:8, met:"Direct au verre", verre:"Flûte", ing:[["Champagne","80 ml"],["Nectar/purée de pêche blanche","40 ml"]], g:"aucune", hist:"Giuseppe Cipriani, Harry\u2019s Bar, Venise, 1948. Nom du peintre Giovanni Bellini.", varn:"ROSSINI : fraise · FELLINI : framboise · MIMOSA : jus d\u2019orange frais.", tdb:"Purées Ponthier : la framboise pour un Fellini."},
+ {n:"Bloody Mary", cat:"Long", type:"Before dinner", tav:13, met:"Direct au verre", verre:"Highball", ing:[["Jus de tomate","70 ml"],["Vodka","40 ml"],["Jus de citron","10 ml"],["Tabasco","2 gouttes"],["Sauce anglaise","1 trait"],["Sel au céleri","assaisonnement"]], g:"demi-tranche citron + céleri (facultatif)", hist:"Jus de tomate + spiritueux mentionnés dès la fin des années 1920 ; première recette dans la presse américaine en 1939. Ajuster l\u2019assaisonnement au goût du client.", varn:"BULL SHOT : consommé de bœuf · BLOODY MARIA : tequila · VIRGIN MARY : sans vodka · RED SNAPPER : gin.", tdb:""},
+ {n:"Champagne Cocktail", cat:"Long", type:"All day", tav:8, met:"Direct au verre", verre:"Flûte", ing:[["Champagne","110 ml"],["Cognac","10 ml"],["Sucre blanc","1 morceau"],["Aromatic bitters","1 trait"]], g:"zeste de citron exprimé", hist:"Le premier cocktail au champagne, mentionné dès 1855 ; recette publiée par Jerry Thomas, « How to Mix Drinks », 1862.", varn:"", tdb:"Cognac : Merlet VS."},
+ {n:"Dark and Stormy", cat:"Long", type:"All day", tav:11, met:"Direct au verre", verre:"Highball", ing:[["Ginger beer","100 ml"],["Black rum (float)","40 ml"],["Jus de citron vert","15 ml"]], g:"quartier de citron vert + agitateur", hist:"Marque déposée par la famille Gosling (1991) : version « Black Seal » obligatoire. Boisson nationale des Bermudes.", varn:"", tdb:"Ginger beer : Fever-Tree (3 gingembres)."},
+ {n:"Fizz", cat:"Long", type:"All day", tav:13, met:"Shaker", verre:"Highball", ing:[["Eau-de-vie","40 ml"],["Jus de citron","20 ml"],["Sirop de sucre","10 ml"],["Eau gazeuse","50 ml"]], g:"tranche de citron", hist:"Gin Fizz publié dans le « Bar-tender\u2019s Guide » de Jerry Thomas, 1876. Inventé par les marins britanniques (années 1870).", varn:"TOM COLLINS : préparé directement au verre Highball sur glace.", tdb:"Base possible : Eau de Vigne Merlet, Sab\u2019s Le Blanc, Dartigalongue Un-Oaked."},
+ {n:"French 75", cat:"Long", type:"All day", tav:16, met:"Shaker", verre:"Flûte", ing:[["Champagne","50 ml"],["Gin","40 ml"],["Jus de citron","20 ml"],["Sirop de sucre","10 ml"]], g:"zeste de citron exprimé", hist:"Recette « 75 » née à Paris pendant la Grande Guerre (au calvados) ; Harry McElhone (Harry\u2019s Bar, 1925) y met du champagne. Publiée aux États-Unis en 1927.", varn:"", tdb:"Gin : Roku."},
+ {n:"Horse\u2019s Neck", cat:"Long", type:"All day", tav:11, met:"Direct au verre", verre:"Highball", ing:[["Ginger ale","100 ml"],["Cognac","40 ml"],["Aromatic bitters","3 traits"]], g:"long zeste de citron (le « cou de cheval »)", hist:"Recette originale de 1890 sans alcool ; le « coup de fouet » (cognac ou whiskey) arrive quelques années plus tard.", varn:"", tdb:"Au TDB26 : Merlet VS + Fever-Tree Ginger Ale."},
+ {n:"Mai Tai", cat:"Long", type:"All day", tav:30, met:"Shaker", verre:"Rocks (glace pilée)", ing:[["Rhum vieux agricole","25 ml"],["Rhum vieux jamaïcain","25 ml"],["Jus de citron vert","25 ml"],["Curaçao orange","15 ml"],["Sirop d\u2019orgeat","15 ml"]], g:"demi-tranche citron vert + menthe + paille courte", hist:"Victor Bergeron dit « Trader Vic », promoteur de la culture Tiki. La recette s\u2019impose à Hawaï en 1953.", varn:"", tdb:"Rhum jamaïcain : Appleton 8 Years Old."},
+ {n:"Mojito", cat:"Long", type:"All day", tav:13, met:"Direct au verre", verre:"Highball", ing:[["Ron cubain","50 ml"],["Eau gazeuse","50 ml"],["Jus de citron vert","20 ml"],["Sucre poudre","1 bar spoon"],["Feuilles de menthe","10"]], g:"tranche citron vert + tête de menthe + paille", hist:"Emblème de Cuba, publié dans « Libro de Cocktail » de Juan Lasa, 1929. Mojito = « petit jus » en espagnol.", varn:"", tdb:""},
+ {n:"Moscow Mule", cat:"Long", type:"All day", tav:13, met:"Direct au verre", verre:"Timbale Mule", ing:[["Ginger beer","100 ml"],["Vodka","40 ml"],["Jus de citron vert","15 ml"]], g:"tranche de citron vert", hist:"Créé par le propriétaire de Smirnoff aux États-Unis, 1941, pour promouvoir la vodka. Deux traits d\u2019aromatic bitters proposables à la commande.", varn:"FRENCH MULE : cognac · MEXICAN MULE : tequila · CHILCANO DE PISCO : pisco + amargo chuncho · GIN-GIN MULE : gin + menthe.", tdb:"Chilcano TDB26 : Cuatro Gallos Italia + Fever-Tree Ginger Beer."},
+ {n:"Paloma", cat:"Long", type:"All day", tav:10, met:"Direct au verre", verre:"Highball givré au sel", ing:[["Jus de pamplemousse","50 ml"],["Eau gazeuse","50 ml"],["Tequila blanco 100 % agave","40 ml"],["Jus de citron vert","10 ml"],["Sirop d\u2019agave","10 ml"]], g:"demi-tranche de pamplemousse", hist:"Années 1990, région de Guadalajara. Paloma = « colombe ». Recette d\u2019origine : soda au pamplemousse.", varn:"", tdb:"Au TDB26 : Calle 23 Blanco + Fever-Tree Sparkling Pink Grapefruit."},
+ {n:"Piña Colada", cat:"Long", type:"All day", tav:13, met:"Shaker", verre:"Highball", ing:[["Jus d\u2019ananas","60 ml"],["Rhum blanc","40 ml"],["Crème de noix de coco","20 ml"]], g:"quartier d\u2019ananas + cerise", hist:"Attribuée à Ramon « Monchito » Marrero Perez, hôtel Hilton de San Juan, 1954, après l\u2019invention de la crème de coco à Porto Rico.", varn:"CHICHI : vodka · BLUE HAWAIIAN : + 15 ml curaçao bleu · APPLE COLADA : jus de pomme trouble.", tdb:"Twist TDB26 : Chinola Pineapple, ou crème remplacée par l\u2019Adriatico Bianco."},
+ {n:"Planter\u2019s Punch", cat:"Long", type:"All day", tav:16, met:"Direct au verre", verre:"Highball", ing:[["Rhum agricole blanc","40 ml"],["Jus d\u2019orange","40 ml"],["Jus d\u2019ananas","40 ml"],["Aromatic bitters","2 traits"],["Rhum agricole ambré (float)","1 trait"]], g:"quartier d\u2019ananas + cerise + agitateur", hist:"Le punch est la plus ancienne boisson du bar : première recette publiée en Inde en 1638.", varn:"", tdb:"Float ambré : Isautier Barrik."},
+ {n:"Rum Swizzle", cat:"Long", type:"All day", tav:20, met:"Swizzle stick", verre:"Highball (glace pilée)", ing:[["Rum ambré","50 ml"],["Jus de citron vert","30 ml"],["Velvet falernum","20 ml"],["Sirop de sucre","20 ml"],["Aromatic bitters","2 traits"]], g:"zeste d\u2019orange + menthe + paille", hist:"« Swizzle » = préparation au bâton lélé (5 branches). Boisson au rum désignée ainsi dès 1788.", varn:"Toutes les eaux-de-vie vieillies conviennent.", tdb:""},
+ {n:"Sex on the Beach", cat:"Long", type:"All day", tav:15, met:"Shaker", verre:"Highball", ing:[["Vodka","40 ml"],["Jus d\u2019orange","40 ml"],["Nectar de cranberry","40 ml"],["Liqueur de pêche","10 ml"]], g:"demi-tranche d\u2019orange", hist:"Inventée aux États-Unis, popularisée à partir des années 1980.", varn:"", tdb:""},
+ {n:"Spritz", cat:"Long", type:"Before dinner", tav:16, met:"Direct au verre", verre:"Verre à vin", ing:[["Vin blanc effervescent","60 ml"],["Bitter ou autre spiritueux","50 ml"],["Eau gazeuse","20 ml"]], g:"adaptée au spiritueux", hist:"D\u2019abord vin blanc + eau de Seltz ; l\u2019amer arrive dans les années 1920. Boisson signature de Venise. Prosecco à privilégier ; la marque du spiritueux précède le mot SPRITZ.", varn:"", tdb:"Campari Spritz, ou 0 % avec la base Giffard Aperitif Bitter."},
+ {n:"Tequila Sunrise", cat:"Long", type:"All day", tav:13, met:"Direct au verre", verre:"Highball", ing:[["Jus d\u2019orange","80 ml"],["Tequila","40 ml"],["Sirop de grenadine (sans mélanger)","1 trait"]], g:"demi-tranche d\u2019orange + cerise + agitateur", hist:"Première version au Mexique vers 1930 ; version actuelle de 1972, adoptée par les Rolling Stones en tournée.", varn:"Le trait de grenadine crée le dégradé « lever de soleil ».", tdb:"Tequila : Calle 23 Blanco."},
+];
+const SOCLE_VARIANTES = [
+ {q:"Le BOULEVARDIER remplace, dans le Negroni :", o:["Le gin par du bourbon","Le bitter par du café","Le vermouth rouge par du dry","Le gin par du prosecco"], r:0, e:"Boulevardier = bourbon + bitter + vermouth rouge. (Au TDB26 : Wild Turkey 101 + Campari + Antica Formula.)"},
+ {q:"Le NEGRONI SBAGLIATO remplace le gin par :", o:["Du prosecco","De la vodka","Du champagne","De la gentiane"], r:0, e:"Sbagliato = « raté » : le prosecco prend la place du gin."},
+ {q:"Le GIBSON est un Dry Martini garni :", o:["D\u2019un oignon grelot","D\u2019une olive noire","D\u2019un zeste d\u2019orange","D\u2019une cerise"], r:0, e:"Gibson = Dry Martini + oignon grelot. La garniture classique reste olive verte ou zeste de citron."},
+ {q:"Dans le DIRTY MARTINI du socle, les 15 ml de vermouth dry deviennent :", o:["15 ml de saumure d\u2019olive","15 ml de jus de citron","15 ml de sherry fino","30 ml de vermouth rouge"], r:0, e:"15 ml de saumure d\u2019olive remplacent le vermouth dry. (Version TDB26 : un trait d\u2019Oli\u2019Still Manguin.)"},
+ {q:"Le ROB ROY est un Manhattan réalisé avec :", o:["Du scotch whisky","Du rye canadien","Du cognac","Du rhum vieux"], r:0, e:"Rob Roy : aromatic bitters + 15 ml vermouth rouge + 55 ml scotch whisky + cerise."},
+ {q:"La TOMMY\u2019S MARGARITA remplace le triple sec par :", o:["Du sirop d\u2019agave","Du Grand Marnier","Du sirop de sucre","Du jus d\u2019orange"], r:0, e:"Tommy\u2019s = tequila + citron vert + sirop d\u2019agave. La Cadillac, elle, monte en gamme avec du Grand Marnier."},
+ {q:"Le WHITE LADY est un Sidecar où le cognac devient :", o:["Du gin","De la vodka","Du calvados","Du rhum blanc"], r:0, e:"White Lady : 40 gin + 20 triple sec + 10 citron — même squelette que le Sidecar."},
+ {q:"Le TOM COLLINS est un Fizz :", o:["Préparé directement au verre","Servi sans glace","Frappé au blender","Complété au champagne"], r:0, e:"Tom Collins = même composition que le Fizz, mais réalisé directement au verre Highball sur glace."},
+ {q:"Le RED SNAPPER remplace la vodka du Bloody Mary par :", o:["Du gin","De la tequila","Du mezcal","Du consommé de bœuf"], r:0, e:"Red Snapper = gin. Bloody Maria = tequila, Bull Shot = consommé de bœuf, Virgin Mary = sans alcool."},
+ {q:"Le ROSSINI est un Bellini à la :", o:["Fraise","Framboise","Pêche jaune","Mangue"], r:0, e:"Rossini = fraise ; Fellini = framboise ; Mimosa = jus d\u2019orange frais."},
+ {q:"Le CHILCANO DE PISCO est une variante officielle du :", o:["Moscow Mule","Dark and Stormy","Fizz","Paloma"], r:0, e:"Variante du Moscow Mule : pisco + ginger beer, l\u2019amargo chuncho remplaçant l\u2019aromatic bitters. (TDB26 : Cuatro Gallos Italia + Fever-Tree.)"},
+ {q:"Le CARDINALE remplace, dans le Negroni :", o:["Le vermouth rouge par du vermouth dry","Le gin par du bourbon","Le bitter par de la gentiane","Le vermouth par du sherry"], r:0, e:"Cardinale = gin + bitter + vermouth DRY. White Negroni = vermouth blanc + gentiane + gin."},
+ {q:"Le HEMINGWAY SPECIAL est une variante du :", o:["Daiquiri","Mojito","Sour","Sidecar"], r:0, e:"Daiquiri Hemingway : 40 ron + 20 pamplemousse + 10 citron vert + 5 maraschino."},
+ {q:"La CAIPIROVSKA remplace la cachaça par :", o:["De la vodka","Du ron cubain","Du pisco","Du rhum agricole"], r:0, e:"Caipirovska = vodka ; Caipirissima = ron cubain."},
+ {q:"Le BLUE HAWAIIAN est une Piña Colada avec :", o:["15 ml de curaçao bleu en plus","De la vodka","Du jus de pomme","Du curaçao orange"], r:0, e:"Blue Hawaiian = + 15 ml de curaçao bleu. Chichi = vodka ; Apple Colada = jus de pomme trouble."},
+];
+const SOCLE_METHODES=["Shaker","Verre à mélange","Direct au verre","Swizzle stick"];
+const SOCLE_DOSES=["5 ml","10 ml","15 ml","20 ml","25 ml","30 ml","35 ml","40 ml","50 ml","55 ml","60 ml","70 ml","80 ml","100 ml","110 ml"];
+function socleQuestions(n){
+  const qs=[];
+  shuffle(SOCLE).slice(0,6).forEach(c=>{
+    const mlIngs=c.ing.filter(i=>/ml$/.test(i[1]));
+    if(!mlIngs.length)return;
+    const ing=mlIngs[Math.floor(Math.random()*mlIngs.length)];
+    const wrong=shuffle(SOCLE_DOSES.filter(d=>d!==ing[1])).slice(0,3);
+    qs.push({q:"Dans le "+c.n+" du socle, quelle est la dose de "+ing[0].toLowerCase().replace(" (float)","").replace(" (sans mélanger)","")+" ?",
+      opts:shuffle([{t:ing[1],ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+      e:"Recette officielle du "+c.n+" : "+c.ing.map(i=>i[1]+" "+i[0].toLowerCase()).join(" · ")+"."});
+  });
+  shuffle(SOCLE).slice(0,3).forEach(c=>{
+    const met=c.met.replace(" (dry shake)","");
+    qs.push({q:"Méthode officielle du "+c.n+" ?",
+      opts:shuffle(SOCLE_METHODES.map(m=>({t:m,ok:m===met}))),
+      e:c.n+" : "+c.met+", servi en verre "+c.verre+"."});
+  });
+  shuffle(SOCLE).slice(0,2).forEach(c=>{
+    const pool=[...new Set([8,10,11,13,15,16,18,20,25,26,27,28,30,34,35,36,40].filter(t=>t!==c.tav))];
+    const wrong=shuffle(pool).slice(0,3);
+    qs.push({q:"TAV du "+c.n+" (socle) ?",
+      opts:shuffle([{t:c.tav+" %",ok:true},...wrong.map(w=>({t:w+" %",ok:false}))]),
+      e:"Le "+c.n+" titre "+c.tav+" % — "+(c.cat==="Short"?"short drink":"long drink")+", type "+c.type.toLowerCase()+"."});
+  });
+  shuffle(SOCLE_VARIANTES).slice(0,3).forEach(v=>{
+    qs.push({q:v.q, opts:shuffle(v.o.map((t,i)=>({t,ok:i===v.r}))), e:v.e});
+  });
+  return shuffle(qs).slice(0,n);
+}
+function startSocleQuiz(){
+  quizStates.ponts={qs:socleQuestions(12), idx:0, score:0};
+  renderSocleQuiz();
+}
+function renderSocleQuiz(){
+  const st=quizStates.ponts;
+  const panel=document.getElementById("ponts-panel");
+  document.getElementById("ponts-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("ponts-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    const pct=Math.round(100*st.score/st.qs.length);
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+      '<p style="margin:10px 0 20px">'+(pct>=80?"Le référentiel est en place — le jury peut envoyer les questions techniques.":"Passe par les fiches éclair, puis retente un tirage.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startSocleQuiz()">Nouveau tirage (12 questions)</button></div>';
+    document.getElementById("ponts-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  html+='</div><div class="feedback" id="ponts-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="ponts-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
+      if(!good) btn.classList.add("wrong"); else st.score++;
+      const fb=document.getElementById("ponts-fb");
+      fb.className="feedback show "+(good?"good":"bad");
+      fb.innerHTML='<span class="handnote">'+(good?"dans le mille !":"pas tout à fait…")+'</span> '+q.e;
+      document.getElementById("ponts-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+      document.getElementById("ponts-next").style.display="";
+    };
+  });
+  document.getElementById("ponts-next").onclick=()=>{st.idx++;renderSocleQuiz();};
+}
+/* ---- Fiches éclair du Socle ---- */
+let socleBrowseBuilt=false, socleFilter="Tout";
+function buildSocleBrowse(){
+  socleBrowseBuilt=true;
+  const filters=document.getElementById("socle-filters");
+  ["Tout","Short drinks","Long drinks"].forEach((f,i)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(i===0?" active":"");
+    b.textContent=f;
+    b.onclick=()=>{socleFilter=f;document.querySelectorAll("#socle-filters .chip").forEach(x=>x.classList.toggle("active",x===b));renderSocleCards();};
+    filters.appendChild(b);
+  });
+  renderSocleCards();
+}
+function renderSocleCards(){
+  const zone=document.getElementById("socle-cards");
+  const list=SOCLE.filter(c=>socleFilter==="Tout"||(socleFilter==="Short drinks"&&c.cat==="Short")||(socleFilter==="Long drinks"&&c.cat==="Long"));
+  zone.innerHTML=list.map(c=>
+    '<div class="socle-card"><span class="tav">'+c.tav+' %</span><h3>'+c.n+'</h3>'+
+    '<ul>'+c.ing.map(i=>'<li><b>'+i[1]+'</b> '+i[0].toLowerCase()+'</li>').join('')+'</ul>'+
+    '<div class="meta"><b>Méthode :</b> '+c.met+' · <b>Verre :</b> '+c.verre+'<br><b>'+(c.cat==="Short"?"Short drink":"Long drink")+'</b> · '+c.type+' · <b>Garniture :</b> '+c.g+'<br>'+c.hist+'</div>'+
+    (c.varn?'<div class="variantes"><b>Variantes :</b> '+c.varn+'</div>':'')+
+    (c.tdb?'<div class="variantes" style="background:rgba(200,129,58,.16)"><b style="color:#a5651f">💡 '+c.tdb+'</b></div>':'')+
+    '</div>').join('');
+}
+(function(){
+  const qb=document.getElementById("socle-mode-quiz"), bb=document.getElementById("socle-mode-browse");
+  qb.onclick=()=>{qb.classList.add("active");bb.classList.remove("active");document.getElementById("socle-quizwrap").style.display="";document.getElementById("socle-browsewrap").style.display="none";};
+  bb.onclick=()=>{bb.classList.add("active");qb.classList.remove("active");document.getElementById("socle-quizwrap").style.display="none";document.getElementById("socle-browsewrap").style.display="";if(!socleBrowseBuilt)buildSocleBrowse();};
+})();
+
+
+/* ---- CARTE MENTALE ---- */
+const MIND = {
+ nonalcool:{t:"Non alcool", col:"#9fbf6b", items:[
+  "Adriatico Zero — 2019, Pouilles, amande Filippo Cea, le seul amaretto 0,0 % du concours",
+  "Giffard — 1885 Angers, pharmacien Émile Giffard, Menthe-Pastille · gamme shrub + Bases Cocktail (4 ans R&D)",
+  "Fever-Tree — 2004 Londres, Rolls & Warrillow · quinquina = arbre à fièvre, quinine de RDC · 8 références",
+  "Ponthier — 1946 Objat, roi de la châtaigne, B Corp, Pure Trace · Passion, Abricot, Figue de Barbarie, Framboise",
+  "PCB Création — 1992 Benfeld (Alsace), les Bach · Ingredium 2019 = 5 familles techniques"]},
+ aperitifs:{t:"Apéritifs & amers", col:"#b23a2b", items:[
+  "Combier — 1834 Saumur, 1er triple sec, alambics Eiffel · Blanchette 60° (blanche) / L'Entêté 62° (verte, chlorophylle)",
+  "Campari — 1860 Novare, 25° en France, cochenille jusqu'en 2006 · Negroni = Florence 1919",
+  "La Ina — soleras 1919 (Domecq), Lustau 2008 · Fino 15° (flor) / Oloroso 20° (oxydatif) / PX 17° (passerillé)",
+  "Noilly Prat — 1813, Marseillan · Picpoul + Clairette, 1 an dans l'Enclos, dodinage · Dry 18° / Ambré 16°",
+  "Carpano — 1786 Turin, INVENTEUR du vermouth · Antica Formula 16,5° (vanille de Madagascar) / Classico 16°"]},
+ eaux:{t:"Eaux-de-vie & alcools", col:"#c8813a", items:[
+  "BOWS — 2016, Benoît Garcia, Montauban → Laure-Minervois · Fiba 45° (figue de Barbarie) + Benleioc 45° (brassins stout)",
+  "Manguin — Barthelasse (Avignon), olive distillée depuis 2014 · Oli'Still 40° : truffe, olive noire, salin",
+  "Roku — 2017, Osaka, Suntory (1899) · 6 botaniques japonais récoltés selon le shun, 43°",
+  "Wild Turkey — site 1869, nom 1940, Jimmy Russell 1954 · 81 = 40,5° / 101 = 50,5° (proof = ×2)",
+  "Isautier — 1845, doyenne de La Réunion, Antoinette 1865 · Fusion 55° (co-fermentation 36 h), Barrik 40°, 5 ans 45°",
+  "Appleton — 1749, estate rum, Joy Spence 1997 · Signature 40° / 8 ans 43° · âge = plus jeune rhum",
+  "Calle 23 — Sophie Decobecq, levures maison, Los Altos · Blanco/Repo 8 mois/Añejo 16 mois, tous 40°",
+  "Nuestra Soledad — Casa Cortés 1840, single village, espadín, 40° · Vierge de la Solitude",
+  "Cuatro Gallos — Ica, 4 frères · pisco : 1 distillation à degré, 0 eau, 0 bois · Quebranta / Italia 40°",
+  "Dartigalongue — 1838 Nogaro, doyenne armagnac, millésime 1848 · Un/Single/Double-Oaked 43°",
+  "Merlet — 1850 Saint-Sauvant · VS / Brothers Blend (Fins Bois + 1/5 GC) / Eau de Vigne, tous 40°",
+  "Sab's — 2019 Beaune, bouilleur ambulant · marc = peaux/pépins · Le Blanc 43° / Le Marc 46° (finish cognac)"]},
+ liqueurs:{t:"Liqueurs & spécialités", col:"#e2b45a", items:[
+  "Boudier — 1874 Dijon, famille Battault, cassis Noir de Bourgogne · produit Kota · Kir = chanoine Kir",
+  "Adriatico — Bianco « Crushed » 16° (cru, vegan) / Classico « Roasted » 28° (torréfié) — LE piège",
+  "Algebra — 19°, Londres · café Has Bean + rhum + 100 g/L de sucre = minimum légal · Décaf pour 23 h",
+  "Bénédictine — 1863 Fécamp, moine Vincelli 1510, 27 plantes, D.O.M. = Deo Optimo Maximo",
+  "Chinola — 2014 Rép. dominicaine, « fruit de la passion » · vine-to-bottle 24 h · 21° partout · larimar",
+  "Grand Marnier — 1880 · 51 % cognac + bigarade · baptisée par César Ritz",
+  "Kota — pandan « vanille d'Asie », Nico de Soto × Boudier, été 2024, 18°, Thaïlande",
+  "Marie Brizard — 1755 Bordeaux, doyenne du concours, fondée par une femme · anisette 25°"]},
+ femmes:{t:"Les femmes du TDB26", col:"#e9e2cf", items:[
+  "Marie Brizard — fondatrice, 1755",
+  "Antoinette Isautier — dirigeante dès 1865",
+  "Joy Spence — Appleton, 1re femme master blender de l'industrie (1997)",
+  "Sophie Decobecq — fondatrice-maître distillatrice de Calle 23",
+  "Marie Ferrand — maître de chai Isautier, créatrice du Double Agent Fusion",
+  "Virginie Dartigalongue — 6e génération, codirige la maison"]},
+ groupes:{t:"Groupes & distributeurs", col:"#7d9c93", items:[
+  "Groupe Campari — Campari, Wild Turkey (2009), Appleton (2012), Grand Marnier (2016)",
+  "Bacardi-Martini — Noilly Prat, Bénédictine",
+  "Vintage Spirit Garage — La Ina, Calle 23, Nuestra Soledad, Cuatro Gallos, Dartigalongue, Kota",
+  "Mezcal Brothers — BOWS (Fiba + Benleioc), Chinola",
+  "Dugas — Carpano · Solinest — Fever-Tree · Grand Chais de France — Isautier · Bellefontaine — Merlet",
+  "En direct — Boudier, Giffard, Adriatico, Ponthier, PCB, Manguin, Suntory, Algebra, Marie Brizard, Sab's, Combier"]},
+};
+
+/* =================== NAVIGATION =================== */
+function showView(id){
+  document.querySelectorAll("section.view").forEach(s=>s.classList.remove("active"));
+  document.getElementById("view-"+id).classList.add("active");
+  document.querySelectorAll("#mainnav button").forEach(b=>b.classList.toggle("active", b.dataset.view===id));
+  window.scrollTo({top:0});
+  if(id==="flash" && !flashState.started) startFlash();
+  if(id==="qcm" && !quizStates.qcm) startQuiz("qcm", QCM);
+  if(id==="vf" && !quizStates.vf) startVF();
+  if(id==="deg" && !quizStates.deg) startDeg();
+  if(id==="chrono" && !quizStates.chrono) startChrono();
+  if(id==="ponts" && !quizStates.ponts) startSocleQuiz();
+  if(id==="mind" && !mindBuilt) buildMind();
+  if(id==="sketch" && !sketchBuilt) buildSketch();
+  if(id==="fiches" && !fichesBuilt) buildFiches();
+  if(id==="socleplus" && !socleplusBuilt) buildSoclePlus();
+}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+/* =================== ACCUEIL =================== */
+(function buildShelf(){
+  const shelf=document.getElementById("shelf");
+  MODULES.forEach((m,i)=>{
+    const b=document.createElement("button");
+    b.className="label-card";
+    if(m.id==="flash") b.innerHTML='<span class="badge">commence ici</span>';
+    b.innerHTML += ICONS[m.icon] + '<span class="name">'+m.name+'</span><span class="desc">'+m.desc+'</span><span class="deg">'+m.deg+'</span>';
+    b.onclick=()=>showView(m.id);
+    shelf.appendChild(b);
+  });
+})();
+
+/* =================== FLASHCARDS =================== */
+const flashState={started:false, deck:[], idx:0, known:0, total:0, filter:"Tout"};
+const FLASH_CATS=["Tout","Non alcool","Apéritifs","Eaux-de-vie","Liqueurs","Transversal"];
+(function buildFlashFilters(){
+  const box=document.getElementById("flash-filters");
+  FLASH_CATS.forEach(c=>{
+    const b=document.createElement("button");
+    b.className="chip"+(c==="Tout"?" active":"");
+    b.textContent=c;
+    b.onclick=()=>{flashState.filter=c;document.querySelectorAll("#flash-filters .chip").forEach(x=>x.classList.toggle("active",x===b));startFlash();};
+    box.appendChild(b);
+  });
+})();
+function startFlash(){
+  flashState.started=true;
+  const pool = flashState.filter==="Tout" ? FLASH : FLASH.filter(f=>f.c===flashState.filter);
+  flashState.deck=shuffle(pool);
+  flashState.known=0; flashState.total=pool.length;
+  renderFlash();
+}
+function renderFlash(){
+  const fc=document.getElementById("flashcard");
+  const remaining=flashState.deck.length;
+  document.getElementById("flash-score").textContent=flashState.known+" / "+flashState.total+" maîtrisées";
+  document.getElementById("flash-progress").style.width=(flashState.total?100*flashState.known/flashState.total:0)+"%";
+  if(remaining===0){
+    document.getElementById("fc-q").innerHTML="🥂 Pile terminée !";
+    document.getElementById("fc-a").textContent="";
+    document.getElementById("fc-cat-f").textContent="bravo";
+    document.getElementById("fc-remaining").textContent="Relance une pile ou change de filtre.";
+    fc.classList.remove("flipped");
+    document.getElementById("fc-again").textContent="↻ Recommencer";
+    document.getElementById("fc-again").onclick=()=>{startFlash();resetFlashBtns();};
+    document.getElementById("fc-know").style.display="none";
+    return;
+  }
+  const card=flashState.deck[0];
+  fc.classList.remove("flipped");
+  setTimeout(()=>{
+    document.getElementById("fc-q").textContent=card.q;
+    document.getElementById("fc-a").textContent=card.a;
+    document.getElementById("fc-cat-f").textContent=card.c;
+    document.getElementById("fc-cat-b").textContent=card.c;
+  },120);
+  document.getElementById("fc-remaining").textContent=remaining+" carte"+(remaining>1?"s":"")+" dans la pile";
+}
+function resetFlashBtns(){
+  const again=document.getElementById("fc-again");
+  again.textContent="↻ À revoir"; again.onclick=fcAgain;
+  const know=document.getElementById("fc-know");
+  know.style.display=""; know.onclick=fcKnow;
+}
+function fcAgain(){ // remet la carte plus loin dans la pile
+  const c=flashState.deck.shift();
+  const pos=Math.min(flashState.deck.length, 3+Math.floor(Math.random()*3));
+  flashState.deck.splice(pos,0,c);
+  renderFlash();
+}
+function fcKnow(){ flashState.deck.shift(); flashState.known++; renderFlash(); }
+document.getElementById("flashcard").onclick=function(){this.classList.toggle("flipped");};
+document.getElementById("fc-again").onclick=fcAgain;
+document.getElementById("fc-know").onclick=fcKnow;
+
+/* =================== QUIZ GÉNÉRIQUE (QCM + PONTS) =================== */
+const quizStates={};
+function startQuiz(key, source){
+  quizStates[key]={qs:shuffle(source).map(q=>({...q, opts:shuffle(q.o.map((t,i)=>({t, ok:i===q.r})))})), idx:0, score:0};
+  renderQuiz(key);
+}
+function renderQuiz(key){
+  const st=quizStates[key];
+  const panel=document.getElementById(key+"-panel");
+  document.getElementById(key+"-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById(key+"-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    const pct=Math.round(100*st.score/st.qs.length);
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+      '<p style="margin:10px 0 20px">'+(pct>=80?"Objectif 80 % atteint — service impeccable. 🍸":"Pas encore 80 % : note tes erreurs et refais-les à J+2.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startQuiz(\''+key+'\','+"QCM"+')">Rejouer (nouveau mélange)</button></div>';
+    document.getElementById(key+"-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  html+='</div><div class="feedback" id="'+key+'-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="'+key+'-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{
+        b.disabled=true;
+        if(q.opts[+b.dataset.i].ok) b.classList.add("correct");
+      });
+      if(!good) btn.classList.add("wrong"); else st.score++;
+      const fb=document.getElementById(key+"-fb");
+      fb.className="feedback show "+(good?"good":"bad");
+      fb.innerHTML='<span class="handnote">'+(good?"exact !":"raté…")+'</span> '+q.e;
+      document.getElementById(key+"-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+      document.getElementById(key+"-next").style.display="";
+    };
+  });
+  document.getElementById(key+"-next").onclick=()=>{st.idx++;renderQuiz(key);};
+}
+
+/* =================== VRAI / FAUX =================== */
+function startVF(){
+  quizStates.vf={qs:shuffle(VF), idx:0, score:0};
+  renderVF();
+}
+function renderVF(){
+  const st=quizStates.vf;
+  const panel=document.getElementById("vf-panel");
+  document.getElementById("vf-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("vf-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    const pct=Math.round(100*st.score/st.qs.length);
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+      '<p style="margin:10px 0 20px">'+(pct>=80?"Les pièges ne te font plus peur.":"Relis les fiches des questions ratées, puis rejoue.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startVF()">Rejouer</button></div>';
+    document.getElementById("vf-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  panel.innerHTML='<div class="quiz-q">Q'+(st.idx+1)+'. «&nbsp;'+q.q+'&nbsp;»</div>'+
+    '<div class="vf-buttons"><button class="btn btn-green" id="vf-true">VRAI</button><button class="btn btn-red" id="vf-false">FAUX</button></div>'+
+    '<div class="feedback" id="vf-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">affirmation '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="vf-next" style="display:none">Suivant →</button></div>';
+  const answer=(v)=>{
+    const good=v===q.r;
+    if(good) st.score++;
+    document.getElementById("vf-true").disabled=true;
+    document.getElementById("vf-false").disabled=true;
+    const fb=document.getElementById("vf-fb");
+    fb.className="feedback show "+(good?"good":"bad");
+    fb.innerHTML='<span class="handnote">'+(good?"bien vu !":"piégé…")+'</span> C\u2019était '+(q.r?"VRAI":"FAUX")+'. '+q.e;
+    document.getElementById("vf-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+    document.getElementById("vf-next").style.display="";
+  };
+  document.getElementById("vf-true").onclick=()=>answer(true);
+  document.getElementById("vf-false").onclick=()=>answer(false);
+  document.getElementById("vf-next").onclick=()=>{st.idx++;renderVF();};
+}
+
+/* =================== DEGRÉS =================== */
+function startDeg(){
+  const picks=shuffle(DEGREES).slice(0,12);
+  quizStates.deg={qs:picks.map(p=>{
+    const wrong=shuffle(DEG_POOL.filter(d=>d!==p.d)).slice(0,3);
+    return {q:"Quel est le degré de : "+p.n+" ?", opts:shuffle([{t:p.d,ok:true},...wrong.map(w=>({t:w,ok:false}))]), e:p.n+" titre "+p.d+"."};
+  }), idx:0, score:0};
+  renderDeg();
+}
+function renderDeg(){
+  const st=quizStates.deg;
+  const panel=document.getElementById("deg-panel");
+  document.getElementById("deg-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("deg-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+      '<p style="margin:10px 0 20px">'+(st.score>=10?"Tu peux les réciter au jury les yeux fermés.":"Répète le mémo « degrés pièges » à voix haute, puis rejoue.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startDeg()">Nouveau tirage (12 produits)</button></div>';
+    document.getElementById("deg-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'" style="text-align:center;font-family:Fraunces,serif;font-size:1.2rem;font-weight:900">'+o.t+'</button>';});
+  html+='</div><div class="feedback" id="deg-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">'+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="deg-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
+      if(!good) btn.classList.add("wrong"); else st.score++;
+      const fb=document.getElementById("deg-fb");
+      fb.className="feedback show "+(good?"good":"bad");
+      fb.innerHTML='<span class="handnote">'+(good?"santé !":"aïe…")+'</span> '+q.e;
+      document.getElementById("deg-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+      document.getElementById("deg-next").style.display="";
+    };
+  });
+  document.getElementById("deg-next").onclick=()=>{st.idx++;renderDeg();};
+}
+
+/* =================== CHRONOLOGIE =================== */
+function startChrono(){
+  quizStates.chrono={round:0, score:0, rounds:5};
+  nextChrono();
+}
+function nextChrono(){
+  const st=quizStates.chrono;
+  const panel=document.getElementById("chrono-panel");
+  document.getElementById("chrono-progress").style.width=(100*st.round/st.rounds)+"%";
+  document.getElementById("chrono-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.round>=st.rounds){
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+(st.rounds*4)+'</div>'+
+      '<p style="margin:10px 0 20px">'+(st.score>=16?"La frise est dans ta tête, de 1749 à 2024.":"Relis la chronologie des fondations, puis rejoue.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startChrono()">Rejouer (5 manches)</button></div>';
+    document.getElementById("chrono-progress").style.width="100%";
+    return;
+  }
+  const picks=shuffle(CHRONO).slice(0,4);
+  const sorted=[...picks].sort((a,b)=>a.y-b.y);
+  st.current={picks, sorted, placed:[]};
+  let html='<div class="quiz-q">Manche '+(st.round+1)+' / '+st.rounds+' — clique les maisons de la <u>plus ancienne</u> à la <u>plus récente</u> :</div>';
+  html+='<div class="chrono-pool" id="chrono-pool">';
+  picks.forEach((p,i)=>{html+='<button class="chrono-chip" data-i="'+i+'">'+p.n+'</button>';});
+  html+='</div><div class="handnote" style="color:var(--copper-2);margin-top:6px">ta frise ↓</div><div class="chrono-slots" id="chrono-slots">';
+  for(let s=0;s<4;s++){html+='<div class="chrono-slot" data-s="'+s+'"><span class="num">'+(s+1)+'.</span><span class="val"></span></div>';}
+  html+='</div><div class="feedback" id="chrono-fb"></div><div class="quiz-footer"><button class="btn btn-ghost" id="chrono-reset">↺ Recommencer la manche</button><button class="btn btn-copper" id="chrono-next" style="display:none">Manche suivante →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".chrono-chip").forEach(chip=>{
+    chip.onclick=()=>{
+      if(chip.classList.contains("placed"))return;
+      const cur=st.current;
+      const slot=panel.querySelector('.chrono-slot[data-s="'+cur.placed.length+'"] .val');
+      slot.textContent=cur.picks[+chip.dataset.i].n;
+      cur.placed.push(cur.picks[+chip.dataset.i]);
+      chip.classList.add("placed");
+      if(cur.placed.length===4) checkChrono();
+    };
+  });
+  document.getElementById("chrono-reset").onclick=()=>{
+    st.current.placed=[];
+    panel.querySelectorAll(".chrono-chip").forEach(c=>c.classList.remove("placed"));
+    panel.querySelectorAll(".chrono-slot").forEach(s=>{s.classList.remove("good","bad");s.querySelector(".val").textContent="";});
+    document.getElementById("chrono-fb").className="feedback";
+  };
+  document.getElementById("chrono-next").onclick=()=>{st.round++; nextChrono();};
+  function checkChrono(){
+    const cur=st.current; let pts=0;
+    cur.placed.forEach((p,i)=>{
+      const slot=panel.querySelector('.chrono-slot[data-s="'+i+'"]');
+      const good=p===cur.sorted[i];
+      slot.classList.add(good?"good":"bad");
+      slot.querySelector(".val").textContent=p.n+" ("+p.y+")";
+      if(good)pts++;
+    });
+    st.score+=pts;
+    const fb=document.getElementById("chrono-fb");
+    fb.className="feedback show "+(pts===4?"good":"bad");
+    fb.innerHTML='<span class="handnote">'+(pts===4?"frise parfaite !":pts+" / 4 bien placés")+'</span> Ordre correct : '+cur.sorted.map(p=>p.n+" ("+p.y+")").join(" → ");
+    document.getElementById("chrono-score").textContent=st.score+" pts";
+    document.getElementById("chrono-next").style.display="";
+    document.getElementById("chrono-reset").style.display="none";
+  }
+}
+
+/* =================== CARTE MENTALE =================== */
+let mindBuilt=false;
+function buildMind(){
+  mindBuilt=true;
+  const keys=Object.keys(MIND);
+  const W=920,H=560,cx=W/2,cy=H/2;
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Carte mentale des partenaires TDB26" font-family="Karla,sans-serif">';
+  // branches
+  const positions=[
+    {x:170,y:110},{x:750,y:105},{x:120,y:300},{x:800,y:300},{x:210,y:475},{x:715,y:480}
+  ];
+  keys.forEach((k,i)=>{
+    const p=positions[i];
+    svg+='<path d="M'+cx+' '+cy+' Q'+((cx+p.x)/2+(i%2?30:-30))+' '+((cy+p.y)/2)+' '+p.x+' '+p.y+'" stroke="'+MIND[k].col+'" stroke-width="3" fill="none" stroke-dasharray="7 6" opacity=".7"/>';
+  });
+  // centre
+  svg+='<g><circle cx="'+cx+'" cy="'+cy+'" r="66" fill="#c8813a" stroke="#e9e2cf" stroke-width="3"/>'+
+    '<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="26" fill="#16302a">TDB26</text>'+
+    '<text x="'+cx+'" y="'+(cy+16)+'" text-anchor="middle" font-family="Caveat,cursive" font-size="17" fill="#16302a">partenaires</text></g>';
+  // nœuds
+  keys.forEach((k,i)=>{
+    const p=positions[i], m=MIND[k];
+    const w=Math.max(150, m.t.length*9.5+34);
+    svg+='<g class="mind-node" data-k="'+k+'" tabindex="0" role="button" aria-label="'+m.t+'">'+
+      '<rect x="'+(p.x-w/2)+'" y="'+(p.y-26)+'" width="'+w+'" height="52" rx="26" fill="'+m.col+'" stroke="#0e211d" stroke-width="2.5"/>'+
+      '<text x="'+p.x+'" y="'+(p.y+2)+'" text-anchor="middle" font-weight="700" font-size="15.5" fill="#16302a">'+m.t+'</text>'+
+      '<text x="'+p.x+'" y="'+(p.y+18)+'" text-anchor="middle" font-family="Caveat,cursive" font-size="14" fill="#16302a" opacity=".75">'+m.items.length+' points · clique</text></g>';
+  });
+  svg+='</svg>';
+  document.getElementById("mindwrap").innerHTML=svg;
+  document.querySelectorAll(".mind-node").forEach(n=>{
+    const open=()=>{
+      const m=MIND[n.dataset.k];
+      const info=document.getElementById("mind-info");
+      info.innerHTML='<h3>'+m.t+'</h3><ul>'+m.items.map(i=>'<li>'+i+'</li>').join('')+'</ul>';
+      info.classList.add("show");
+      info.scrollIntoView({behavior:"smooth",block:"nearest"});
+    };
+    n.onclick=open;
+    n.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}};
+  });
+}
+
+/* =================== SKETCHNOTES =================== */
+let sketchBuilt=false;
+const SK_FONT='font-family="Caveat,cursive"';
+const SK_BODY='font-family="Karla,sans-serif"';
+const SKETCHES=[
+{id:"sherry", t:"Fino vs Oloroso", svg:`
+<svg viewBox="0 0 900 430" role="img" aria-label="Schéma fino contre oloroso">
+<text x="450" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">LA INA — les 3 styles de Jerez</text>
+<text x="450" y="62" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">Palomino + albariza + solera : les 3 mots magiques</text>
+<!-- FINO -->
+<g><path d="M90 130 h180 v150 a20 20 0 0 1 -20 20 h-140 a20 20 0 0 1 -20 -20 z" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<path d="M92 150 q45 14 88 0 q45 -14 88 0" stroke="#9fbf6b" stroke-width="6" fill="none"/>
+<text x="180" y="145" text-anchor="middle" ${SK_FONT} font-size="17" fill="#4f8f5b">← voile de FLOR (levures)</text>
+<rect x="98" y="160" width="164" height="130" fill="#e8d68a" opacity=".8"/>
+<text x="180" y="235" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="19" fill="#22302b">FINO 15°</text>
+<text x="180" y="330" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">élevage BIOLOGIQUE ≈ 5 ans</text>
+<text x="180" y="350" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">sec · salin · amande · 7-9 °C</text>
+<text x="180" y="372" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Adonis, Bamboo, split-base martini</text></g>
+<!-- OLOROSO -->
+<g><path d="M360 130 h180 v150 a20 20 0 0 1 -20 20 h-140 a20 20 0 0 1 -20 -20 z" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<text x="450" y="122" text-anchor="middle" ${SK_FONT} font-size="17" fill="#b23a2b">muté plus haut → pas de flor → O₂ !</text>
+<rect x="368" y="145" width="164" height="145" fill="#c98a3f" opacity=".85"/>
+<path d="M395 158 q10 -18 20 0 M450 152 q10 -18 20 0 M500 160 q10 -18 20 0" stroke="#b23a2b" stroke-width="3" fill="none"/>
+<text x="450" y="230" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="19" fill="#fff">OLOROSO 20°</text>
+<text x="450" y="330" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">élevage OXYDATIF</text>
+<text x="450" y="350" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">sec mais ample · noix · tabac</text>
+<text x="450" y="372" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">Old Fashioned, avec le whisky</text></g>
+<!-- PX -->
+<g><circle cx="705" cy="150" r="26" fill="#e2b45a" stroke="#22302b" stroke-width="3"/>
+<path d="M690 128 q15 -22 30 0" stroke="#4f8f5b" stroke-width="4" fill="none"/>
+<text x="760" y="145" ${SK_FONT} font-size="17" fill="#a5651f">soleil = soleo</text>
+<path d="M705 185 v25" stroke="#22302b" stroke-width="3" marker-end="url(#arr)"/>
+<path d="M630 220 h150 v90 a15 15 0 0 1 -15 15 h-120 a15 15 0 0 1 -15 -15 z" fill="#2a1a12" stroke="#22302b" stroke-width="3"/>
+<text x="705" y="270" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="18" fill="#e2b45a">PX 17°</text>
+<text x="705" y="292" text-anchor="middle" ${SK_BODY} font-size="13" fill="#f4ecd9">~400 g/L de sucre</text>
+<text x="705" y="345" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">raisins passerillés · figue · café</text>
+<text x="705" y="368" text-anchor="middle" ${SK_FONT} font-size="16" fill="#a5651f">5-10 ml = sirop complexe, float espresso martini</text></g>
+<text x="450" y="415" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">⚠ piège degré : Fino 15° &lt; PX 17° &lt; Oloroso 20°</text>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#22302b"/></marker></defs>
+</svg>`},
+{id:"pisco", t:"Règles d'or du pisco", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="Règles du pisco péruvien">
+<text x="450" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">PISCO PÉRUVIEN — les règles d'or</text>
+<text x="450" y="62" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">grand classique de question jury (Cuatro Gallos, vallée d'Ica)</text>
+<g><path d="M120 260 q0 -80 60 -80 q60 0 60 80 z" fill="#c98a3f" stroke="#22302b" stroke-width="3"/>
+<rect x="170" y="120" width="20" height="65" fill="#c98a3f" stroke="#22302b" stroke-width="3"/>
+<path d="M190 130 q80 -10 110 60" stroke="#22302b" stroke-width="3" fill="none"/>
+<text x="180" y="300" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="16" fill="#22302b">alambic de cuivre</text>
+<text x="180" y="322" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">1 SEULE distillation</text></g>
+<g><circle cx="420" cy="200" r="55" fill="none" stroke="#b23a2b" stroke-width="5"/>
+<path d="M383 163 L457 237" stroke="#b23a2b" stroke-width="5"/>
+<path d="M410 180 q10 15 0 28 q-8 12 10 20" stroke="#3a7ca5" stroke-width="4" fill="none"/>
+<text x="420" y="290" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="16" fill="#b23a2b">ZÉRO EAU ajoutée</text>
+<text x="420" y="312" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">distillé directement à 38-48°</text></g>
+<g><circle cx="650" cy="200" r="55" fill="none" stroke="#b23a2b" stroke-width="5"/>
+<path d="M613 163 L687 237" stroke="#b23a2b" stroke-width="5"/>
+<path d="M625 185 h50 v35 a10 10 0 0 1 -10 10 h-30 a10 10 0 0 1 -10 -10 z" fill="#8a5a2b" stroke="#22302b" stroke-width="2.5"/>
+<text x="650" y="290" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="16" fill="#b23a2b">JAMAIS de bois</text>
+<text x="650" y="312" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">repos ≥ 3 mois en cuve inerte</text></g>
+<text x="450" y="365" text-anchor="middle" ${SK_BODY} font-size="15" fill="#22302b">Puro = 1 cépage · Acholado = assemblage · Mosto Verde = moût partiellement fermenté (plus gras)</text>
+<text x="450" y="390" text-anchor="middle" ${SK_FONT} font-size="18" fill="#a5651f">Quebranta → Pisco Sour · Italia (aromatique) → Chilcano</text>
+</svg>`},
+{id:"proof", t:"Proof américain", svg:`
+<svg viewBox="0 0 900 360" role="img" aria-label="Proof américain égale degré fois deux">
+<text x="450" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">WILD TURKEY — proof = degré × 2</text>
+<g><rect x="130" y="90" width="150" height="190" rx="14" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<rect x="150" y="120" width="110" height="90" rx="6" fill="#e9dcae" stroke="#22302b" stroke-width="2"/>
+<text x="205" y="165" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="30" fill="#22302b">81</text>
+<text x="205" y="190" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">PROOF</text>
+<text x="205" y="250" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="22" fill="#a5651f">= 40,5°</text>
+<text x="205" y="310" text-anchor="middle" ${SK_FONT} font-size="17" fill="#22302b">2011, Eddie Russell — highballs</text></g>
+<g><rect x="620" y="90" width="150" height="190" rx="14" fill="#f3e9c8" stroke="#22302b" stroke-width="3"/>
+<rect x="640" y="120" width="110" height="90" rx="6" fill="#e0b062" stroke="#22302b" stroke-width="2"/>
+<text x="695" y="165" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="30" fill="#22302b">101</text>
+<text x="695" y="190" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">PROOF</text>
+<text x="695" y="250" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="22" fill="#b23a2b">= 50,5°</text>
+<text x="695" y="310" text-anchor="middle" ${SK_FONT} font-size="17" fill="#22302b">flagship 6-8 ans — Old Fashioned</text></g>
+<path d="M310 180 q140 -70 280 0" stroke="#c8813a" stroke-width="4" fill="none" stroke-dasharray="8 7"/>
+<text x="450" y="120" text-anchor="middle" ${SK_FONT} font-size="24" fill="#a5651f">÷ 2 pour avoir le degré !</text>
+<text x="450" y="215" text-anchor="middle" ${SK_BODY} font-size="15" fill="#22302b">~75 % maïs / 13 % seigle / 12 % orge</text>
+<text x="450" y="240" text-anchor="middle" ${SK_BODY} font-size="15" fill="#22302b">alligator char n°4 · Jimmy Russell depuis 1954</text>
+<text x="450" y="340" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">nom né en 1940 : une chasse au dindon sauvage 🦃</text>
+</svg>`},
+{id:"giffard", t:"Giffard : 2 gammes 0 %", svg:`
+<svg viewBox="0 0 900 400" role="img" aria-label="Les deux gammes sans alcool Giffard">
+<text x="450" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">GIFFARD — deux gammes 0 % à ne pas confondre</text>
+<text x="450" y="62" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">1885, Angers, Émile Giffard pharmacien (Menthe-Pastille)</text>
+<g><rect x="70" y="90" width="360" height="270" rx="14" fill="#eef2df" stroke="#9fbf6b" stroke-width="3"/>
+<text x="250" y="125" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="18" fill="#22302b">« Giffard Sans Alcool »</text>
+<text x="250" y="150" text-anchor="middle" ${SK_FONT} font-size="20" fill="#4f8f5b">technique du SHRUB</text>
+<path d="M180 175 h140 l-15 60 h-110 z" fill="#fff" stroke="#22302b" stroke-width="2.5"/>
+<text x="250" y="212" text-anchor="middle" ${SK_BODY} font-size="13" fill="#b23a2b">vinaigre de vin</text>
+<text x="250" y="265" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">fruits + plantes macérés dans le vinaigre :</text>
+<text x="250" y="285" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">l'acidité remplace la structure de l'alcool</text>
+<text x="250" y="325" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">Ananas · Spritz · Triple Sec · Gingembre</text>
+<text x="250" y="343" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">Fleur de Sureau · Pamplemousse</text></g>
+<g><rect x="470" y="90" width="360" height="270" rx="14" fill="#f6ecdc" stroke="#c8813a" stroke-width="3"/>
+<text x="650" y="125" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="18" fill="#22302b">« Bases Cocktail Sans Alcool »</text>
+<text x="650" y="150" text-anchor="middle" ${SK_FONT} font-size="20" fill="#a5651f">spiritueux miroirs — 4 ans de R&amp;D</text>
+<text x="650" y="190" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">Aperitif Bitter → bitter rouge · Woody Malt → whisky</text>
+<text x="650" y="213" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">Smoky Agave → mezcal · Herbal + Juniper → gin</text>
+<text x="650" y="236" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">Cold Cane → rhum · Ruby Grape → vermouth</text>
+<text x="650" y="285" text-anchor="middle" ${SK_FONT} font-size="18" fill="#4f8f5b">→ reconstruire Garibaldi, Spritz,</text>
+<text x="650" y="308" text-anchor="middle" ${SK_FONT} font-size="18" fill="#4f8f5b">Jungle Bird… en 0 %</text>
+<text x="650" y="343" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">compenser le corps : sucre, acidité, purée Ponthier</text></g>
+<text x="450" y="388" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">mocktail jury : base Giffard + Fever-Tree + purée Ponthier + décor PCB</text>
+</svg>`},
+{id:"noilly", t:"Noilly : l'Enclos", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Élevage en plein air de Noilly Prat">
+<text x="450" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">NOILLY PRAT — un an dehors, dans l'Enclos</text>
+<text x="450" y="62" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">Marseillan, étang de Thau · recette 1813 de Joseph Noilly</text>
+<circle cx="130" cy="120" r="30" fill="#e2b45a" stroke="#22302b" stroke-width="3"/>
+<text x="130" y="175" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">soleil</text>
+<path d="M240 105 q25 -12 50 0 q25 12 50 0" stroke="#3a7ca5" stroke-width="4" fill="none"/>
+<path d="M250 130 q25 -12 50 0 q25 12 50 0" stroke="#3a7ca5" stroke-width="4" fill="none"/>
+<text x="295" y="170" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">vent + embruns</text>
+<path d="M430 95 l0 30 M450 90 l0 35 M470 97 l0 28" stroke="#3a7ca5" stroke-width="3" stroke-linecap="round"/>
+<text x="450" y="170" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">pluie</text>
+<g>
+<ellipse cx="240" cy="270" rx="55" ry="40" fill="#8a5a2b" stroke="#22302b" stroke-width="3"/>
+<ellipse cx="380" cy="270" rx="55" ry="40" fill="#8a5a2b" stroke="#22302b" stroke-width="3"/>
+<ellipse cx="520" cy="270" rx="55" ry="40" fill="#8a5a2b" stroke="#22302b" stroke-width="3"/>
+<path d="M185 270 h110 M325 270 h110 M465 270 h110" stroke="#5c3a1a" stroke-width="3"/>
+<text x="380" y="335" text-anchor="middle" ${SK_BODY} font-size="15" fill="#22302b">fûts de Picpoul de Pinet + Clairette — oxydation façon madère → couleur paille, notes rancio</text></g>
+<g><path d="M700 200 v90 M700 210 q30 20 0 45" stroke="#22302b" stroke-width="4" fill="none" stroke-linecap="round"/>
+<ellipse cx="700" cy="300" rx="48" ry="26" fill="none" stroke="#c8813a" stroke-width="4" stroke-dasharray="8 6"/>
+<text x="700" y="150" text-anchor="middle" ${SK_FONT} font-size="21" fill="#a5651f">le « dodinage »</text>
+<text x="700" y="345" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">brassage quotidien à la pale</text>
+<text x="700" y="363" text-anchor="middle" ${SK_BODY} font-size="13" fill="#22302b">(~20 plantes en macération)</text></g>
+<text x="330" y="375" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">Dry 18° = Dry Martini · Ambré 16° = la pépite de la boutique</text>
+</svg>`},
+{id:"adriatico", t:"Adriatico : le piège 16/28", svg:`
+<svg viewBox="0 0 900 380" role="img" aria-label="Adriatico Bianco contre Classico">
+<text x="450" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="27" fill="#22302b">ADRIATICO — Bianco vs Classico : LE piège garanti</text>
+<text x="450" y="62" text-anchor="middle" ${SK_FONT} font-size="19" fill="#a5651f">2019, Pouilles · amande Filippo Cea · 2× moins de sucre · sel marin</text>
+<g><rect x="120" y="95" width="290" height="230" rx="14" fill="#fdfbf4" stroke="#22302b" stroke-width="3"/>
+<circle cx="200" cy="150" r="22" fill="#f0e6cf" stroke="#22302b" stroke-width="2.5"/>
+<path d="M188 150 l24 0 M200 138 l0 24" stroke="#22302b" stroke-width="2"/>
+<text x="300" y="145" ${SK_FONT} font-size="19" fill="#4f8f5b">amande CRUE concassée</text>
+<text x="265" y="200" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="21" fill="#22302b">BIANCO « Crushed »</text>
+<text x="265" y="232" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="30" fill="#4f8f5b">16°</text>
+<text x="265" y="265" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">« lait d'amande » alcoolisé · blanc · vegan</text>
+<text x="265" y="295" text-anchor="middle" ${SK_FONT} font-size="17" fill="#a5651f">Piña Colada · float sur Porn Star</text></g>
+<g><rect x="490" y="95" width="290" height="230" rx="14" fill="#f3e3ca" stroke="#22302b" stroke-width="3"/>
+<circle cx="570" cy="150" r="22" fill="#b0702f" stroke="#22302b" stroke-width="2.5"/>
+<path d="M556 138 q6 -14 12 0 M572 134 q6 -14 12 0" stroke="#b23a2b" stroke-width="2.5" fill="none"/>
+<text x="672" y="145" ${SK_FONT} font-size="19" fill="#b23a2b">amande TORRÉFIÉE + distillée</text>
+<text x="635" y="200" text-anchor="middle" ${SK_BODY} font-weight="700" font-size="21" fill="#22302b">CLASSICO « Roasted »</text>
+<text x="635" y="232" text-anchor="middle" font-family="Fraunces,serif" font-weight="900" font-size="30" fill="#b23a2b">28°</text>
+<text x="635" y="265" text-anchor="middle" ${SK_BODY} font-size="14" fill="#22302b">ambré · vanille, cannelle, cacao, café, sel</text>
+<text x="635" y="295" text-anchor="middle" ${SK_FONT} font-size="17" fill="#a5651f">Godfather · Amaretto Sour</text></g>
+<path d="M415 210 h70" stroke="#b23a2b" stroke-width="4" stroke-dasharray="7 6"/>
+<text x="450" y="200" text-anchor="middle" ${SK_FONT} font-size="20" fill="#b23a2b">12° d'écart !</text>
+<text x="450" y="360" text-anchor="middle" ${SK_FONT} font-size="18" fill="#22302b">+ le Zero 0,0 % = le seul amaretto sans alcool du concours</text>
+</svg>`},
+];
+function buildSketch(){
+  sketchBuilt=true;
+  const nav=document.getElementById("sketch-nav");
+  const zone=document.getElementById("sketch-panels");
+  SKETCHES.forEach((s,i)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(i===0?" active":"");
+    b.textContent=s.t;
+    b.onclick=()=>{
+      document.querySelectorAll("#sketch-nav .chip").forEach(x=>x.classList.toggle("active",x===b));
+      document.querySelectorAll(".sketchpanel").forEach((p,j)=>p.classList.toggle("show",j===i));
+    };
+    nav.appendChild(b);
+    const p=document.createElement("div");
+    p.className="sketchpanel"+(i===0?" show":"");
+    p.innerHTML=s.svg;
+    zone.appendChild(p);
+  });
+}
+
+/* =================== FICHES DE RÉVISION (lecture) =================== */
+let fichesBuilt=false;
+const FICHES = [
+ {t:"Repères clés par marque", html:`
+  <p class="fiche-lead">L'info à retenir absolument pour chaque partenaire. Une ligne = une marque.</p>
+  <div class="fiche-grid">
+   <div class="fiche-block"><h4>Non alcool</h4><ul>
+    <li><b>Adriatico Zero</b> — 2019, Pouilles, amande Filippo Cea, sel marin, 2× moins de sucre. Le seul amaretto 0,0 %.</li>
+    <li><b>Giffard</b> — 1885 Angers, pharmacien, Menthe-Pastille. Gamme shrub (vinaigre de vin) vs Bases Cocktail (4 ans R&D, spiritueux miroirs).</li>
+    <li><b>Fever-Tree</b> — 2004 Londres, Rolls & Warrillow. Fever tree = quinquina = quinine (RDC). 8 références.</li>
+    <li><b>Ponthier</b> — 1946 Objat, ex-négoce de fruits, roi de la châtaigne, B Corp. Figue de Barbarie = fruit du cactus (→ Fiba).</li>
+    <li><b>PCB Création</b> — 1992 Benfeld (Alsace), les Bach. Ingredium (2019) = 5 familles techniques.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Apéritifs & amers</h4><ul>
+    <li><b>Combier</b> — 1834 Saumur, 1er triple sec, alambics Eiffel. Blanchette 60° (blanche) / L'Entêté 62° (verte, chlorophylle).</li>
+    <li><b>Campari</b> — 1860 Novare, 25° en France, cochenille jusqu'en 2006. Negroni = 1919 Florence.</li>
+    <li><b>La Ina</b> — soleras 1919 (Domecq), Lustau depuis 2008. Fino 15° (flor) / Oloroso 20° (oxydatif) / PX 17°.</li>
+    <li><b>Noilly Prat</b> — 1813, Marseillan, Picpoul + Clairette, 1 an dans l'Enclos, dodinage. Dry 18° / Ambré 16°.</li>
+    <li><b>Carpano</b> — 1786 Turin, inventeur du vermouth. Antica Formula 16,5° (vanille Madagascar) / Classico 16°.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Eaux-de-vie & alcools</h4><ul>
+    <li><b>BOWS Fiba</b> — 2016 Benoît Garcia, Montauban → Laure-Minervois. Fiba = figue de Barbarie, 45°, le « mezcal français ».</li>
+    <li><b>Manguin Oli'Still</b> — Barthelasse (Avignon), olive distillée depuis 2014. 40°, truffe-olive-salin.</li>
+    <li><b>Roku</b> — 2017 Osaka, Suntory. « Six » botaniques japonais récoltés selon le shun, 43°.</li>
+    <li><b>Benleioc</b> — Ben+Lei+Oc. Brassins type stout (1re en Europe), affinage Pacherenc. Sorgho / Tourbé 45°.</li>
+    <li><b>Wild Turkey</b> — site 1869, nom 1940 (chasse au dindon), Jimmy Russell 1954. 81 = 40,5° / 101 = 50,5°.</li>
+    <li><b>Isautier</b> — 1845, doyenne de La Réunion, Antoinette 1865. Fusion 55° (co-ferment. 36 h) / Barrik 40° / 5 ans 45°.</li>
+    <li><b>Appleton</b> — 1749 Jamaïque, estate rum, Joy Spence (1re femme master blender, 1997). Âge = plus jeune rhum.</li>
+    <li><b>Calle 23</b> — Sophie Decobecq, levures maison, Los Altos. Repo 8 mois / Añejo 16 mois, tous 40°.</li>
+    <li><b>Nuestra Soledad</b> — Casa Cortés 1840, single village, espadín, 40°. Vierge de la Solitude.</li>
+    <li><b>Cuatro Gallos</b> — pisco d'Ica : 1 distillation à degré, 0 eau, 0 bois. Quebranta / Italia 40°.</li>
+    <li><b>Dartigalongue</b> — 1838 Nogaro, doyenne armagnac, millésime 1848. Un/Single/Double-Oaked 43°.</li>
+    <li><b>Merlet</b> — 1850 Saint-Sauvant. VS / Brothers Blend (4 ans, Fins Bois + 1/5 GC) / Eau de Vigne, tous 40°.</li>
+    <li><b>Sab's</b> — 2019 Beaune, bouilleur ambulant. Marc = peaux/pépins. Le Blanc 43° / Le Marc 46° (finish cognac).</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Liqueurs & spécialités</h4><ul>
+    <li><b>Gabriel Boudier</b> — 1874 Dijon, famille Battault, cassis Noir de Bourgogne. Produit Kota. Kir = chanoine Kir.</li>
+    <li><b>Adriatico</b> — Bianco « Crushed » 16° (cru, vegan) / Classico « Roasted » 28° (torréfié). LE piège.</li>
+    <li><b>Algebra</b> — 19° Londres. Café Has Bean + rhum + 100 g/L sucre = minimum légal (« extra-dry »). Décaf = 23 h.</li>
+    <li><b>Bénédictine</b> — 1863 Fécamp, moine Vincelli (1510), 27 plantes, D.O.M. = Deo Optimo Maximo.</li>
+    <li><b>Chinola</b> — 2014 Rép. dominicaine, « fruit de la passion », vine-to-bottle (24 h), 21°, larimar.</li>
+    <li><b>Grand Marnier</b> — 1880, 51 % cognac + bigarade, baptisée par César Ritz.</li>
+    <li><b>Kota</b> — pandan « vanille d'Asie », Nico de Soto × Boudier, été 2024, 18°, Thaïlande. LA nouveauté.</li>
+    <li><b>Marie Brizard</b> — 1755 Bordeaux, doyenne du concours, fondée par une femme, anisette 25°.</li>
+   </ul></div>
+  </div>`},
+ {t:"Chronologie des fondations", html:`
+  <p class="fiche-lead">De la plus ancienne à la plus récente — l'ordre à réciter.</p>
+  <div class="timeline">
+   ${[["1749","Appleton Estate (Jamaïque)"],["1755","Marie Brizard (Bordeaux)"],["1786","Carpano invente le vermouth (Turin)"],["1813","Noilly (recette) / 1res distillations Dartigalongue"],["1834","Combier (Saumur) + 1er triple sec"],["1838","Maison Dartigalongue (Nogaro)"],["1840","Famille Cortés, mezcal (Oaxaca)"],["1845","Isautier (La Réunion)"],["1850","Merlet (Saint-Sauvant)"],["1860","Campari (Novare)"],["1863","Bénédictine (Fécamp)"],["1869","Site Wild Turkey (Kentucky)"],["1874","Gabriel Boudier (Dijon)"],["1880","Grand Marnier"],["1885","Giffard (Angers)"],["1899","Suntory (maison de Roku)"],["1919","Soleras La Ina (Domecq)"],["1946","Ponthier (Objat)"],["1992","PCB Création (Benfeld)"],["2003","Calle 23 (projet Decobecq)"],["2004","Fever-Tree + relance absinthe Combier"],["2014","Chinola + olive distillée Manguin"],["2016","BOWS (Montauban)"],["2017","Roku"],["2019","Adriatico + Ingredium + Sab's"],["2024","Kota (été)"]].map(x=>'<div class="tl-row"><span class="tl-year">'+x[0]+'</span><span class="tl-lab">'+x[1]+'</span></div>').join('')}
+  </div>`},
+ {t:"Superlatifs & femmes", html:`
+  <div class="fiche-grid">
+   <div class="fiche-block"><h4>Les « plus anciens de » (à dégainer)</h4><ul>
+    <li><b>Combier</b> — plus ancienne distillerie du Val de Loire.</li>
+    <li><b>Dartigalongue</b> — plus ancienne maison d'armagnac (+ millésime 1848).</li>
+    <li><b>Isautier</b> — plus ancienne distillerie ET entreprise de La Réunion.</li>
+    <li><b>Appleton</b> — parmi les plus anciennes distilleries de rhum au monde (1749).</li>
+    <li><b>Marie Brizard</b> — plus ancienne maison du concours (1755).</li>
+    <li><b>Jimmy Russell</b> (Wild Turkey) — plus ancien maître distillateur en activité au monde.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Les femmes du TDB26 (fil rouge)</h4><ul>
+    <li><b>Marie Brizard</b> — fondatrice, 1755.</li>
+    <li><b>Antoinette Isautier</b> — dirigeante dès 1865.</li>
+    <li><b>Joy Spence</b> — Appleton, 1re femme master blender de l'industrie (1997).</li>
+    <li><b>Sophie Decobecq</b> — fondatrice-maître distillatrice de Calle 23.</li>
+    <li><b>Marie Ferrand</b> — maître de chai Isautier, créatrice du Double Agent Fusion.</li>
+    <li><b>Virginie Dartigalongue</b> — 6e génération, codirige la maison.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Noms & acronymes décodés</h4><ul>
+    <li><b>BOWS</b> = Brave Occitan Wild Spirit · <b>Benleioc</b> = Ben+Lei+Oc · <b>Fiba</b> = FIgue de BArbarie</li>
+    <li><b>Roku</b> = six (jap.) · <b>Chinola</b> = fruit de la passion (dom.) · <b>Kota</b> = pandan</li>
+    <li><b>D.O.M.</b> = Deo Optimo Maximo · <b>Fever tree</b> = quinquina, « l'arbre à fièvre »</li>
+    <li><b>Calle 23</b> = plaque de rue de Guadalajara · <b>Nuestra Soledad</b> = Vierge de la Solitude</li>
+    <li><b>Vermouth</b> = Wermut (armoise, all.) · <b>Punt e Mes</b> = « un point et demi »</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Réseau des distributeurs</h4><ul>
+    <li><b>Groupe Campari</b> — Campari, Wild Turkey, Appleton, Grand Marnier.</li>
+    <li><b>Bacardi-Martini</b> — Noilly Prat, Bénédictine.</li>
+    <li><b>Vintage Spirit Garage</b> — La Ina, Calle 23, Nuestra Soledad, Cuatro Gallos, Dartigalongue, Kota.</li>
+    <li><b>Mezcal Brothers</b> — BOWS (Fiba + Benleioc), Chinola.</li>
+    <li><b>Dugas</b> — Carpano · <b>Solinest</b> — Fever-Tree · <b>Grand Chais</b> — Isautier · <b>Bellefontaine</b> — Merlet.</li>
+   </ul></div>
+  </div>`},
+ {t:"Degrés pièges (à réciter)", html:`
+  <p class="fiche-lead">Les degrés que le jury adore. Apprends-les par cœur.</p>
+  <div class="fiche-grid">
+   <div class="fiche-block"><h4>Bas degrés</h4><ul>
+    <li>Bellini / Champagne Cocktail (cocktails) — <b>8 %</b></li>
+    <li>Fino La Ina — <b>15°</b> · PX Viña 25 — <b>17°</b> · Oloroso Rio Viejo — <b>20°</b></li>
+    <li>Noilly Ambré / Carpano Classico / Adriatico Bianco — <b>16°</b></li>
+    <li>Carpano Antica Formula — <b>16,5°</b> · Noilly Dry — <b>18°</b> · Kota — <b>18°</b></li>
+    <li>Algebra — <b>19°</b> · Chinola (les 3) — <b>21°</b></li>
+   </ul></div>
+   <div class="fiche-block"><h4>Degrés moyens & hauts</h4><ul>
+    <li>Campari & Marie Brizard — <b>25°</b> · Adriatico Classico — <b>28°</b></li>
+    <li>Manguin, Calle 23, Merlet, Cuatro Gallos, Nuestra Soledad, Appleton Signature, Grand Marnier, Bénédictine — <b>40°</b></li>
+    <li>Wild Turkey 81 — <b>40,5°</b> · Roku / Appleton 8 ans / Dartigalongue / Sab's Le Blanc — <b>43°</b></li>
+    <li>Isautier 5 ans / Fiba / Benleioc — <b>45°</b> · Sab's Le Marc — <b>46°</b> · Wild Turkey 101 — <b>50,5°</b></li>
+    <li>Isautier Fusion — <b>55°</b> · Blanchette — <b>60°</b> · L'Entêté — <b>62°</b></li>
+   </ul></div>
+  </div>
+  <p class="fiche-note">Astuce : proof américain = degré × 2 (Wild Turkey 101 → 50,5°).</p>`},
+ {t:"Socle : catégories, familles, méthodes", html:`
+  <div class="fiche-grid">
+   <div class="fiche-block"><h4>Catégories (= contenance)</h4><ul>
+    <li><b>Short drink</b> — plutôt puissant, ≤ 100 ml (moins de 10 cl).</li>
+    <li><b>Long drink</b> — plutôt allongé, à partir de 100 ml (10 cl).</li>
+   </ul>
+   <h4>Types (= temps)</h4><ul>
+    <li><b>Before dinner</b> — apéritif, plus ou moins amer/sec.</li>
+    <li><b>After dinner</b> — digestif, plus ou moins liquoreux/puissant.</li>
+    <li><b>All day cocktail</b> — tout moment, fruité, désaltérant.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Familles du socle</h4><ul>
+    <li><b>Colada</b> — eau-de-vie + crème de coco + jus (Piña Colada).</li>
+    <li><b>Fizz</b> — eau-de-vie + sucre + citron + eau gazeuse (Gin Fizz).</li>
+    <li><b>Julep</b> — eau-de-vie vieillie + sucre + menthe (Mint Julep).</li>
+    <li><b>Old-Fashioned</b> — eau-de-vie vieillie + sucre + bitters.</li>
+    <li><b>Smash</b> — eau-de-vie + herbe + sucre + agrume (Gin Basil Smash).</li>
+    <li><b>Sour</b> — spiritueux + sucre + agrume (+ souvent blanc d'œuf).</li>
+    <li><b>Tiki</b> — rhum(s) + sucre + agrume + jus de fruits (Mai Tai).</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Les 3 méthodes</h4><ul>
+    <li><b>Shaker</b> — mélanger, émulsionner, rafraîchir en limitant la fonte (jus, crème, œuf).</li>
+    <li><b>Verre à mélange</b> — mélanger + rafraîchir avec dilution (produits alcooliques ; pas de jus/soda).</li>
+    <li><b>Direct au verre</b> — quand les ingrédients se mélangent facilement.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Règle des « 3 S » (créations)</h4><ul>
+    <li><b>Sweet</b> — le sucré : liqueur, crème, fruit, sirop, sucre.</li>
+    <li><b>Sour</b> — l'acidité, le lien : agrume, verjus, solution acide.</li>
+    <li><b>Strong</b> — la puissance, le corps : l'eau-de-vie / le spiritueux.</li>
+    <li>Max 6 ingrédients · verser du moins cher au plus cher · doses en ml.</li>
+   </ul></div>
+  </div>`},
+ {t:"Socle : calcul du TAV", html:`
+  <p class="fiche-lead">La méthode officielle, illustrée sur l'Americano.</p>
+  <div class="tav-demo">
+   <div class="tav-line"><span>20 ml vermouth rouge à 14,5 %</span><b>20 × 14,5 = 290</b></div>
+   <div class="tav-line"><span>50 ml bitter à 25 %</span><b>50 × 25 = 1250</b></div>
+   <div class="tav-line"><span>50 ml eau gazeuse à 0 %</span><b>50 × 0 = 0</b></div>
+   <div class="tav-tot"><span>Contenance = 120 ml</span><b>Total = 1540</b></div>
+   <div class="tav-res">1540 ÷ 120 = 12,83 → <b>TAV de 13 %</b></div>
+  </div>
+  <p class="fiche-note">Formule : (Σ des volumes × degrés) ÷ contenance totale = TAV du cocktail.</p>`},
+ {t:"Lexique pro (extraits socle)", html:`
+  <p class="fiche-lead">Les termes du référentiel qui peuvent tomber.</p>
+  <div class="fiche-grid">
+   <div class="fiche-block"><ul>
+    <li><b>Albédo</b> — partie blanche de l'écorce d'un agrume (le « ziste »).</li>
+    <li><b>Aquafaba</b> — jus de pois chiche, émulsifiant.</li>
+    <li><b>Cuban roll</b> — transvaser d'une timbale à l'autre pour oxygéner (ex-« throwing »).</li>
+    <li><b>Collins</b> — long drink, même composition qu'un Fizz mais direct au verre.</li>
+    <li><b>Dry shake</b> — frapper une 1re fois sans glace, avec émulsifiant.</li>
+    <li><b>Reverse dry shake</b> — frapper une 2de fois sans glace, avec émulsifiant.</li>
+    <li><b>Exprimer</b> — libérer les essences d'un zeste.</li>
+    <li><b>Float</b> — verser un filet de liquide sur le cocktail sans mélanger.</li>
+   </ul></div>
+   <div class="fiche-block"><ul>
+    <li><b>Givrer (rim)</b> — décorer les parois d'un verre (ex. Margarita).</li>
+    <li><b>Macération</b> — extraction d'arômes à froid ; <b>infusion</b> — à chaud.</li>
+    <li><b>Muter</b> — stopper la fermentation par ajout d'alcool (garde les sucres).</li>
+    <li><b>Mesure</b> — 40 ml (standard français).</li>
+    <li><b>Trait (dash)</b> — environ 3 à 5 gouttes.</li>
+    <li><b>Shaker Boston</b> — 2 timbales, axe décalé · <b>Continental</b> — emboîtement parfait · <b>3 pièces</b> — passoire intégrée.</li>
+    <li><b>Mocktail / No Low</b> — sans alcool / faible degré (consommation responsable).</li>
+    <li><b>Swizzle stick</b> — le « bois lélé » des Antilles.</li>
+   </ul></div>
+  </div>`},
+];
+function buildFiches(){
+  fichesBuilt=true;
+  const nav=document.getElementById("fiches-nav");
+  const zone=document.getElementById("fiches-panels");
+  FICHES.forEach((f,i)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(i===0?" active":"");
+    b.textContent=f.t;
+    b.onclick=()=>{
+      document.querySelectorAll("#fiches-nav .chip").forEach(x=>x.classList.toggle("active",x===b));
+      document.querySelectorAll("#fiches-panels .fichepanel").forEach((p,j)=>p.classList.toggle("show",j===i));
+      zone.scrollIntoView({behavior:"smooth",block:"start"});
+    };
+    nav.appendChild(b);
+    const p=document.createElement("div");
+    p.className="fichepanel"+(i===0?" show":"");
+    p.innerHTML=f.html;
+    zone.appendChild(p);
+  });
+}
+
+/* =================== SOCLE+ (exercices ciblés) =================== */
+let socleplusBuilt=false;
+const SP_MODES=[
+ {id:"guess", label:"🍸 Devine le cocktail"},
+ {id:"verre", label:"🥃 Le bon verre"},
+ {id:"famille", label:"👨‍👩‍👧 La famille"},
+ {id:"garniture", label:"🍒 La garniture"},
+];
+// familles socle (déductibles du référentiel)
+const SP_FAMILLES={
+ "Piña Colada":"Colada","Fizz":"Fizz","Mint Julep":"Julep","Old-Fashioned":"Old-Fashioned",
+ "Gin Basil Smash":"Smash","Mai Tai":"Tiki","Sour":"Sour","Daiquiri":"Sour"
+};
+const SP_FAM_POOL=["Colada","Fizz","Julep","Old-Fashioned","Smash","Tiki","Sour"];
+const SP_VERRES=[...new Set(SOCLE.map(c=>c.verre.replace(/ \(.*\)/,"").replace(" givrée au sel","").replace(" givré au sel","")))];
+function spQuestions(mode,n){
+  const qs=[];
+  if(mode==="guess"){
+    shuffle(SOCLE).slice(0,n).forEach(c=>{
+      const ings=c.ing.filter(i=>i[0]!=="Sel au céleri").slice(0,3).map(i=>i[1]+" "+i[0].toLowerCase()).join(", ");
+      const wrong=shuffle(SOCLE.filter(x=>x.n!==c.n)).slice(0,3).map(x=>x.n);
+      qs.push({q:"Quel cocktail du socle contient : "+ings+" … ?",
+        opts:shuffle([{t:c.n,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+        e:c.n+" — recette : "+c.ing.map(i=>i[1]+" "+i[0].toLowerCase()).join(" · ")+"."});
+    });
+  }
+  if(mode==="verre"){
+    shuffle(SOCLE).slice(0,n).forEach(c=>{
+      const v=c.verre.replace(/ \(.*\)/,"").replace(" givrée au sel","").replace(" givré au sel","");
+      const wrong=shuffle(SP_VERRES.filter(x=>x!==v)).slice(0,3);
+      qs.push({q:"Dans quel verre sert-on le "+c.n+" ?",
+        opts:shuffle([{t:v,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+        e:c.n+" se sert en verre "+c.verre+"."});
+    });
+  }
+  if(mode==="famille"){
+    const keys=Object.keys(SP_FAMILLES);
+    shuffle(keys).forEach(k=>{
+      const fam=SP_FAMILLES[k];
+      const wrong=shuffle(SP_FAM_POOL.filter(x=>x!==fam)).slice(0,3);
+      qs.push({q:"À quelle famille appartient le "+k+" ?",
+        opts:shuffle([{t:fam,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+        e:k+" appartient à la famille « "+fam+" »."});
+    });
+  }
+  if(mode==="garniture"){
+    shuffle(SOCLE.filter(c=>c.g&&c.g!=="aucune")).slice(0,n).forEach(c=>{
+      const wrong=shuffle(SOCLE.filter(x=>x.n!==c.n&&x.g&&x.g!=="aucune")).slice(0,3).map(x=>x.g);
+      qs.push({q:"Quelle est la garniture du "+c.n+" ?",
+        opts:shuffle([{t:c.g,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
+        e:c.n+" — garniture : "+c.g+"."});
+    });
+  }
+  return shuffle(qs).slice(0,n);
+}
+let spMode="guess";
+function buildSoclePlus(){
+  socleplusBuilt=true;
+  const box=document.getElementById("socleplus-modes");
+  SP_MODES.forEach((m,i)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(i===0?" active":"");
+    b.textContent=m.label;
+    b.onclick=()=>{spMode=m.id;document.querySelectorAll("#socleplus-modes .chip").forEach(x=>x.classList.toggle("active",x===b));startSP();};
+    box.appendChild(b);
+  });
+  startSP();
+}
+function startSP(){
+  quizStates.sp={qs:spQuestions(spMode,10), idx:0, score:0};
+  renderSP();
+}
+function renderSP(){
+  const st=quizStates.sp;
+  const panel=document.getElementById("sp-panel");
+  document.getElementById("sp-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("sp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    const pct=Math.round(100*st.score/st.qs.length);
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+      '<p style="margin:10px 0 20px">'+(pct>=80?"Nickel — change d'exercice ou relance.":"Retourne aux fiches éclair du Socle, puis rejoue.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startSP()">Rejouer</button></div>';
+    document.getElementById("sp-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  html+='</div><div class="feedback" id="sp-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="sp-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
+      if(!good) btn.classList.add("wrong"); else st.score++;
+      const fb=document.getElementById("sp-fb");
+      fb.className="feedback show "+(good?"good":"bad");
+      fb.innerHTML='<span class="handnote">'+(good?"exact !":"raté…")+'</span> '+q.e;
+      document.getElementById("sp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+      document.getElementById("sp-next").style.display="";
+    };
+  });
+  document.getElementById("sp-next").onclick=()=>{st.idx++;renderSP();};
+}
+
+/* =================== GRAND TEST (tout mélangé) =================== */
+function toMcq(item){ // normalise vers {q, opts:[{t,ok}], e}
+  if(item.opts) return {q:item.q, opts:item.opts, e:item.e};
+  if(item.o) return {q:item.q, opts:item.o.map((t,i)=>({t,ok:i===item.r})), e:item.e};
+  return null;
+}
+function buildAllQuestions(){
+  let pool=[];
+  // QCM marques
+  QCM.forEach(x=>pool.push(toMcq({q:x.q,o:x.o,r:x.r,e:x.e})));
+  // Vrai/Faux → converti en QCM 2 options
+  VF.forEach(x=>pool.push({q:"Vrai ou faux ? « "+x.q+" »", opts:shuffle([{t:"Vrai",ok:x.r===true},{t:"Faux",ok:x.r===false}]), e:"C'était "+(x.r?"VRAI":"FAUX")+". "+x.e}));
+  // Degrés partenaires
+  shuffle(DEGREES).slice(0,10).forEach(p=>{
+    const wrong=shuffle(DEG_POOL.filter(d=>d!==p.d)).slice(0,3);
+    pool.push({q:"Quel est le degré de "+p.n+" ?", opts:shuffle([{t:p.d,ok:true},...wrong.map(w=>({t:w,ok:false}))]), e:p.n+" titre "+p.d+"."});
+  });
+  // Chronologie → "lequel est le plus ancien"
+  for(let i=0;i<6;i++){
+    const picks=shuffle(CHRONO).slice(0,4);
+    const oldest=[...picks].sort((a,b)=>a.y-b.y)[0];
+    pool.push({q:"Lequel de ces partenaires est le plus ancien ?", opts:shuffle(picks.map(p=>({t:p.n,ok:p===oldest}))), e:oldest.n+" (fondé en "+oldest.y+") est le plus ancien du lot."});
+  }
+  // Socle : recettes/méthodes/TAV/variantes
+  pool=pool.concat(socleQuestions(20));
+  // Socle+ : verres, familles, garnitures, devine
+  pool=pool.concat(spQuestions("verre",5), spQuestions("famille",4), spQuestions("garniture",4), spQuestions("guess",4));
+  return pool.filter(Boolean);
+}
+function startGrandTest(n){
+  document.getElementById("gt-setup").style.display="none";
+  document.getElementById("gt-quizwrap").style.display="";
+  const pool=shuffle(buildAllQuestions());
+  quizStates.gt={qs:pool.slice(0,n), idx:0, score:0, size:n};
+  renderGrandTest();
+}
+function renderGrandTest(){
+  const st=quizStates.gt;
+  const panel=document.getElementById("gt-panel");
+  document.getElementById("gt-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("gt-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    const pct=Math.round(100*st.score/st.qs.length);
+    let verdict;
+    if(pct>=90) verdict="Score de champion — tu es prêt(e) pour le concours. 🏆";
+    else if(pct>=80) verdict="Objectif 80 % atteint. Solide !";
+    else if(pct>=60) verdict="Bonne base — cible tes erreurs dans les modules dédiés.";
+    else verdict="Repasse par les Fiches et les modules, puis retente.";
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+      '<p style="font-size:1.15rem;margin:6px 0">'+pct+' %</p>'+
+      '<p style="margin:10px 0 20px">'+verdict+'</p>'+
+      '<button class="btn btn-copper" onclick="startGrandTest('+st.size+')">Rejouer ('+st.size+')</button> '+
+      '<button class="btn btn-ghost" onclick="document.getElementById(\'gt-setup\').style.display=\'\';document.getElementById(\'gt-quizwrap\').style.display=\'none\'">Changer de longueur</button></div>';
+    document.getElementById("gt-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q">Q'+(st.idx+1)+'. '+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'">'+o.t+'</button>';});
+  html+='</div><div class="feedback" id="gt-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">question '+(st.idx+1)+' / '+st.qs.length+'</span><button class="btn btn-copper" id="gt-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
+      if(!good) btn.classList.add("wrong"); else st.score++;
+      const fb=document.getElementById("gt-fb");
+      fb.className="feedback show "+(good?"good":"bad");
+      fb.innerHTML='<span class="handnote">'+(good?"oui !":"non…")+'</span> '+q.e;
+      document.getElementById("gt-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+      document.getElementById("gt-next").style.display="";
+    };
+  });
+  document.getElementById("gt-next").onclick=()=>{st.idx++;renderGrandTest();};
+}
+
+</script>
+</body>
+</html>
