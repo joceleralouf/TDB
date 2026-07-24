@@ -606,16 +606,16 @@ function updateMistakeBadge(){
 
 /* =================== DONNÉES =================== */
 const MODULES = [
-  {id:"fiches", name:"Fiches de révision", desc:"Tout l'essentiel à lire, rangé par thème : marques, femmes, degrés, socle, lexique.", deg:"à lire d'abord", icon:"book"},
-  {id:"flash", name:"Flashcards", desc:"39 cartes à retourner, avec pile « à revoir » qui insiste jusqu'à la maîtrise.", deg:"mémoire active", icon:"card"},
-  {id:"qcm", name:"QCM", desc:"Les 20 questions officielles des fiches, mélangées, avec explications.", deg:"20 questions", icon:"quiz"},
-  {id:"vf", name:"Vrai / Faux", desc:"15 affirmations piégées : Blanchette verte ? Chinola = mangue ?", deg:"15 pièges", icon:"vf"},
+  {id:"fiches", name:"Fiches de révision", desc:"Tout l'essentiel à lire : repères, procédés décortiqués, pièges avancés, femmes, degrés, socle.", deg:"10 fiches", icon:"book"},
+  {id:"flash", name:"Flashcards", desc:"100 cartes à retourner, avec pile « à revoir » qui insiste jusqu'à la maîtrise.", deg:"mémoire active", icon:"card"},
+  {id:"qcm", name:"QCM", desc:"20 questions tirées d'un pool de 45, du socle officiel aux détails de production.", deg:"pool de 45", icon:"quiz"},
+  {id:"vf", name:"Vrai / Faux", desc:"15 affirmations tirées d'un pool de 31 : Fiba avec des fruits ? Kota = pandan ?", deg:"pool de 31", icon:"vf"},
   {id:"deg", name:"Degrés pièges", desc:"Le grand jeu des degrés : 16°, 28°, 55°… ne confonds plus jamais.", deg:"à réciter", icon:"deg"},
   {id:"chrono", name:"Chronologie", desc:"Remets les maisons dans l'ordre, de 1749 à 2024.", deg:"1749 → 2024", icon:"chrono"},
   {id:"ponts", name:"Cocktails du Socle", desc:"Les 36 recettes officielles : doses, méthodes, TAV, variantes. Quiz + fiches éclair.", deg:"référentiel 2025", icon:"bridge"},
   {id:"socleplus", name:"Socle+", desc:"4 exercices ciblés : devine le cocktail, son verre, sa famille, sa garniture.", deg:"100 % socle", icon:"target"},
   {id:"mind", name:"Carte mentale", desc:"Toute la liste partenaires en un coup d'œil, nœud par nœud.", deg:"vue d'ensemble", icon:"mind"},
-  {id:"sketch", name:"Sketchnotes", desc:"Méthodes, familles, verres, TAV, techniques… 26 schémas dessinés.", deg:"26 schémas", icon:"sketch"},
+  {id:"sketch", name:"Sketchnotes", desc:"Méthodes, familles, verres, TAV, techniques… 27 schémas dessinés.", deg:"27 schémas", icon:"sketch"},
   {id:"grandtest", name:"Le Grand test", desc:"Tout, tout, tout : partenaires + socle mélangés. 15, 30 ou 50 questions.", deg:"l'épreuve totale", icon:"trophy"},
 ];
 const ICONS = {
@@ -652,13 +652,13 @@ const FLASH = [
  {c:"Apéritifs", q:"Noilly Dry vs Ambré ?", a:"Dry 18° = LE vermouth du Dry Martini, sec, salin (chouchou de Julia Child). Ambré 16° = recette confidentielle longtemps réservée à la boutique de Marseillan — miel, vanille, cannelle."},
  {c:"Apéritifs", q:"Carpano : pourquoi c'est LA référence historique du vermouth ?", a:"Antonio Benedetto Carpano INVENTE le vermouth moderne à Turin en 1786 (adopté par le roi Victor-Amédée III). Antica Formula 16,5° = recette d'origine, signature vanille de Madagascar. Classico 16° = fraîcheur, service en volume. Punt e Mes = 1870."},
  {c:"Eaux-de-vie", q:"BOWS : acronyme, fondateur, lieux ?", a:"Brave Occitan Wild Spirit. Fondée en 2016 par Benoît Garcia, d'abord dans son jardin à Montauban (alambic Lagorsse 900 L qu'il a dessiné), puis ferme-distillerie à Laure-Minervois depuis 2022. Zéro filtration, embouteillage par gravité."},
- {c:"Eaux-de-vie", q:"Fiba : décompose le nom et donne le pitch.", a:"FIgue de BArbarie, 45°. L'esprit mezcalero appliqué au cactus du Sud de la France : végétal, légèrement fumé-terreux. Le « mezcal français » — unique en France."},
+ {c:"Eaux-de-vie", q:"Fiba : décompose le nom et donne le pitch.", a:"FIgue de BArbarie, 45°. Attention : on distille les RAQUETTES du cactus (Opuntia ficus-indica), coupées puis FUMÉES AU BOIS D'OLIVIER, macérées et distillées — pas le fruit. Réduction lente sur un mois à l'eau de la Montagne Noire. Végétal, floral, légèrement fumé-boisé : le « mezcal français », série expérimentale de BOWS."},
  {c:"Eaux-de-vie", q:"Oli'Still de Manguin : lieu, procédé, profil ?", a:"Île de la Barthelasse (Avignon), alambics depuis 1957 (célèbre Poire Manguin ; Claude Manguin = fils du peintre Henri Manguin). Olive distillée depuis 2014 : macération d'olives de Provence + alambic charentais à repasse. 40° — truffe, olive noire, finale saline. Remplace la saumure du Dirty Martini."},
- {c:"Eaux-de-vie", q:"Roku : que signifie le nom, et quels sont les 6 botaniques ?", a:"Roku = « six ». Fleur de sakura, feuille de sakura, thé sencha, thé gyokuro, poivre sanshō, zeste de yuzu — chacun récolté selon le shun (moment d'apogée). + 8 botaniques classiques = 14. Osaka, 2017, Suntory (1899). Bouteille hexagonale."},
+ {c:"Eaux-de-vie", q:"Roku : que signifie le nom, et quels sont les 6 botaniques ?", a:"Roku = « six ». PRINTEMPS : fleur + feuille de sakura. ÉTÉ : thé sencha + thé gyokuro. AUTOMNE : poivre sanshō. HIVER : zeste de yuzu. Chacun récolté à son shun. + 8 botaniques classiques = 14. Osaka (Liquor Atelier, 4 types d'alambics), 2017, Suntory (1899). Bouteille hexagonale, étiquette en papier washi."},
  {c:"Eaux-de-vie", q:"Benleioc : nom, particularité de brassage, les deux versions ?", a:"BEN(oît) + LEI (loyauté) + OC (Occitanie). Whiskies de brassins type STOUT (bières noires torréfiées) — une 1re en Europe. Affinage en fûts de Pacherenc. Sorgho 45° (céréale rare, clin d'œil baijiu) / Tourbé 45° (~53 ppm)."},
- {c:"Eaux-de-vie", q:"Wild Turkey : origine du nom et les deux références ?", a:"Site distillant depuis 1869 (frères Ripy). Nom né en 1940 : Thomas McCarthy apporte du bourbon à une chasse au dindon sauvage. 101 Proof = 50,5° (flagship, 6-8 ans) / 81 Proof = 40,5° (2011, Eddie Russell). Proof américain = degré × 2. Alligator char n°4."},
+ {c:"Eaux-de-vie", q:"Wild Turkey : origine du nom et les deux références ?", a:"Site distillant depuis 1869 (frères Ripy). Marque née en 1940 chez Austin Nichols & Co. (grossiste new-yorkais) : son dirigeant Thomas McCarthy apporte du bourbon à une chasse au dindon sauvage. La distillerie Ripy n'est rachetée qu'en 1972. 101 Proof = 50,5° (flagship, 6-8 ans) / 81 Proof = 40,5° (2011, Eddie Russell). Proof américain = degré × 2. Alligator char n°4."},
  {c:"Eaux-de-vie", q:"Qui est Jimmy Russell ?", a:"Maître distillateur de Wild Turkey depuis 1954 — le plus ancien maître distillateur en activité au monde, surnommé « le Bouddha du bourbon ». Son fils Eddie est co-master distiller, Bruce (3e génération) est déjà là."},
- {c:"Eaux-de-vie", q:"Isautier : fondation, superlatifs, femmes clés ?", a:"1845 à Saint-Pierre — plus ancienne distillerie ET entreprise de La Réunion, 7e génération. Antoinette Isautier dirige dès 1865 ! Maître de chai actuelle : Marie Ferrand. Pionnier des rhums arrangés (années 1970)."},
+ {c:"Eaux-de-vie", q:"Isautier : fondation, superlatifs, femmes clés ?", a:"1845 à Saint-Pierre par les frères Louis et Charles — plus ancienne distillerie ET entreprise de La Réunion, 7e génération. Antoinette, épouse de Charles, prend la direction en 1865 à la mort de son mari. Maître de chai actuelle : Marie Ferrand (œnologue : Matthieu Cosse). Créatrice de la catégorie moderne des rhums arrangés (années 1970)."},
  {c:"Eaux-de-vie", q:"Double Agent Fusion : procédé exact et degré ?", a:"Innovation de Marie Ferrand : co-fermentation de 36 h de mélasse ET pur jus de canne (50/50), distillation en colonne, 2 ans et demi de repos en cuve. Ni traditionnel ni agricole : un agent double. 55° — brioche, menthe-réglisse, touche saline."},
  {c:"Eaux-de-vie", q:"Appleton Estate : date, concept, et que signifie l'âge sur l'étiquette ?", a:"1749, Nassau Valley (Jamaïque) — estate rum complet : canne, eau calcaire, pot stills à double retort, vieillissement tropical (3× plus rapide) et assemblage sur place. L'âge = celui du PLUS JEUNE rhum de l'assemblage."},
  {c:"Eaux-de-vie", q:"Qui est Joy Spence ?", a:"Master blender d'Appleton depuis 1997 — la PREMIÈRE femme master blender de toute l'industrie des spiritueux. Chimiste de formation, 40+ ans dans la maison. Anecdote incontournable en concours."},
@@ -667,9 +667,9 @@ const FLASH = [
  {c:"Eaux-de-vie", q:"Nuestra Soledad : famille, concept, hommage du nom ?", a:"Casa Cortés : famille zapotèque de Santiago Matatlán, 6 générations depuis 1840 (aussi El Jolgorio). Concept single village : 100 % espadín, chaque cuvée = un village des Valles Centrales. Nom = la Virgen de la Soledad, patronne d'Oaxaca. Four de terre + tahona + fermentation sauvage."},
  {c:"Eaux-de-vie", q:"Les règles d'or du pisco péruvien ?", a:"Distillation UNIQUE, directement au degré final (38-48°) : aucun ajout d'eau. JAMAIS de bois : repos min. 3 mois en cuve inerte. Puro = 1 cépage / Acholado = assemblage / Mosto Verde = moût partiellement fermenté."},
  {c:"Eaux-de-vie", q:"Quebranta vs Italia (Cuatro Gallos) ?", a:"Quebranta = NON aromatique (banane, fruits secs, cacao) → le Pisco Sour (Morris' Bar, Lima, ~1920). Italia = aromatique muscaté (jasmin, litchi) → Chilcano avec Fever-Tree Ginger Ale. Vallée d'Ica, quatre frères, 8 cépages."},
- {c:"Eaux-de-vie", q:"Dartigalongue : superlatifs et logique de la gamme ?", a:"1838 à Nogaro = plus ancienne maison d'armagnac ; plus vieux millésime authentifié : 1848. Gamme « leçon de bois », tous 43° : Un-Oaked = zéro bois (Blanche d'Armagnac) / Single-Oaked = un fût / Double-Oaked = deux fûts NEUFS gascons chauffe forte → profil bourbon-friendly."},
+ {c:"Eaux-de-vie", q:"Dartigalongue : superlatifs et logique de la gamme ?", a:"1838 à Nogaro = plus ancienne maison d'armagnac ; plus vieux millésime authentifié : 1848. Gamme « Armagnac Experience », tous 43° : Un-Oaked = zéro bois (Blanche Armagnac, réduite à 43,2°) / Single-Oaked = un seul TYPE de fût, des fûts de chêne ROUX déjà utilisés / Double-Oaked = double passage en fûts NEUFS gascons à chauffe forte → profil bourbon-friendly."},
  {c:"Eaux-de-vie", q:"Merlet : les 3 références et leur définition ?", a:"Saint-Sauvant, 1850, 5e génération (Gilles + Pierre & Luc). VS 40° = 2 ans min. Brothers Blend 40° = 4 ans min, Fins Bois majoritaires + 1/5 Grande Champagne. Eau de Vigne 40° = « la Blanche », eau-de-vie de vin NON vieillie (Ugni Blanc/Colombard)."},
- {c:"Eaux-de-vie", q:"Sab's : qui, où, et la différence marc / fine ?", a:"Mathieu Sabbagh, Beaune, 2019 (rachat distillerie Pigneret) — un des derniers bouilleurs ambulants de France. MARC = distillé des peaux/pépins/rafles (cousin de la grappa). FINE = distillée de vin ou de lies. Le Blanc 43° (inox 1 an) / Le Marc 46° (4 ans fûts 228 L + finish 6 mois fût de cognac)."},
+ {c:"Eaux-de-vie", q:"Sab's : qui, où, et la différence marc / fine ?", a:"Mathieu Sabbagh rachète en 2018 la distillerie Pigneret (fondée en 1941 à Moroges) et la rebaptise Alambic Bourguignon, à Beaune ; la marque Sab's sort fin 2019. Un des derniers bouilleurs ambulants de France. MARC = distillé des peaux/pépins/rafles (cousin de la grappa). FINE = distillée de vin ou de lies. Le Blanc 43° (inox 1 an) / Le Marc 46° (4 ans fûts 228 L + finish 6 mois fût de cognac)."},
  {c:"Liqueurs", q:"Gabriel Boudier : ville, famille, deux productions célèbres ?", a:"Dijon, 1874, famille Battault depuis 1936. Roi de la crème de cassis de Dijon (baies Noir de Bourgogne). Produit aussi la liqueur Kota de Nico de Soto et le Saffron Gin. Kir = chanoine Félix Kir, maire de Dijon."},
  {c:"Liqueurs", q:"Adriatico Bianco vs Classico — LE piège du questionnaire ?", a:"Classico « Roasted » 28° : amandes TORRÉFIÉES, ambré, vanille-cacao-sel → Godfather, Amaretto Sour. Bianco « Crushed » 16° : amandes CRUES concassées, « lait d'amande » alcoolisé, blanc, vegan → Piña Colada, float sur Porn Star. 12 points d'écart !"},
  {c:"Liqueurs", q:"Algebra : pourquoi « extra-dry », et les 3 ingrédients ?", a:"100 g/L de sucre = le MINIMUM légal européen pour l'appellation « liqueur » → impossible de faire plus sec (standards : 250-330 g/L). Café de spécialité Has Bean + rhums Caraïbes/Amérique du Sud + sucre de canne. 19°, Londres, Yves Cosentino. La Décaf = l'espresso martini de 23 h."},
@@ -681,6 +681,65 @@ const FLASH = [
  {c:"Transversal", q:"Les 6 femmes du TDB26 (fil rouge storytelling) ?", a:"Marie Brizard (fondatrice, 1755) · Antoinette Isautier (dirigeante dès 1865) · Joy Spence (Appleton, 1re master blender, 1997) · Sophie Decobecq (Calle 23) · Marie Ferrand (Isautier, créatrice du Fusion) · Virginie Dartigalongue (6e génération)."},
  {c:"Transversal", q:"Les 4 marques du groupe Campari au TDB26 ?", a:"Campari · Wild Turkey (2009) · Appleton Estate (2012) · Grand Marnier (2016). Un seul contact France : 01 49 24 20 20."},
  {c:"Transversal", q:"Vintage Spirit Garage distribue quelles marques ?", a:"La Ina, Calle 23, Nuestra Soledad, Cuatro Gallos, Dartigalongue et Kota. (Mezcal Brothers : BOWS + Chinola · Dugas : Carpano · Solinest : Fever-Tree · Bacardi-Martini : Noilly + Bénédictine.)"},
+
+ /* ===== APPROFONDISSEMENT FOURNISSEURS ===== */
+ {c:"Non alcool", q:"Giffard : quelle menthe exactement, et où depuis quand ?", a:"Menthe poivrée de type MITCHAM, rapportée d'Angleterre par Émile Giffard, pharmacien place du Ralliement à Angers. Production à Avrillé depuis 1972, seconde usine (sirops) à Saint-Léger-des-Bois. Giffard a racheté Bigallet en 2010. La Menthe-Pastille titre 24° et son nom vient des pastilles de menthe à la mode à l'époque."},
+ {c:"Non alcool", q:"Giffard Sans Alcool : le détail technique qui impressionne le jury ?", a:"Macération dans du VINAIGRE DE VIN BLANC français, puis un procédé maison qui efface les notes de vinaigre au nez et en bouche tout en gardant l'acidité et la longueur. Produit pasteurisé : il se garde environ 4 à 5 mois après ouverture sans réfrigération. Taux de sucre calé sur celui d'une liqueur (100-200 g/L)."},
+ {c:"Non alcool", q:"Fever-Tree : combien de temps de R&D, et où ont-ils cherché ?", a:"15 à 18 mois. Recherches à la British Library sur la quinine (sources remontant à 1620), voyages jusqu'à la frontière Rwanda / RD Congo pour sourcer l'écorce, 5 versions de recette avant la bonne. Rencontre dans un pub près de Sloane Square ; premier référencement chez Waitrose. En 2018 la capitalisation dépasse celle de Schweppes au Royaume-Uni."},
+ {c:"Non alcool", q:"Fever-Tree : ce qu'il n'y a PAS dedans (le constat de départ) ?", a:"Rolls et Warrillow ont analysé les mixers du marché et y ont trouvé du benzoate de sodium, de la saccharine et des arômes d'agrumes de synthèse (le décanal). Leur cahier des charges : zéro conservateur de synthèse, zéro édulcorant artificiel, quinine naturelle, eau de source, sucre de canne."},
+ {c:"Non alcool", q:"Ponthier : la règle de composition et les garde-fous qualité ?", a:"Minimum 90 % de fruit, maximum 10 % de sucre de canne, aucun additif (ni colorant, ni conservateur, ni arôme ajouté). UNE seule origine et UNE seule variété par parfum, indiquées sur l'emballage (label Pure Trace). Contrôle systématique des résidus de pesticides par un laboratoire indépendant en Allemagne. Société à mission, certifiée B Corp."},
+ {c:"Non alcool", q:"PCB Création : avec qui travaille la maison, et où ?", a:"1 rue de Hollande à Benfeld (Bas-Rhin). Collections co-signées avec Pierre Hermé, Cédric Grolet, Christophe Michalak, Yann Brys, Christophe Adam, Sadaharu Aoki, Jordi Bordas, Sébastien Bouillet… Ingredium (2019) a été formulée par la R&D en collaboration directe avec des chefs — d'où sa logique de « problème / solution » très adaptée au bar."},
+
+ {c:"Apéritifs", q:"Combier : les 4 dates de l'absinthe maison ?", a:"1899 : dépôt de la marque « Blanchette » (3 juin). 1915 : interdiction, la production s'arrête. 2006 : Blanchette réintroduite dans les alambics d'origine. 2012 : Franck Choisne crée L'Entêté, sa propre recette. Entre les deux, il relance l'absinthe dès 2004."},
+ {c:"Apéritifs", q:"Le combat de Franck Choisne : deux batailles, pas une !", a:"1) Faire modifier le décret de 1988 pour réautoriser le FENOUIL dans la composition — sans quoi impossible de refaire une absinthe historique. 2) Obtenir le droit d'écrire le mot « absinthe » sur l'étiquette, acquis en 2011. Natif de Saumur, il rachète la distillerie en 2000. D'où le nom L'Entêté."},
+ {c:"Apéritifs", q:"Combier : d'où viennent les alambics à absinthe, et qui les utilise aussi ?", a:"Ce sont deux grands alambics PERNOD FILS rachetés d'occasion au tournant du XXe siècle. Ted Breaux y produit ses fameuses absinthes Jade depuis 2004. Le bâtiment de la distillerie, lui, est signé des ateliers Gustave Eiffel — la distillerie est classée et se visite comme un musée."},
+ {c:"Apéritifs", q:"Combier : qu'est-ce que le Royal Combier, et comment est fait le triple sec ?", a:"Royal Combier (1920) = Original Combier (le triple sec) + Élixir Combier + un cognac Delamain. Il devient le chouchou des officiers du Cadre Noir voisin. L'Original : oranges douces et amères (Haïti) macérées environ 48 h, puis triple distillation dans des alambics de cuivre centenaires — recette inchangée depuis 1834."},
+ {c:"Apéritifs", q:"Campari : comment s'appelait le produit au départ ?", a:"« Bitter all'uso d'Hollanda » — bitter à la façon de la Hollande, en référence à un cordial hollandais qui avait inspiré Gaspare. Gaspare Campari était le 10e enfant d'un fermier de Cassolnovo (Pavie). Caffè Campari dans la Galleria en 1867 ; usine de Sesto San Giovanni en 1904, aujourd'hui siège du groupe ; Campari Soda en 1932."},
+ {c:"Apéritifs", q:"Campari : combien d'ingrédients, et comment il est fabriqué ?", a:"Recette secrète : on cite selon les sources 60 à 68 plantes, écorces et fruits. Le seul ingrédient officiellement confirmé par la maison est l'écorce d'orange amère (on évoque aussi quinquina, rhubarbe, chinotto). Le CONCENTRÉ est assemblé dans une salle unique à Milan puis expédié aux usines d'embouteillage, dont la France : c'est ce qui protège la recette."},
+ {c:"Apéritifs", q:"La Ina : comment Lustau a-t-elle récupéré la gamme Domecq ?", a:"Lustau (fondée en 1896 par José Ruiz-Berdejo, almacenista ; aujourd'hui division sherry du Grupo Caballero) rachète d'abord 6 bodegas de la calle Arcos en 2001, puis en 2008 les marques ET les soleras : 4 000 botas déplacées d'un bout à l'autre de Jerez. La gamme comprend aussi l'amontillado Botaina et la manzanilla Macarena."},
+ {c:"Apéritifs", q:"La Ina : les âges moyens et les dates de solera ?", a:"Fino La Ina : environ 6 ans sous voile de flor, solera fondée en 1919. Oloroso Rio Viejo : environ 10 ans en élevage oxydatif, solera fondée en 1918 — le nom vient d'un domaine du pago de Macharnudo. Détail savoureux : le nom Lustau n'apparaît pas sur les étiquettes de la gamme."},
+ {c:"Apéritifs", q:"Noilly Prat : le parcours complet du vin, étape par étape ?", a:"1) 8 mois en grands foudres à l'intérieur. 2) 1 an DEHORS dans l'Enclos, en demi-muids — part des anges d'environ 6 %. 3) Retour, assemblage avec la mistelle (elle-même élevée ~12 mois) et des alcoolats de citron et de framboise. 4) Macération d'une vingtaine de plantes pendant 21 jours, dodinage 2 fois par jour. 5) Repos d'environ 6 semaines avant embouteillage."},
+ {c:"Apéritifs", q:"Noilly Prat : le piège de l'Enclos ?", a:"Seuls l'Original Dry et l'Extra Dry passent par le vieillissement en plein air de l'Enclos — ne prête pas ce procédé à toute la gamme. Marseillan produit 4 recettes : Original Dry, Extra Dry, Rouge et Ambré. La maison est installée à Marseillan depuis 1859 ; le chai Sainte-Anne (mistelles) date de 1901."},
+ {c:"Apéritifs", q:"Carpano : ce qu'il y a vraiment dans l'Antica Formula ?", a:"Extraction à CHAUD et à FROID d'environ 130 botaniques, puis assemblage avec sucre et sucre brûlé. Signatures : vanilles de Madagascar, Tahiti et Papouasie, safran d'Iran, armoise du Piémont et du Val d'Aoste. La recette complète n'est connue que de trois personnes, dont Niccolò Branca."},
+ {c:"Apéritifs", q:"Carpano : depuis quand chez Branca, et quelle devise ?", a:"Racheté par Fratelli Branca (Milan, la maison du Fernet-Branca) en 2001. Devise : « Novare Serbando » — innover en préservant. Antonio Benedetto Carpano tenait sa boutique face au Palais Royal de Turin et travaillait une base de muscat ; il meurt en 1815."},
+
+ {c:"Eaux-de-vie", q:"Fiba : quelle est la vraie matière première ? (LA question piège)", a:"Ce ne sont PAS les fruits mais les RAQUETTES du figuier de Barbarie (Opuntia ficus-indica) : récoltées, coupées, FUMÉES AU BOIS D'OLIVIER, puis macérées et distillées. Réduction lente sur un mois à l'eau de la Montagne Noire. Série expérimentale de BOWS, 45°. Le fumé vient donc du bois d'olivier, pas d'un four enterré."},
+ {c:"Eaux-de-vie", q:"BOWS : où exactement, et quelle méthode céréalière ?", a:"Ancien domaine viticole au lieu-dit Gibalaux-le-Bas, à Laure-Minervois (Aude), à une vingtaine de kilomètres de Carcassonne — après les débuts dans le jardin de Montauban. Les céréales locales sont émondées puis CUITES À LA VAPEUR, au lieu du trempage-germination-séchage classique. Benoît Garcia dessine lui-même ses étiquettes et sa bouteille."},
+ {c:"Eaux-de-vie", q:"Oli'Still : pourquoi on ne peut PAS fermenter l'olive ?", a:"Parce que l'olive ne contient pas de sucre fermentescible : impossible d'en tirer un alcool directement comme avec un fruit ou une céréale. On MACÈRE donc les olives dans l'alcool avant de distiller — exactement la logique d'un gin. Alambic charentais à repasse, sélection des cœurs de chauffe. C'est LA phrase à sortir au jury."},
+ {c:"Eaux-de-vie", q:"Manguin : les repères de la maison, du peintre à l'olive ?", a:"Île de la Barthelasse, entre le Palais des Papes et la Tour Philippe le Bel. Dans les années 40, Claude Manguin — agronome, fils du peintre fauviste Henri Manguin — plante poiriers et pêchers et fournit Fauchon et les Halles de Paris. Alambics charentais dès 1957 (la Poire Manguin). Béatrice et Emmanuel Hanquiez reprennent en 2011 ; « créateur de l'olive distillée » depuis 2014."},
+ {c:"Eaux-de-vie", q:"Roku : les 6 botaniques japonais, SAISON PAR SAISON ?", a:"PRINTEMPS : fleur de sakura + feuille de sakura. ÉTÉ : thé sencha + thé gyokuro. AUTOMNE : poivre sanshō. HIVER : zeste de yuzu. Chacun cueilli à son shun, son apogée. 6 japonais + 8 classiques = 14 botaniques. Donner les saisons dans l'ordre, c'est la réponse qui fait mouche."},
+ {c:"Eaux-de-vie", q:"Roku : les 8 botaniques classiques, et comment on distille ?", a:"Genièvre, coriandre, racine d'angélique, graine d'angélique, cardamome, cannelle, écorce d'orange amère, zeste de citron. Le Liquor Atelier d'Osaka dispose de 4 types d'alambics : chaque famille est distillée séparément selon sa nature (dont sous vide à basse température pour le sakura), puis assemblée. Étiquette imprimée sur papier washi."},
+ {c:"Eaux-de-vie", q:"Wild Turkey : qui a créé la marque, et quand la distillerie a-t-elle été rachetée ?", a:"La marque naît en 1940 chez AUSTIN NICHOLS & Co., un grossiste alimentaire new-yorkais — Thomas McCarthy en était le dirigeant, d'où la partie de chasse au dindon. Wild Turkey ne rachète la distillerie des frères Ripy qu'en 1972. Le site, lui, distille depuis 1869. Groupe Campari depuis 2009."},
+ {c:"Eaux-de-vie", q:"Wild Turkey : degré d'entrée en fût et niveau de chauffe ?", a:"Entrée en fût volontairement BASSE : 107 proof historiquement, 115 aujourd'hui — bien en dessous du maximum légal de 125. Moins d'alcool à l'entrée = moins d'eau à ajouter à la fin = plus de goût. Fût neuf de chêne blanc américain, char n°4 dit « alligator » (≈ 55 secondes de flamme). Eau de la Kentucky River filtrée par le socle calcaire."},
+ {c:"Eaux-de-vie", q:"Isautier : qui était exactement Antoinette ?", a:"L'ÉPOUSE de Charles Isautier. Elle prend la direction de la maison en 1865, à la mort de son mari — une femme à la tête d'une distillerie au XIXe siècle. Les frères Louis et Charles étaient arrivés sur l'île au début des années 1830 et fondent la maison en 1845."},
+ {c:"Eaux-de-vie", q:"Isautier : le contexte réunionnais à maîtriser ?", a:"Trois distilleries à La Réunion : Isautier, Savanna et Rivière du Mât. L'IGP « Rhum de La Réunion » a été obtenue le 22 janvier 2015 (cahier des charges actualisé en 2021). Isautier a créé la catégorie moderne des rhums arrangés dans les années 1970 (le premier : Gingerlick). Le domaine de Saint-Pierre abrite le musée La Saga du Rhum. Œnologue : Matthieu Cosse."},
+ {c:"Eaux-de-vie", q:"Appleton : attention aux trois dates différentes !", a:"1655 : le domaine existe déjà. 1749 : première trace écrite de distillation — c'est la date revendiquée. 1944 : naissance officielle de la MARQUE Appleton Estate, l'un des premiers rhums à porter le nom de sa distillerie. Eau de la source River Head, filtrée par le calcaire de la vallée ; environ 200 000 fûts vieillissent sur place."},
+ {c:"Eaux-de-vie", q:"Calle 23 : les chiffres de production à citer ?", a:"Agaves bleus de 7 à 9 ans, cuisson en autoclave à BASSE pression, double distillation, sortie d'alambic à 55 % puis réduction à 40°. Levures sauvages isolées par Sophie Decobecq dans les champs d'agave puis cultivées à la distillerie. Fermentation en cuves inox, sans fibres."},
+ {c:"Eaux-de-vie", q:"Calle 23 : le parcours de Sophie Decobecq, dans l'ordre ?", a:"1999 : projet de fin d'études (UTC Compiègne) sur les levures et bactéries lactiques à l'Institut polytechnique de Mexico. 2000 : mission en Afrique du Sud pour remettre sur pied une distillerie d'agave. 2003 : installation définitive au Mexique. Détail qui plaît au jury : elle a choisi l'autoclave APRÈS des dégustations à l'aveugle contre le four traditionnel (horno)."},
+ {c:"Eaux-de-vie", q:"Nuestra Soledad : les trois marques de Casa Cortés ?", a:"Agave de Cortés (le gros volume), Nuestra Soledad (single village, 100 % espadín) et El Jolgorio (haut de gamme, agaves sauvages rares). Famille zapotèque de Santiago Matatlán, racines dans les années 1830. C'est Asis Cortés qui a dessiné les étiquettes de Nuestra Soledad."},
+ {c:"Eaux-de-vie", q:"Nuestra Soledad : le sens du nom, version complète ?", a:"Hommage à la Virgen de la Soledad, patronne d'Oaxaca — avec l'idée que « le mezcal t'accompagne toujours, dans les bons comme dans les mauvais moments ». Six villages des Valles Centrales sont représentés dans la collection. Cuisson au bois de mesquite et de chêne dans le four de terre."},
+ {c:"Eaux-de-vie", q:"Cuatro Gallos : comment quatre frères arrivent-ils au pisco ?", a:"Dans les années 90, ils cherchaient des terres pour planter des avocats, des pacanes et du raisin de table. Ils tombent sur un fundo planté des plus VIEILLES vignes de Quebranta de la vallée et décident de ne pas les arracher. Fundo El Carmen, district de San Juan Bautista, sol argileux, journées chaudes et nuits fraîches."},
+ {c:"Eaux-de-vie", q:"Dartigalongue : ce qu'est vraiment le Single-Oaked (piège) ?", a:"Il n'est PAS élevé en fût neuf. « Single » = un SEUL TYPE de fût : des fûts de chêne ROUX (déjà utilisés) du Sud-Ouest, à chauffes moyennes et fortes — pour garder le fruit sans charger en tanins. C'est le Double-Oaked qui fait un double passage en fûts NEUFS gascons à chauffe forte."},
+ {c:"Eaux-de-vie", q:"Dartigalongue : les chiffres exacts de l'Un-Oaked ?", a:"Eau-de-vie à 58° à la sortie de la petite colonne armagnacaise, maturation d'au moins 3 mois en cuve inox, réduction lente à l'eau déminéralisée jusqu'à 43,2°. C'est une Blanche Armagnac, une AOC à part entière. Benoît Hillion préfère le terme « un-oaked », plus parlant derrière un bar."},
+ {c:"Eaux-de-vie", q:"Dartigalongue : qui a passé la main à qui, et quand ?", a:"En 2010, Françoise Dartigalongue (5e génération) convainc sa NIÈCE Virginie de reprendre la maison avec son mari Benoît Hillion, alors agronome à Paris. Maître de chai Ghislain Laffargue depuis 1990. Le musée de la maison a été créé en 1978 par Pierre Dartigalongue. Devise : « Mon armagnac, ma force »."},
+ {c:"Eaux-de-vie", q:"Merlet : l'anecdote qui surprend tout le monde ?", a:"C'est la distillerie Merlet qui a créé en 2001 la liqueur bleue HPNOTIQ. Avant ça : Firmin Merlet installe son alambic en 1850 et la maison fournit en eaux-de-vie Hennessy, Martell, Courvoisier. En 1980 Gilles plante du cassis : naissance de la gamme de liqueurs. Le premier cognac sous la marque Merlet ne sort qu'en 2010."},
+ {c:"Eaux-de-vie", q:"Merlet : la chaîne de transmission ?", a:"Firmin (1850) → Édouard, premier à fournir les grandes maisons → Guy, qui agrandit → Gilles, aux commandes depuis les années 1970. Pierre et Luc rejoignent entre 2005 et 2008 ; en 2023, jubilé des 50 ans de Gilles et transmission officielle aux fils. 40 hectares entre Saint-Sauvant et Chérac. Brothers Blend : eaux-de-vie de 4 à 12 ans."},
+ {c:"Eaux-de-vie", q:"Sab's : que veut dire le nom ? (double sens)", a:"Sab's = les initiales de Société Alambic Bourguignon ET le surnom de Mathieu SABbagh. Double lecture assumée. La bouteille est dessinée comme un flacon de pharmacie ancienne, clin d'œil à l'époque où les spiritueux étaient perçus comme médicinaux."},
+ {c:"Eaux-de-vie", q:"Sab's : les dates exactes, sans se tromper ?", a:"La distillerie Pigneret est fondée en 1941 à Moroges. Mathieu Sabbagh la rachète en 2018 avec son associé Paul de Vaucorbeil et la rebaptise Alambic Bourguignon, basée à Beaune. La marque Sab's est lancée fin 2019. La maison distille aussi les marcs et lies des Hospices de Beaune, vendus en fin de vente aux enchères."},
+ {c:"Eaux-de-vie", q:"Sab's : l'anecdote historique en or ?", a:"Vers 1900, à l'époque de l'Exposition universelle de Paris, il se vendait autant de marc de Bourgogne que de cognac. Aujourd'hui il ne reste qu'une poignée de bouilleurs ambulants en France. Alambic à vapeur Müller ambulant — le même type que celui utilisé par les Italiens pour la grappa. Avant la distillation : Baccarat à New York, puis Bosch, puis Pernod."},
+
+ {c:"Liqueurs", q:"Gabriel Boudier : qui dirige, et à qui appartient la maison ?", a:"Claire Battault est directrice générale ; environ 75 personnes. La maison, fondée en 1874 à Dijon, appartient au groupe Famille Piffaut Vins & Domaines. Elle produit en propre ET pour des tiers — c'est là qu'on retrouve Kota et le Saffron Gin."},
+ {c:"Liqueurs", q:"Kota : que signifie le nom ? (personne ne le sait)", a:"« Kota » veut dire LA VILLE en indonésien et en malais. Ce n'est donc ni le nom de la plante ni celui d'une personne — c'est le seul nom du concours qui désigne un lieu générique. Un joli piège à placer, et une réponse qui fait la différence."},
+ {c:"Liqueurs", q:"Kota : la genèse, les intermédiaires et la fabrication ?", a:"Idée dans les cartons depuis 2020, échantillonnage en mars 2024, lancement européen à l'été 2024 (États-Unis en mars 2025). C'est Florent Beuchet — créateur de Compagnie des Indes — qui a mis Nico de Soto en relation avec Boudier et qui dirige la marque. Feuilles fraîches de pandan de Thaïlande macérées plusieurs jours dans un alcool neutre, puis distillées à Dijon. Environ 750 espèces de pandan dans le monde."},
+ {c:"Liqueurs", q:"Adriatico : les deux fondateurs et la date exacte ?", a:"Jean-Robert Bellanger (né d'une mère italienne, passé par le luxe et les boissons) ET son associé Thomas Benoit, en septembre 2019. Deux ans de mise au point de la recette. Les amandes Filippo Cea sont récoltées à la main dans la campagne d'ALBEROBELLO, dans les Pouilles."},
+ {c:"Liqueurs", q:"Algebra : l'exception légale que peu de gens connaissent ?", a:"100 g/L est bien le minimum légal européen pour une liqueur… sauf DEUX exceptions traditionnelles : les liqueurs de cerise (70 g/L) et de gentiane (80 g/L). Algebra contient 4 fois moins de sucre qu'une liqueur de café classique et 2 fois moins que les marques dites nouvelle génération."},
+ {c:"Liqueurs", q:"Algebra : le parcours d'Yves Cosentino et la fabrication ?", a:"Vingt ans chez Moët-Hennessy, Diageo, Pernod-Ricard et Absolut ; il se lance quand le bureau londonien d'Absolut ferme en 2014. Algebra Drinks naît en 2015 (cocktails à la pression, avec Julhès Paris) ; la liqueur, elle, sort en juin 2020. Café torréfié par Has Bean dans le Staffordshire, extrait fabriqué au laboratoire londonien par extraction à froid fractionnée, embouteillage chez Thames Distillers."},
+ {c:"Liqueurs", q:"Chinola : qu'est-ce que « El Valle de Chinola » ?", a:"C'est le nom de la ferme, dans une vallée isolée de la péninsule de Samaná, là où mer des Caraïbes et Atlantique se rejoignent. La marque y a financé routes, petits ponts, puits et poteaux électriques. Première liqueur de fruits frais « vine-to-bottle » stable à température ambiante. Se prononce « tchi-no-la »."},
+
+ {c:"Transversal", q:"Qui possède quoi ? (les groupes à ne pas confondre)", a:"Campari Group : Campari, Wild Turkey (2009), Appleton (2012), Grand Marnier (2016). Bacardi-Martini : Noilly Prat, Bénédictine. Fratelli Branca : Carpano (2001). Grupo Caballero / Lustau : La Ina (2008). Famille Piffaut : Gabriel Boudier. Suntory : Roku. Casa Cortés : Nuestra Soledad."},
+ {c:"Transversal", q:"Les inventeurs de catégorie du TDB26 ?", a:"Carpano invente le vermouth moderne (1786) · Combier invente le triple sec (1834) · Gaspare Campari invente le rituel de l'apéritif au bitter (1860) · Isautier crée la catégorie moderne des rhums arrangés (années 1970) · Fever-Tree crée le mixer premium (2005) · Manguin se revendique créateur de l'olive distillée (2014)."},
+ {c:"Transversal", q:"Qui fabrique pour qui ? (les productions déléguées)", a:"Gabriel Boudier produit Kota (Nico de Soto) et le Saffron Gin. Combier distille les absinthes Jade de Ted Breaux. Merlet a créé Hpnotiq. Lustau élève La Ina sans jamais mettre son nom sur l'étiquette. Une question transversale classique en jury."},
+ {c:"Transversal", q:"Les six femmes du TDB26, avec leur rôle EXACT ?", a:"Marie Brizard : fondatrice (1755). Antoinette Isautier : épouse de Charles, elle prend la direction en 1865 à sa mort. Joy Spence : master blender d'Appleton depuis 1997, 1re femme de l'industrie. Sophie Decobecq : fondatrice et maître distillatrice de Calle 23. Marie Ferrand : maître de chai d'Isautier, créatrice du Double Agent Fusion. Virginie Dartigalongue : 6e génération, codirige avec Benoît Hillion."},
 ];
 
 /* ---- QCM ---- */
@@ -705,6 +764,33 @@ const QCM = [
  {q:"Les feuilles de pandan de Kota proviennent :", o:["Du Vietnam","Des Philippines","De Thaïlande","D'Indonésie"], r:2, e:"Thaïlande — feuilles fraîches macérées puis distillées chez Boudier."},
  {q:"Le café d'Algebra est torréfié par :", o:["Monmouth","Has Bean","Square Mile","Merling"], r:1, e:"Has Bean (Londres), café de spécialité en sourcing équitable. Merling = le torréfacteur du C² de Merlet !"},
  {q:"Le Grand Marnier Cordon Rouge contient :", o:["30 % de cognac","51 % de cognac","70 % de cognac","Aucun cognac"], r:1, e:"51 % de cognac dans le Cordon Rouge, marié à la bigarade des Caraïbes."},
+
+ /* ===== APPROFONDISSEMENT ===== */
+ {q:"Le Fiba de BOWS est élaboré à partir :", o:["Des fruits mûrs du figuier de Barbarie","Des raquettes du cactus, fumées au bois d'olivier","Des fleurs séchées d'opuntia","D'un jus de cactus fermenté en cuve"], r:1, e:"Ce sont les RAQUETTES (Opuntia ficus-indica), coupées puis fumées au bois d'olivier, macérées et distillées. Le fumé ne vient donc pas d'un four enterré."},
+ {q:"Chez Dartigalongue, le Single-Oaked est élevé :", o:["Dans un seul fût neuf","Dans un seul type de fûts : des fûts de chêne roux (déjà utilisés)","En fût de cognac","En amphore"], r:1, e:"« Single » = un seul TYPE de fût. Les fûts roux préservent le fruit ; ce sont les fûts neufs du Double-Oaked qui apportent les tanins et la torréfaction."},
+ {q:"À quelle saison le poivre sanshō du Roku est-il récolté ?", o:["Printemps","Été","Automne","Hiver"], r:2, e:"Automne. Printemps = sakura (fleur + feuille), été = sencha + gyokuro, hiver = yuzu."},
+ {q:"Le Campari s'appelait à l'origine :", o:["Rosso Milano","Bitter all'uso d'Hollanda","Elisir di Novara","Aperitivo Reale"], r:1, e:"Bitter à la façon de la Hollande, en référence au cordial hollandais qui a inspiré Gaspare Campari."},
+ {q:"L'Antica Formula de Carpano est élaborée avec environ :", o:["30 botaniques","60 botaniques","130 botaniques","200 botaniques"], r:2, e:"Environ 130 botaniques, en extraction à chaud ET à froid. Vanilles de Madagascar, Tahiti et Papouasie, safran d'Iran, armoise du Piémont."},
+ {q:"Chez Noilly Prat, le dodinage a lieu :", o:["Une fois par semaine","Deux fois par jour pendant 21 jours","En continu pendant un an","Uniquement au moment de l'assemblage"], r:1, e:"Deux fois par jour pendant les trois semaines de macération, à la main, dans la Salle des Secrets."},
+ {q:"« Kota » signifie :", o:["Pandan","Ville","Feuille","Soleil"], r:1, e:"« Kota » = la ville, en indonésien et en malais. Rien à voir avec la plante elle-même."},
+ {q:"Les liqueurs Giffard Sans Alcool sont macérées dans :", o:["De l'eau chaude","Du vinaigre de vin blanc","Du vinaigre de cidre","De la glycérine végétale"], r:1, e:"Vinaigre de vin blanc français, technique inspirée du shrub, puis un procédé maison efface les notes de vinaigre."},
+ {q:"Wild Turkey entre en fût à un degré :", o:["Supérieur au maximum légal","Exactement au maximum légal de 125 proof","Volontairement plus bas que le maximum légal","Différent chaque année"], r:2, e:"107 proof historiquement, 115 aujourd'hui, contre 125 autorisés. Moins d'alcool à l'entrée = plus de goût, moins d'eau à la fin."},
+ {q:"L'Un-Oaked de Dartigalongue est réduit à :", o:["40°","43,2°","45°","46°"], r:1, e:"58° à la sortie d'alambic, puis réduction lente en cuve inox jusqu'à 43,2°. C'est une Blanche Armagnac, AOC à part entière."},
+ {q:"Pourquoi l'olive ne peut-elle pas être fermentée puis distillée comme un fruit ?", o:["Elle contient trop d'huile","Elle ne contient pas de sucre fermentescible","Elle est trop amère","Sa peau est trop dure"], r:1, e:"Pas de sucre fermentescible : on macère donc les olives dans l'alcool avant de distiller, comme pour un gin. LA phrase à sortir sur l'Oli'Still."},
+ {q:"Combien de botas Lustau a-t-elle reprises à Domecq en 2008 ?", o:["400","1 000","4 000","10 000"], r:2, e:"4 000 botas, déplacées d'un bout à l'autre de Jerez, avec les marques La Ina, Botaina, Rio Viejo et Viña 25."},
+ {q:"Dans l'Union européenne, quelles liqueurs ont un minimum de sucre INFÉRIEUR à 100 g/L ?", o:["Les liqueurs de café et de cacao","Les liqueurs de cerise (70 g/L) et de gentiane (80 g/L)","Les liqueurs d'agrumes","Aucune : 100 g/L est un plancher absolu"], r:1, e:"Deux exceptions traditionnelles seulement. C'est pour ça qu'Algebra, à 100 g/L pile, est la liqueur de café la plus sèche possible."},
+ {q:"La marque Wild Turkey a été créée en 1940 par :", o:["Les frères Ripy","Austin Nichols & Co., grossiste new-yorkais","Le groupe Campari","Jimmy Russell"], r:1, e:"Austin Nichols & Co. — Thomas McCarthy en était le dirigeant. La distillerie des frères Ripy n'a été rachetée qu'en 1972."},
+ {q:"Antoinette Isautier prend la direction de la maison en 1865 parce que :", o:["Elle rachète les parts de ses beaux-frères","Son mari Charles vient de mourir","Elle est la fille du fondateur","Elle revient de métropole"], r:1, e:"Elle était l'épouse de Charles Isautier et reprend l'entreprise à sa mort — une femme à la tête d'une distillerie au XIXe siècle."},
+ {q:"La solera de l'Oloroso Rio Viejo a été fondée en :", o:["1870","1918","1919","1945"], r:1, e:"1918 pour Rio Viejo, 1919 pour le Fino La Ina. Un an d'écart : le genre de détail qui départage."},
+ {q:"Le nom « Sab's » vient :", o:["Uniquement du nom Sabbagh","Des initiales de Société Alambic Bourguignon ET du surnom du fondateur","D'un lieu-dit près de Beaune","Du nom du premier alambic"], r:1, e:"Double sens assumé : Société Alambic Bourguignon + le surnom de Mathieu Sabbagh."},
+ {q:"Les amandes Filippo Cea d'Adriatico sont récoltées à la main dans la campagne de :", o:["Bari","Alberobello","Lecce","Tarente"], r:1, e:"Alberobello, dans les Pouilles. Le sel, lui, vient de la saline de Margherita di Savoia."},
+ {q:"Le café d'Algebra est torréfié :", o:["Dans le Kent","Dans le Staffordshire","Dans le Yorkshire","En Écosse"], r:1, e:"Has Bean torréfie dans le Staffordshire ; l'extrait est ensuite fabriqué au laboratoire londonien d'Algebra."},
+ {q:"Franck Choisne a dû faire modifier un décret de 1988 pour réautoriser :", o:["La thuyone","Le fenouil dans la composition","L'anis vert","La coloration à la chlorophylle"], r:1, e:"Le fenouil — sans lui, impossible de refaire une absinthe historique. La mention « absinthe » sur l'étiquette n'est venue qu'en 2011."},
+ {q:"La distillerie rachetée par Mathieu Sabbagh en 2018 s'appelait :", o:["Pigneret","Cartron","Vedrenne","Briottet"], r:0, e:"La distillerie Pigneret, fondée en 1941 à Moroges, rebaptisée Alambic Bourguignon et installée à Beaune."},
+ {q:"Les trois marques de mezcal de Casa Cortés sont :", o:["Agave de Cortés, Nuestra Soledad, El Jolgorio","Nuestra Soledad, Del Maguey, El Jolgorio","Agave de Cortés, Matatlán, Espadín Real","El Jolgorio, Soledad, Zapoteca"], r:0, e:"Agave de Cortés (volume), Nuestra Soledad (single village) et El Jolgorio (agaves sauvages rares)."},
+ {q:"La liqueur bleue Hpnotiq a été créée en 2001 par :", o:["Marie Brizard","Merlet","Gabriel Boudier","Combier"], r:1, e:"C'est la distillerie Merlet qui l'a mise au point — une anecdote qui surprend toujours."},
+ {q:"Les fondateurs de Fever-Tree ont documenté leur recherche sur la quinine :", o:["Au Kew Gardens","À la British Library","Au Musée d'histoire naturelle","Aux archives de Plymouth Gin"], r:1, e:"À la British Library, sur des sources remontant à 1620, avant d'aller sourcer l'écorce à la frontière Rwanda / RD Congo."},
+ {q:"Chez Ponthier, la composition d'une purée respecte :", o:["Minimum 70 % de fruit","Minimum 90 % de fruit et maximum 10 % de sucre de canne","50 % de fruit et 50 % de sirop","Un ratio libre selon le fruit"], r:1, e:"Minimum 90 % de fruit, maximum 10 % de sucre, aucun additif. Une seule origine et une seule variété par parfum."},
 ];
 
 /* ---- VRAI/FAUX ---- */
@@ -724,6 +810,24 @@ const VF = [
  {q:"Le marc de Bourgogne est obtenu en distillant du vin.", r:false, e:"Le marc distille les résidus de pressurage (peaux, pépins, rafles). Vin/lies = la FINE."},
  {q:"Le mash bill de Wild Turkey est riche en blé.", r:false, e:"Riche en SEIGLE : ~75 % maïs / 13 % seigle / 12 % orge maltée."},
  {q:"Le Noilly Prat Ambré a longtemps été vendu uniquement à la boutique de Marseillan.", r:true, e:"L'Ambré fut longtemps une exclusivité de la boutique de Marseillan."},
+
+ /* ===== APPROFONDISSEMENT ===== */
+ {q:"Le Fiba de BOWS est distillé à partir des fruits du figuier de Barbarie.", r:false, e:"FAUX : ce sont les RAQUETTES du cactus, fumées au bois d'olivier, qui sont macérées et distillées."},
+ {q:"Le Single-Oaked de Dartigalongue est élevé en fût neuf.", r:false, e:"FAUX : fûts de chêne ROUX (déjà utilisés) du Sud-Ouest. C'est le Double-Oaked qui passe deux fois en fûts neufs."},
+ {q:"Les thés sencha et gyokuro du Roku sont récoltés en été.", r:true, e:"VRAI : printemps = sakura, été = sencha + gyokuro, automne = sanshō, hiver = yuzu."},
+ {q:"Tous les vermouths Noilly Prat passent un an dehors dans l'Enclos.", r:false, e:"FAUX : seuls l'Original Dry et l'Extra Dry. L'Ambré et le Rouge ne suivent pas ce parcours."},
+ {q:"Carpano appartient au groupe Fratelli Branca depuis 2001.", r:true, e:"VRAI : le groupe milanais du Fernet-Branca. Devise maison : « Novare Serbando », innover en préservant."},
+ {q:"« Kota » signifie « pandan » en indonésien.", r:false, e:"FAUX : kota = la VILLE, en indonésien et en malais."},
+ {q:"L'olive peut être fermentée puis distillée comme n'importe quel fruit.", r:false, e:"FAUX : elle ne contient pas de sucre fermentescible. On la macère dans l'alcool avant de distiller, comme pour un gin."},
+ {q:"Les liqueurs Giffard Sans Alcool sont macérées dans du vinaigre de vin blanc.", r:true, e:"VRAI : technique du shrub, puis un procédé maison efface les notes de vinaigre au nez et en bouche."},
+ {q:"Wild Turkey entre en fût à un degré volontairement plus bas que le maximum légal.", r:true, e:"VRAI : 107 puis 115 proof, contre 125 autorisés. « On distille le goût, pas l'alcool »."},
+ {q:"La marque Appleton Estate existe depuis 1749.", r:false, e:"FAUX : 1749 = première trace écrite de distillation. La MARQUE Appleton Estate naît en 1944 ; le domaine, lui, existe depuis 1655."},
+ {q:"Sophie Decobecq a choisi l'autoclave après des dégustations à l'aveugle contre le four traditionnel.", r:true, e:"VRAI : elle aurait préféré le horno pour le romantisme, mais l'aveugle a tranché en faveur de l'autoclave basse pression."},
+ {q:"Le Royal Combier contient du cognac.", r:true, e:"VRAI : Original Combier (triple sec) + Élixir Combier + cognac Delamain, créé en 1920."},
+ {q:"La distillerie Pigneret, devenue Alambic Bourguignon, avait été fondée en 1941.", r:true, e:"VRAI : fondée en 1941 à Moroges, rachetée par Mathieu Sabbagh en 2018."},
+ {q:"L'Un-Oaked de Dartigalongue est embouteillé à 40°.", r:false, e:"FAUX : 43,2°, après réduction lente depuis 58° en cuve inox."},
+ {q:"Le concentré de Campari est fabriqué dans une seule salle à Milan avant d'être expédié aux usines.", r:true, e:"VRAI : c'est ce qui protège la recette. Le seul ingrédient officiellement confirmé est l'écorce d'orange amère."},
+ {q:"Les purées Ponthier peuvent contenir des arômes ajoutés pour homogénéiser le goût.", r:false, e:"FAUX : aucun additif — ni colorant, ni conservateur, ni arôme. Minimum 90 % de fruit."},
 ];
 
 /* ---- DEGRÉS ---- */
@@ -756,6 +860,8 @@ const CHRONO = [
  {n:"Suntory", y:1899},{n:"Soleras La Ina", y:1919},{n:"Ponthier", y:1946},
  {n:"PCB Création", y:1992},{n:"Calle 23", y:2003},{n:"Fever-Tree", y:2004},
  {n:"Chinola", y:2014},{n:"BOWS", y:2016},{n:"Roku", y:2017},{n:"Adriatico", y:2019},{n:"Kota", y:2024},
+ {n:"Lustau (Jerez)", y:1896},{n:"Solera Rio Viejo", y:1918},{n:"Distillerie Pigneret (\u2192 Sab's)", y:1941},
+ {n:"1ers alambics Manguin", y:1957},{n:"Rhums arrang\u00e9s Isautier", y:1970},{n:"Carpano rachet\u00e9 par Branca", y:2001},
 ];
 
 /* ---- SOCLE DES COCKTAILS DE RÉFÉRENCE (édition 2025) ---- */
@@ -1065,8 +1171,9 @@ document.getElementById("fc-know").onclick=fcKnow;
 
 /* =================== QUIZ GÉNÉRIQUE (QCM + PONTS) =================== */
 const quizStates={};
+const QUIZ_LEN=20;
 function startQuiz(key, source){
-  quizStates[key]={qs:shuffle(source).map(q=>({...q, opts:shuffle(q.o.map((t,i)=>({t, ok:i===q.r})))})), idx:0, score:0};
+  quizStates[key]={qs:shuffle(source).slice(0,QUIZ_LEN).map(q=>({...q, opts:shuffle(q.o.map((t,i)=>({t, ok:i===q.r})))})), idx:0, score:0};
   renderQuiz(key);
 }
 function renderQuiz(key){
@@ -1107,7 +1214,7 @@ function renderQuiz(key){
 
 /* =================== VRAI / FAUX =================== */
 function startVF(){
-  quizStates.vf={qs:shuffle(VF), idx:0, score:0};
+  quizStates.vf={qs:shuffle(VF).slice(0,15), idx:0, score:0};
   renderVF();
 }
 function renderVF(){
@@ -1922,7 +2029,7 @@ const FICHES = [
     <li><b>Carpano</b> — 1786 Turin, inventeur du vermouth. Antica Formula 16,5° (vanille Madagascar) / Classico 16°.</li>
    </ul></div>
    <div class="fiche-block"><h4>Eaux-de-vie & alcools</h4><ul>
-    <li><b>BOWS Fiba</b> — 2016 Benoît Garcia, Montauban → Laure-Minervois. Fiba = figue de Barbarie, 45°, le « mezcal français ».</li>
+    <li><b>BOWS Fiba</b> — 2016 Benoît Garcia, Montauban → Laure-Minervois. Fiba = FIgue de BArbarie, 45° : ce sont les <b>raquettes</b> du cactus, fumées au bois d'olivier.</li>
     <li><b>Manguin Oli'Still</b> — Barthelasse (Avignon), olive distillée depuis 2014. 40°, truffe-olive-salin.</li>
     <li><b>Roku</b> — 2017 Osaka, Suntory. « Six » botaniques japonais récoltés selon le shun, 43°.</li>
     <li><b>Benleioc</b> — Ben+Lei+Oc. Brassins type stout (1re en Europe), affinage Pacherenc. Sorgho / Tourbé 45°.</li>
@@ -1932,9 +2039,9 @@ const FICHES = [
     <li><b>Calle 23</b> — Sophie Decobecq, levures maison, Los Altos. Repo 8 mois / Añejo 16 mois, tous 40°.</li>
     <li><b>Nuestra Soledad</b> — Casa Cortés 1840, single village, espadín, 40°. Vierge de la Solitude.</li>
     <li><b>Cuatro Gallos</b> — pisco d'Ica : 1 distillation à degré, 0 eau, 0 bois. Quebranta / Italia 40°.</li>
-    <li><b>Dartigalongue</b> — 1838 Nogaro, doyenne armagnac, millésime 1848. Un/Single/Double-Oaked 43°.</li>
+    <li><b>Dartigalongue</b> — 1838 Nogaro, doyenne armagnac, millésime 1848. Un-Oaked (0 bois) / Single-Oaked (fûts <b>roux</b>) / Double-Oaked (2× fût neuf), tous 43°.</li>
     <li><b>Merlet</b> — 1850 Saint-Sauvant. VS / Brothers Blend (4 ans, Fins Bois + 1/5 GC) / Eau de Vigne, tous 40°.</li>
-    <li><b>Sab's</b> — 2019 Beaune, bouilleur ambulant. Marc = peaux/pépins. Le Blanc 43° / Le Marc 46° (finish cognac).</li>
+    <li><b>Sab's</b> — Pigneret (1941) rachetée en 2018, Beaune, bouilleur ambulant ; marque Sab's fin 2019. Marc = peaux/pépins. Le Blanc 43° / Le Marc 46° (finish cognac).</li>
    </ul></div>
    <div class="fiche-block"><h4>Liqueurs & spécialités</h4><ul>
     <li><b>Gabriel Boudier</b> — 1874 Dijon, famille Battault, cassis Noir de Bourgogne. Produit Kota. Kir = chanoine Kir.</li>
@@ -1943,7 +2050,7 @@ const FICHES = [
     <li><b>Bénédictine</b> — 1863 Fécamp, moine Vincelli (1510), 27 plantes, D.O.M. = Deo Optimo Maximo.</li>
     <li><b>Chinola</b> — 2014 Rép. dominicaine, « fruit de la passion », vine-to-bottle (24 h), 21°, larimar.</li>
     <li><b>Grand Marnier</b> — 1880, 51 % cognac + bigarade, baptisée par César Ritz.</li>
-    <li><b>Kota</b> — pandan « vanille d'Asie », Nico de Soto × Boudier, été 2024, 18°, Thaïlande. LA nouveauté.</li>
+    <li><b>Kota</b> — « kota » = la <b>ville</b> (indonésien/malais). Pandan « vanille d'Asie », Nico de Soto × Boudier, été 2024, 18°, feuilles de Thaïlande.</li>
     <li><b>Marie Brizard</b> — 1755 Bordeaux, doyenne du concours, fondée par une femme, anisette 25°.</li>
    </ul></div>
   </div>`},
@@ -1972,10 +2079,13 @@ const FICHES = [
    </ul></div>
    <div class="fiche-block"><h4>Noms & acronymes décodés</h4><ul>
     <li><b>BOWS</b> = Brave Occitan Wild Spirit · <b>Benleioc</b> = Ben+Lei+Oc · <b>Fiba</b> = FIgue de BArbarie</li>
-    <li><b>Roku</b> = six (jap.) · <b>Chinola</b> = fruit de la passion (dom.) · <b>Kota</b> = pandan</li>
+    <li><b>Roku</b> = six (jap.) · <b>Chinola</b> = fruit de la passion (dom.) · <b>Kota</b> = « la ville » (indonésien / malais)</li>
     <li><b>D.O.M.</b> = Deo Optimo Maximo · <b>Fever tree</b> = quinquina, « l'arbre à fièvre »</li>
     <li><b>Calle 23</b> = plaque de rue de Guadalajara · <b>Nuestra Soledad</b> = Vierge de la Solitude</li>
     <li><b>Vermouth</b> = Wermut (armoise, all.) · <b>Punt e Mes</b> = « un point et demi »</li>
+    <li><b>Sab's</b> = Société Alambic Bourguignon + surnom de Sabbagh · <b>Bitter all'uso d'Hollanda</b> = 1er nom du Campari</li>
+    <li><b>Novare Serbando</b> = devise Branca/Carpano, « innover en préservant » · <b>El Valle de Chinola</b> = la ferme de Samaná</li>
+    <li><b>Ingredium</b> = gamme technique PCB (2019) · <b>Armagnac Experience</b> = la gamme bar de Dartigalongue</li>
    </ul></div>
    <div class="fiche-block"><h4>Réseau des distributeurs</h4><ul>
     <li><b>Groupe Campari</b> — Campari, Wild Turkey, Appleton, Grand Marnier.</li>
@@ -1983,6 +2093,7 @@ const FICHES = [
     <li><b>Vintage Spirit Garage</b> — La Ina, Calle 23, Nuestra Soledad, Cuatro Gallos, Dartigalongue, Kota.</li>
     <li><b>Mezcal Brothers</b> — BOWS (Fiba + Benleioc), Chinola.</li>
     <li><b>Dugas</b> — Carpano · <b>Solinest</b> — Fever-Tree · <b>Grand Chais</b> — Isautier · <b>Bellefontaine</b> — Merlet.</li>
+    <li class="mini"><b>Ne pas confondre distributeur et propriétaire :</b> Carpano appartient à <b>Fratelli Branca</b> (2001), La Ina à <b>Lustau / Grupo Caballero</b> (2008), Boudier au groupe <b>Famille Piffaut</b>, Roku à <b>Suntory</b>, Nuestra Soledad à <b>Casa Cortés</b>.</li>
    </ul></div>
   </div>`},
  {t:"Degrés pièges (à réciter)", html:`
@@ -2069,7 +2180,81 @@ const FICHES = [
     <li><b>Mocktail / No Low</b> — sans alcool / faible degré (consommation responsable).</li>
     <li><b>Swizzle stick</b> — le « bois lélé » des Antilles.</li>
    </ul></div>
+  </div>`},,
+ {t:"Expert — procédés décortiqués", html:`
+  <p class="fiche-lead">Le cran au-dessus : ce qui se passe vraiment dans la cuve, l'alambic ou le fût. C'est là que se gagnent les questions de jury.</p>
+  <div class="fiche-grid">
+   <div class="fiche-block"><h4>Non alcool</h4><ul>
+    <li><b>Giffard Sans Alcool</b> — macération dans du <b>vinaigre de vin blanc</b> français (technique du shrub), puis un procédé maison efface les notes de vinaigre. Pasteurisé : ~4 à 5 mois après ouverture, sans réfrigération. Sucre calé sur celui d'une liqueur (100-200 g/L).</li>
+    <li><b>Giffard Bases Cocktail</b> — 4 ans de R&D, chaque base est le miroir d'un spiritueux : Aperitif Bitter, Woody Malt (whisky), Smoky Agave (mezcal), Herbal + Juniper (gin), Cold Cane (rhum), Ruby Grape (vermouth).</li>
+    <li><b>Fever-Tree</b> — 15 à 18 mois de mise au point : British Library (sources sur la quinine remontant à 1620), sourcing de l'écorce à la frontière Rwanda / RD Congo, 5 versions de recette. Zéro saccharine, zéro benzoate de sodium, zéro décanal.</li>
+    <li><b>Ponthier</b> — min. 90 % de fruit, max. 10 % de sucre de canne, aucun additif. Une seule origine + une seule variété par parfum (label Pure Trace). Contrôle pesticides par un labo indépendant allemand.</li>
+    <li><b>PCB / Ingredium</b> — 5 familles : Texturants &amp; Amidons · Acides &amp; Sels · Émulsifiants &amp; Stabilisants · Sucres &amp; Dérivés · Clean Label. Formulée avec des chefs (Hermé, Grolet, Michalak, Brys…).</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Apéritifs &amp; amers</h4><ul>
+    <li><b>Combier</b> — triple sec : oranges d'Haïti macérées ~48 h, triple distillation, alambics de cuivre centenaires. Absinthes distillées dans deux alambics <b>Pernod Fils</b> d'époque (ceux des Jade de Ted Breaux). Royal Combier (1920) = triple sec + Élixir + cognac Delamain.</li>
+    <li><b>Campari</b> — 60 à 68 plantes, écorces et fruits ; seul ingrédient confirmé : l'écorce d'orange amère. Le <b>concentré</b> est assemblé dans une salle unique à Milan puis expédié aux usines. Nom d'origine : « Bitter all'uso d'Hollanda ».</li>
+    <li><b>La Ina</b> — Fino ≈ 6 ans sous flor (solera 1919) · Rio Viejo ≈ 10 ans en oxydatif (solera <b>1918</b>, nom d'un domaine de Macharnudo) · Viña 25 PX passerillé. 4 000 botas reprises à Domecq en 2008 par Lustau (fondée 1896, Grupo Caballero).</li>
+    <li><b>Noilly Prat</b> — 8 mois en foudres → <b>1 an dehors dans l'Enclos</b> en demi-muids (part des anges ≈ 6 %) → assemblage + mistelle + alcoolats de citron et framboise → 21 jours de macération (~20 plantes) avec dodinage 2×/jour → repos ~6 semaines. <b>Seuls l'Original Dry et l'Extra Dry passent par l'Enclos.</b></li>
+    <li><b>Carpano</b> — Antica Formula : extraction à chaud ET à froid d'environ <b>130 botaniques</b>, sucre + sucre brûlé. Vanilles de Madagascar, Tahiti, Papouasie ; safran d'Iran ; armoise du Piémont et du Val d'Aoste. Recette connue de 3 personnes.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Eaux-de-vie &amp; alcools</h4><ul>
+    <li><b>Fiba</b> — <b>raquettes</b> d'Opuntia ficus-indica, coupées, <b>fumées au bois d'olivier</b>, macérées, distillées ; réduction lente sur 1 mois à l'eau de la Montagne Noire. Chez BOWS, les céréales sont émondées puis <b>cuites à la vapeur</b>.</li>
+    <li><b>Oli'Still</b> — l'olive n'a <b>pas de sucre fermentescible</b> : on ne peut pas la fermenter. Macération des olives dans l'alcool, puis alambic charentais à repasse et sélection des cœurs. Exactement la logique d'un gin.</li>
+    <li><b>Roku</b> — printemps : sakura (fleur + feuille) · été : sencha + gyokuro · automne : sanshō · hiver : yuzu. 4 types d'alambics au Liquor Atelier, chaque famille distillée séparément. + 8 classiques : genièvre, coriandre, angélique (racine et graine), cardamome, cannelle, orange amère, citron.</li>
+    <li><b>Wild Turkey</b> — mash bill ~75 / 13 / 12. Entrée en fût volontairement basse (107 puis 115 proof, contre 125 max légal). Char n°4 « alligator » ≈ 55 s de flamme. Eau de la Kentucky River filtrée par le calcaire.</li>
+    <li><b>Isautier Fusion</b> — co-fermentation de 36 h mélasse + pur jus (50/50), colonne, 2,5 ans de repos en cuve. IGP « Rhum de La Réunion » depuis le 22 janvier 2015 ; 3 distilleries sur l'île (Isautier, Savanna, Rivière du Mât).</li>
+    <li><b>Appleton</b> — 1655 le domaine, <b>1749</b> la première trace de distillation, <b>1944</b> la marque. Source River Head filtrée par le calcaire, pot stills à double retort, ~200 000 fûts sur place, vieillissement 100 % tropical.</li>
+    <li><b>Calle 23</b> — agaves de 7 à 9 ans, autoclave <b>basse pression</b>, fermentation inox sans fibres avec des levures sauvages isolées dans les champs, double distillation, sortie à 55 % puis réduction à 40°.</li>
+    <li><b>Nuestra Soledad</b> — four conique de terre (mesquite et chêne), tahona, fermentation sauvage en tinas, double distillation en cuivre. Casa Cortés : Agave de Cortés / Nuestra Soledad / El Jolgorio.</li>
+    <li><b>Cuatro Gallos</b> — distillation unique <b>au degré</b>, zéro eau, zéro bois, repos min. 3 mois en cuve inerte. Fundo El Carmen, San Juan Bautista, sol argileux, vieilles vignes de Quebranta.</li>
+    <li><b>Dartigalongue</b> — colonne armagnacaise à 58° · Un-Oaked : ≥ 3 mois en inox, réduction à <b>43,2°</b> · Single-Oaked : fûts de chêne <b>roux</b> (usagés) à chauffes moyennes et fortes · Double-Oaked : <b>double</b> passage en fûts <b>neufs</b> gascons à chauffe forte. 90 % chêne de Gascogne.</li>
+    <li><b>Merlet</b> — Brothers Blend : eaux-de-vie de 4 à 12 ans, majorité Fins Bois + ~1/5 Grande Champagne. 40 ha entre Saint-Sauvant et Chérac. La maison a créé <b>Hpnotiq</b> en 2001.</li>
+    <li><b>Sab's</b> — alambic à vapeur <b>Müller</b> ambulant (le type utilisé pour la grappa), coupe des cœurs au nez. Le Blanc : 100 % pinot noir, 1 an en inox. Le Marc : 4 ans en fûts de 228 L + 6 mois de finish en fût de cognac.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Liqueurs &amp; spécialités</h4><ul>
+    <li><b>Adriatico</b> — amandes Filippo Cea cueillies à la main autour d'<b>Alberobello</b>, séchées au soleil, longuement torréfiées (Classico) ou concassées et infusées à cru (Bianco). Sel de la saline de Margherita di Savoia. 2 ans de mise au point ; fondée en septembre 2019 par Jean-Robert Bellanger et Thomas Benoit.</li>
+    <li><b>Algebra</b> — extraction à froid fractionnée au laboratoire londonien, café Has Bean torréfié dans le <b>Staffordshire</b>, rhum des Caraïbes, sucre de canne, embouteillage chez Thames Distillers. <b>100 g/L = minimum légal UE</b> — seules exceptions : cerise (70 g/L) et gentiane (80 g/L).</li>
+    <li><b>Chinola</b> — ferme « El Valle de Chinola », péninsule de Samaná ; fruits transformés dans les 24 h, alcool neutre de canne, zéro arôme ni colorant. Première liqueur de fruits frais vine-to-bottle stable à température ambiante.</li>
+    <li><b>Kota</b> — feuilles fraîches de pandan de Thaïlande macérées plusieurs jours dans un alcool neutre, puis distillées à Dijon chez Boudier. Idée dès 2020, échantillonnage mars 2024, lancement été 2024. Florent Beuchet (Compagnie des Indes) est l'entremetteur et dirige la marque.</li>
+    <li><b>Gabriel Boudier</b> — ~75 personnes, DG Claire Battault, groupe Famille Piffaut. Produit en propre <b>et pour des tiers</b> : Kota, Saffron Gin.</li>
+    <li><b>Bénédictine</b> — 27 plantes travaillées en plusieurs fractions distillées séparément, assemblées puis vieillies. D.O.M. = Deo Optimo Maximo.</li>
+   </ul></div>
   </div>`},
+ {t:"Pièges avancés", html:`
+  <p class="fiche-lead">Les confusions les plus probables. Si tu ne dois relire qu'une fiche la veille, c'est celle-là.</p>
+  <div class="fiche-grid">
+   <div class="fiche-block"><h4>Matière première &amp; procédé</h4><ul>
+    <li><b>Fiba</b> : les <b>raquettes</b> du cactus, pas le fruit. Fumage au <b>bois d'olivier</b>, pas dans un four enterré.</li>
+    <li><b>Oli'Still</b> : l'olive ne se fermente pas (pas de sucre). Macération dans l'alcool puis distillation.</li>
+    <li><b>Marc vs Fine</b> : le marc distille les peaux, pépins et rafles ; la fine distille le vin ou les lies.</li>
+    <li><b>Pisco</b> : une seule distillation, directement au degré, jamais d'eau après, jamais de bois.</li>
+    <li><b>Giffard</b> : vinaigre de vin <b>blanc</b>, pas de cidre.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Bois &amp; élevage</h4><ul>
+    <li><b>Single-Oaked</b> (Dartigalongue) = fûts de chêne <b>roux</b>, déjà utilisés — pas un fût neuf. Le <b>Double-Oaked</b> = deux passages en fûts <b>neufs</b>.</li>
+    <li><b>Noilly Prat</b> : seuls l'<b>Original Dry</b> et l'<b>Extra Dry</b> vieillissent dehors dans l'Enclos.</li>
+    <li><b>Calle 23</b> : Reposado = 8 mois, Añejo = 16 mois. Ne pas inverser.</li>
+    <li><b>Appleton</b> : l'âge affiché est celui du rhum le <b>plus jeune</b> de l'assemblage.</li>
+    <li><b>Sab's Le Marc</b> : 4 ans en fûts bourguignons de 228 L <b>puis</b> 6 mois de finish en fût de cognac.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Dates qui se ressemblent</h4><ul>
+    <li><b>Appleton</b> : 1655 le domaine · 1749 la distillation · 1944 la marque.</li>
+    <li><b>La Ina</b> : solera du fino en <b>1919</b>, solera de Rio Viejo en <b>1918</b>, reprise par Lustau en 2008.</li>
+    <li><b>Wild Turkey</b> : site 1869 · marque 1940 (Austin Nichols) · rachat de la distillerie Ripy 1972 · Campari 2009.</li>
+    <li><b>Combier</b> : maison 1834 · distillerie construite 1848 · absinthe 1899 · interdiction 1915 · rachat Choisne 2000 · relance 2004 · Blanchette 2006 · mention légale 2011 · L'Entêté 2012.</li>
+    <li><b>Sab's</b> : Pigneret fondée 1941 · rachat 2018 · marque Sab's fin 2019.</li>
+    <li><b>Manguin</b> : vergers années 40 · alambics 1957 · Hanquiez 2011 · olive distillée 2014.</li>
+   </ul></div>
+   <div class="fiche-block"><h4>Noms &amp; propriétaires</h4><ul>
+    <li><b>Kota</b> = « la ville », pas « pandan ».</li>
+    <li><b>Sab's</b> = Société Alambic Bourguignon <b>et</b> Sabbagh.</li>
+    <li><b>Antoinette Isautier</b> = l'<b>épouse</b> de Charles, pas sa fille.</li>
+    <li><b>Virginie Dartigalongue</b> a été convaincue par sa <b>tante</b> Françoise en 2010.</li>
+    <li>Distributeur ≠ propriétaire : Dugas <b>distribue</b> Carpano, mais Carpano <b>appartient</b> à Fratelli Branca.</li>
+    <li><b>Boudier</b> produit Kota, <b>Combier</b> produit les Jade, <b>Merlet</b> a créé Hpnotiq, <b>Lustau</b> élève La Ina.</li>
+   </ul></div>
+  </div>`}
 ];
 function buildFiches(){
   fichesBuilt=true;
