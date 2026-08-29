@@ -37,6 +37,25 @@ body{
   line-height:1.5;
 }
 
+
+/* ---------- Mode examen ---------- */
+.exam-timer{font-family:Caveat,cursive;font-size:3rem;line-height:1;color:var(--gold);text-align:center;margin:4px 0}
+.exam-timer.warn{color:var(--copper)}
+.exam-timer.danger{color:var(--campari);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.exam-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.exam-setup{max-width:560px;margin:0 auto;text-align:center}
+.exam-setup .btn{margin:6px 4px}
+.exam-dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.exam-dot{width:11px;height:11px;border-radius:50%;background:rgba(233,226,207,.22)}
+.exam-dot.ok{background:var(--ok)}
+.exam-dot.ko{background:var(--ko)}
+.exam-dot.now{outline:2px solid var(--gold);outline-offset:2px}
+.exam-review{text-align:left;max-height:none}
+.exam-review .qr{border-bottom:1px solid rgba(233,226,207,.14);padding:10px 0}
+.exam-review .qr .lab{font-family:Caveat,cursive;font-size:1.25rem}
+.exam-review .qr.ko .lab{color:var(--campari)}
+.exam-review .qr.ok .lab{color:var(--absinthe)}
 /* ---------- Condensé (mémo texte) ---------- */
 .memo{background:var(--paper);color:var(--ink);border-radius:var(--radius);padding:26px 30px;box-shadow:var(--shadow);line-height:1.55;max-width:900px;margin:0 auto}
 .memo h3{font-family:Caveat,cursive;font-size:1.85rem;color:var(--copper-2);margin:30px 0 6px;border-bottom:2px solid rgba(165,101,31,.3);padding-bottom:4px}
@@ -356,6 +375,8 @@ h2.viewtitle{
     <button data-view="mind" onclick="showView('mind')">Carte mentale</button>
     <button data-view="sketch" onclick="showView('sketch')">Sketchnotes</button>
     <button data-view="memo" onclick="showView('memo')">Condensé</button>
+    <button data-view="exam" onclick="showView('exam')">⏱ Examen</button>
+    <button data-view="dossier" onclick="showView('dossier')">Dossier TDB</button>
     <button data-view="degust" onclick="showView('degust')">Dégustation</button>
     <button data-view="grandtest" onclick="showView('grandtest')" style="background:var(--campari);color:#fff;border-color:var(--campari)">★ Grand test</button>
     <button data-view="revisions" onclick="showView('revisions')">↻ Mes erreurs</button>
@@ -424,6 +445,27 @@ h2.viewtitle{
     <span class="scorepill" id="qcm-score">0 pt</span>
   </div>
   <div class="panel" id="qcm-panel"></div>
+</section>
+
+<!-- ============ EXAMEN ============ -->
+<section class="view" id="view-exam">
+  <div class="viewhead">
+    <h2 class="viewtitle">Mode examen</h2>
+    <span class="handnote">chrono — produits partenaires, cocktails imposés et livre de Vermeire</span>
+  </div>
+  <div class="panel" id="exam-panel"></div>
+</section>
+
+<!-- ============ DOSSIER TDB ============ -->
+<section class="view" id="view-dossier">
+  <div class="viewhead">
+    <h2 class="viewtitle">Dossier TDB</h2>
+    <span class="handnote">uniquement le contenu du dossier officiel : les cocktails et le livre</span>
+  </div>
+  <div class="memo-tools">
+    <button class="btn btn-copper" onclick="window.print()">🖨 Imprimer / PDF</button>
+  </div>
+  <div class="memo" id="dossier-body"></div>
 </section>
 
 <!-- ============ CONDENSÉ ============ -->
@@ -669,6 +711,8 @@ const MODULES = [
   {id:"socleplus", name:"Socle+", desc:"4 exercices ciblés : devine le cocktail, son verre, sa famille, sa garniture.", deg:"100 % socle", icon:"target"},
   {id:"mind", name:"Carte mentale", desc:"Toute la liste partenaires en un coup d'œil, nœud par nœud.", deg:"vue d'ensemble", icon:"mind"},
   {id:"sketch", name:"Sketchnotes", desc:"Méthodes, familles, verres, TAV, techniques… 26 schémas dessinés.", deg:"26 schémas", icon:"sketch"},
+  {id:"exam", name:"Mode examen", desc:"Chrono, sans filet : marques partenaires, cocktails imposés et livre de Vermeire. Rien sur le socle ni sur le règlement.", deg:"conditions réelles", icon:"chrono"},
+  {id:"dossier", name:"Dossier TDB", desc:"Rien que le dossier officiel : les 13 cocktails, l'extrait de Vermeire et l'index de ses 108 recettes.", deg:"la source", icon:"dossier"},
   {id:"memo", name:"Le condensé", desc:"Tout le programme en texte suivi, sans quiz : à relire d'une traite, ou à imprimer.", deg:"à relire la veille", icon:"memo"},
   {id:"degust", name:"Dégustation à l'aveugle", desc:"Reconnais un produit à son profil, ou un cocktail à sa composition. L'épreuve à coefficient 3.", deg:"nez & bouche", icon:"nose"},
   {id:"grandtest", name:"Le Grand test", desc:"Tout, tout, tout : partenaires + socle mélangés. 15, 30 ou 50 questions.", deg:"l'épreuve totale", icon:"trophy"},
@@ -683,6 +727,8 @@ const ICONS = {
   deg:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><rect x="19" y="6" width="10" height="26" rx="5" fill="none" stroke="#22302b" stroke-width="2.5"/><circle cx="24" cy="36" r="8" fill="#b23a2b" stroke="#22302b" stroke-width="2.5"/><path d="M24 30V16" stroke="#b23a2b" stroke-width="4" stroke-linecap="round"/></svg>',
   chrono:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M6 32h36" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="32" r="4" fill="#c8813a"/><circle cx="24" cy="32" r="4" fill="#9fbf6b"/><circle cx="36" cy="32" r="4" fill="#b23a2b"/><path d="M12 26v-8M24 26V12M36 26v-6" stroke="#22302b" stroke-width="2" stroke-linecap="round"/></svg>',
   bridge:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M6 34h36" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><path d="M10 34c0-10 6-16 14-16s14 6 14 16" stroke="#c8813a" stroke-width="3" fill="none"/><path d="M17 34v-8M24 34V18M31 34v-8" stroke="#22302b" stroke-width="2"/></svg>',
+  chrono:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="27" r="14" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M24 19v8l6 4" fill="none" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 7h10M24 7v6" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  dossier:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M8 12h13l3 4h16v22a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z" fill="none" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M15 25h18M15 31h12" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round"/></svg>',
   memo:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><rect x="11" y="7" width="26" height="34" rx="3" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M16 15h16M16 21h16M16 27h11" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round"/><path d="M16 33h7" stroke="#9fbf6b" stroke-width="2.5" stroke-linecap="round"/></svg>',
   nose:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M20 6 L20 20 Q20 26 15 30 Q10 34 14 38 Q18 42 26 42 Q34 42 34 34 L34 24" fill="none" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><circle cx="22" cy="36" r="2.5" fill="#c8813a"/><path d="M38 12 q4 4 0 8 M42 10 q6 6 0 12" stroke="#9fbf6b" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
   mind:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="24" r="6" fill="#c8813a"/><circle cx="9" cy="12" r="4" fill="#9fbf6b"/><circle cx="39" cy="12" r="4" fill="#b23a2b"/><circle cx="9" cy="38" r="4" fill="#e2b45a"/><circle cx="39" cy="38" r="4" fill="#22302b"/><path d="M20 21l-8-7M28 21l8-7M20 27l-8 9M28 27l8 9" stroke="#22302b" stroke-width="2"/></svg>',
@@ -1315,46 +1361,47 @@ const SOCLE_VARIANTES = [
 
 /* ---- COCKTAILS IMPOSÉS — ANNEXE #2 du dossier finaliste ---- */
 const IMPOSES = [
- {n:"Boulevardier", ing:["WILD TURKEY (au choix)","CAMPARI","CARPANO (au choix)"], base:"Wild Turkey", fam:"Old-Fashioned / apéritif", verre:"Rocks", met:"Verre à mélange",
+ {n:"Boulevardier", grp:"Whiskey américain", dose:[["WILD TURKEY","3 cl"],["CAMPARI","3 cl"],["CARPANO Classico","3 cl"]], alerte:"", tip:"Équilibre 1:1:1, la formule d'origine.", ing:["WILD TURKEY (au choix)","CAMPARI","CARPANO (au choix)"], base:"Wild Turkey", fam:"Old-Fashioned / apéritif", verre:"Rocks", met:"Verre à mélange",
   hist:"Paris, 1927. Attribué à <b>Erskine Gwynne</b>, riche Américain expatrié, apparenté aux Vanderbilt, qui lance la même année un magazine littéraire parisien nommé <i>Boulevardier</i> (paru de 1927 à 1932). La recette est imprimée dans <b>Barflies and Cocktails</b> de Harry McElhone (Harry's New York Bar), non pas dans la liste principale mais dans la section « Cocktails Round Town » signée Arthur Moss. Formule d'origine : <b>1/3 - 1/3 - 1/3</b>. Un « boulevardier » désigne le noceur qui arpente les boulevards.",
   note:"Le Negroni du bourbon. Oublié pendant 80 ans, ressuscité par le craft cocktail, officiel IBA en 2020. Les versions modernes chargent le whiskey (3:2:2 voire 2:1:1)."},
- {n:"Gin Fizz", ing:["ROKU Gin","Jus de citron","Sucre","FEVER-TREE Soda water"], base:"Roku Gin", fam:"Fizz", verre:"Highball", met:"Shaker puis allongé",
+ {n:"Gin Fizz", grp:"Gin", dose:[["ROKU Gin","4 cl"],["Jus de citron jaune","2 cl"],["Sucre","1,5 cl"],["FEVER-TREE Soda water","top"]], alerte:"", tip:"Le soda après passage au verre.", ing:["ROKU Gin","Jus de citron","Sucre","FEVER-TREE Soda water"], base:"Roku Gin", fam:"Fizz", verre:"Highball", met:"Shaker puis allongé",
   hist:"La famille <b>Fizz</b> est codifiée par <b>Jerry Thomas</b> dans la deuxième édition de son <i>Bar-Tender's Guide</i> (1876) : un sour allongé d'eau gazeuse. Son sommet est le <b>Ramos Gin Fizz</b>, créé en 1888 à La Nouvelle-Orléans par Henry C. Ramos, réputé pour ses douze minutes de shake.",
   note:"Sour + soda. Le soda se verse APRÈS le passage au verre, jamais dans le shaker. Chez les puristes, servi sans glace dans le verre."},
- {n:"Mai Tai", ing:["APPLETON ESTATE (au choix)","ISAUTIER (au choix)","GRAND MARNIER","Sirop d'orgeat","Jus de citron vert"], base:"Appleton + Isautier", fam:"Tiki", verre:"Rocks", met:"Shaker",
+ {n:"Mai Tai", grp:"Rhum", dose:[["APPLETON ESTATE","2,5 cl"],["ISAUTIER","2,5 cl"],["GRAND MARNIER","1,5 cl"],["Jus de citron vert","2,5 cl"],["Sirop d'orgeat","1,5 cl"]], alerte:"", tip:"10,5 cl au shaker : le plus gros volume de la liste.", ing:["APPLETON ESTATE (au choix)","ISAUTIER (au choix)","GRAND MARNIER","Sirop d'orgeat","Jus de citron vert"], base:"Appleton + Isautier", fam:"Tiki", verre:"Rocks", met:"Shaker",
   hist:"<b>Victor Jules Bergeron</b>, dit <b>Trader Vic</b>, à Oakland (Californie) en <b>1944</b>. Il le sert à deux amis tahitiens, Ham et Carrie Guild ; Carrie s'exclame « <i>Maita'i roa a'e !</i> » — « hors de ce monde ». Le nom reste. Contrairement à ce qu'on croit, il n'est pas né à Hawaï.",
   note:"Ici le curaçao devient Grand Marnier, et le blend jamaïcain est complété par du rhum réunionnais : deux partenaires dans un verre."},
- {n:"Planter's Punch", ing:["APPLETON ESTATE (au choix)","Jus de citron vert","Sirop grenadine / grenade","Aromatic bitters (option)","FEVER-TREE Soda water"], base:"Appleton Estate", fam:"Punch", verre:"Highball", met:"Shaker puis allongé",
+ {n:"Planter's Punch", grp:"Rhum", dose:[["APPLETON ESTATE","5 cl"],["Sirop grenadine","1,5 cl"],["Jus de citron vert","2 cl"],["FEVER-TREE Soda water","top"]], alerte:"", tip:"Aromatic bitters en option d'après l'annexe.", ing:["APPLETON ESTATE (au choix)","Jus de citron vert","Sirop grenadine / grenade","Aromatic bitters (option)","FEVER-TREE Soda water"], base:"Appleton Estate", fam:"Punch", verre:"Highball", met:"Shaker puis allongé",
   hist:"Antilles, XIXe siècle — le punch des planteurs. La formule s'apprend en vers : <b>one of sour, two of sweet, three of strong, four of weak</b>. Un article du New York Times de 1908 en donne une variante (deux de sour, un et demi de sweet). Aussi appelé <i>Jamaican Rum Punch</i> dans le Savoy Cocktail Book.",
   note:"Le punch est l'ancêtre de tout le bar : première recette publiée en Inde en 1638."},
- {n:"Mezcal Mule", ing:["NUESTRA SOLEDAD Valles","PONTHIER Fruit de la Passion","Concombre (tranches)","Jus de citron vert","FEVER-TREE Ginger beer","Piment en poudre (option)"], base:"Nuestra Soledad Valles", fam:"Mule", verre:"Highball", met:"Shaker puis allongé",
+ {n:"Mezcal Mule", grp:"Agave", dose:[["NUESTRA SOLEDAD Valles","5 cl"],["PONTHIER Fruit de la Passion","2 cl"],["Concombre","2 tranches pilées"],["Jus de citron vert","1,5 cl"],["FEVER-TREE Ginger beer","top"]], alerte:"", tip:"Piment en poudre en option d'après l'annexe.", ing:["NUESTRA SOLEDAD Valles","PONTHIER Fruit de la Passion","Concombre (tranches)","Jus de citron vert","FEVER-TREE Ginger beer","Piment en poudre (option)"], base:"Nuestra Soledad Valles", fam:"Mule", verre:"Highball", met:"Shaker puis allongé",
   hist:"Déclinaison contemporaine du <b>Moscow Mule</b> (1941). Deux récits s'affrontent : la version Los Angeles — <b>John Martin</b> (Smirnoff) et <b>Jack Morgan</b> (Cock'n'Bull, qui produisait la ginger beer) — et la version New York, au Chatham Hotel. Les deux datent de 1941 et citent les mêmes protagonistes. La mule tire son nom du « coup de pied » du gingembre ; le mug en cuivre est devenu sa signature.",
   note:"Mule = spiritueux + citron vert + ginger beer. Le concombre se travaille au pilon ou en infusion rapide, sans déchirer la peau."},
- {n:"Banana Daiquiri", ing:["APPLETON ESTATE (au choix)","et/ou ISAUTIER (au choix)","PONTHIER Banane","Jus de citron vert","Sucre (option)"], base:"Appleton et/ou Isautier", fam:"Daiquiri / Sour", verre:"Coupe", met:"Shaker",
+ {n:"Banana Daiquiri", grp:"Rhum", dose:[["APPLETON ESTATE","5 cl"],["PONTHIER Banane","3 cl"],["Jus de citron vert","2 cl"]], alerte:"", tip:"Sucre en option d'après l'annexe. L'annexe autorise Appleton et/ou Isautier.", ing:["APPLETON ESTATE (au choix)","et/ou ISAUTIER (au choix)","PONTHIER Banane","Jus de citron vert","Sucre (option)"], base:"Appleton et/ou Isautier", fam:"Daiquiri / Sour", verre:"Coupe", met:"Shaker",
   hist:"Le <b>Daiquiri</b> tire son nom d'une <b>mine de fer</b> près de Santiago de Cuba — Vermeire le rappelle dans le livre au programme. Sa paternité est généralement attribuée à l'ingénieur <b>Jennings Cox</b>, vers 1898. La déclinaison à la banane est plus tardive, portée par la diffusion du blender au milieu du XXe siècle en Floride et dans les bars tiki.",
   note:"Attention : la purée de banane Ponthier ne figure PAS dans les 4 purées de l'annexe #1 — elle est fournie pour ce cocktail uniquement."},
- {n:"Raspberry Mule", ing:["ROKU Gin","PONTHIER Framboise","Jus de citron","Sucre","FEVER-TREE Ginger beer"], base:"Roku Gin", fam:"Mule", verre:"Highball", met:"Shaker puis allongé",
+ {n:"Raspberry Mule", grp:"Gin", dose:[["ROKU Gin","4 cl"],["PONTHIER Framboise","2 cl"],["Jus de citron jaune","1 cl"],["Sucre","1 cl"],["FEVER-TREE Ginger beer","top"]], alerte:"", tip:"Citron JAUNE, contrairement au Mezcal Mule.", ing:["ROKU Gin","PONTHIER Framboise","Jus de citron","Sucre","FEVER-TREE Ginger beer"], base:"Roku Gin", fam:"Mule", verre:"Highball", met:"Shaker puis allongé",
   hist:"Variation moderne sur la trame du Moscow Mule (1941), dans la lignée des mules déclinées par spiritueux : Gin-Gin Mule d'Audrey Saunders au Pegu Club de New York, French Mule au cognac, Mexican Mule à la tequila, Chilcano au pisco.",
   note:"Seul mule au gin de la liste. Ici jus de CITRON jaune, pas de citron vert : c'est ce qui le sépare du Mezcal Mule."},
- {n:"Frisco Sour", ing:["WILD TURKEY (au choix)","BÉNÉDICTINE","Jus de citron","Sucre (option)"], base:"Wild Turkey", fam:"Sour", verre:"Coupe", met:"Shaker",
+ {n:"Frisco Sour", grp:"Whiskey américain", dose:[["WILD TURKEY","4 cl"],["BÉNÉDICTINE","2 cl"],["Jus de citron jaune","1,5 cl"],["Sucre","0,5 cl"]], alerte:"", tip:"Sucre réduit : la Bénédictine apporte déjà du miel.", ing:["WILD TURKEY (au choix)","BÉNÉDICTINE","Jus de citron","Sucre (option)"], base:"Wild Turkey", fam:"Sour", verre:"Coupe", met:"Shaker",
   hist:"Il commence sa carrière comme simple <b>Frisco</b>, <u>sans</u> citron : whisky + Bénédictine, remué. On le trouve ainsi chez <b>William « Cocktail Bill » Boothby</b> (<i>The World's Drinks and How to Mix Them</i>, 1934), chez Lucius Beebe (1946) et chez <b>David Embury</b> (<i>The Fine Art of Mixing Drinks</i>, 1948). L'ajout du citron en fait un sour. « Frisco » = San Francisco.",
   note:"Le seul imposé à la Bénédictine. Le sucre est optionnel : la liqueur apporte déjà miel et rondeur."},
- {n:"Yellow Daisy", ing:["ROKU Gin","NOILLY PRAT dry","GRAND MARNIER","L'ENTÊTÉ Absinthe"], base:"Roku Gin", fam:"Martini / Daisy", verre:"Coupe", met:"Verre à mélange",
+ {n:"Yellow Daisy", grp:"Gin", dose:[["ROKU Gin","4 cl"],["NOILLY PRAT Dry","4 cl"],["GRAND MARNIER","2 cl"]], alerte:"L'ENTÊTÉ Absinthe : rinçage ou trait, à caler", tip:"Gin et vermouth à parts égales : très ouvert.", ing:["ROKU Gin","NOILLY PRAT dry","GRAND MARNIER","L'ENTÊTÉ Absinthe"], base:"Roku Gin", fam:"Martini / Daisy", verre:"Coupe", met:"Verre à mélange",
   hist:"Publié dans le <b>Savoy Cocktail Book</b> de <b>Harry Craddock</b> (1930), avec une note indiquant qu'il était le drink favori — et peut-être l'invention — de <b>Richard William « Deadwood Dick » Clark</b>, figure du Far West qui côtoya Buffalo Bill et Calamity Jane. Malgré son nom, il n'appartient PAS à la famille des Daisy : c'est un Martini sucré et aromatisé.",
   note:"Le seul imposé avec de l'absinthe, et le seul avec du Noilly Prat. Quatre spiritueux, zéro jus."},
- {n:"Tampico", ing:["CAMPARI","BOUDIER Triple sec","Jus de citron","FEVER-TREE Tonic water"], base:"Campari", fam:"Highball amer", verre:"Highball", met:"Direct au verre ou shaker puis allongé",
+ {n:"Tampico", grp:"Amer", dose:[["CAMPARI","4 cl"],["BOUDIER Triple sec","3 cl"],["Jus de citron jaune","2 cl"],["FEVER-TREE Tonic water","top"]], alerte:"", tip:"Tonic et non soda : la quinine prolonge l'amertume du Campari.", ing:["CAMPARI","BOUDIER Triple sec","Jus de citron","FEVER-TREE Tonic water"], base:"Campari", fam:"Highball amer", verre:"Highball", met:"Direct au verre ou shaker puis allongé",
   hist:"<b>Création française</b>, années 1960 : attribué à <b>Rudolf Slavik</b>, barman de l'<b>hôtel George V</b> à Paris. Dans la lignée des amers italiens (Americano, Negroni), mais allongé au tonic. Un atout devant un jury français : c'est l'un des rares classiques de la liste né en France.",
   note:"Avec le Jasmine, l'un des deux seuls imposés dont la BASE est le Campari. Tonic et non soda : la quinine prolonge l'amertume."},
- {n:"Jasmine", ing:["ROKU Gin","BOUDIER Triple sec","CAMPARI","Jus de citron"], base:"Roku Gin", fam:"Sour amer", verre:"Coupe", met:"Shaker",
+ {n:"Jasmine", grp:"Gin", dose:[["ROKU Gin","5 cl"],["CAMPARI","1 cl"],["BOUDIER Triple sec","1 cl"],["Jus de citron jaune","2 cl"]], alerte:"", tip:"Campari très dosé bas : il domine vite.", ing:["ROKU Gin","BOUDIER Triple sec","CAMPARI","Jus de citron"], base:"Roku Gin", fam:"Sour amer", verre:"Coupe", met:"Shaker",
   hist:"<b>Paul Harrington</b>, au Townhouse Bar & Grill d'<b>Emeryville</b> (Californie), en <b>1993</b>. Il part du <b>Pegu Club</b>, y remplace l'angostura par du Campari et le citron vert par du citron jaune. Nommé d'après son ami <b>Matt Jasmin</b> — dont Harrington a mal orthographié le nom, avec un « e » de trop, avant de s'en apercevoir trop tard. Publié dans son livre de 1998.",
   note:"Souvent décrit comme un « Negroni sour ». Son ami aurait dit en goûtant : « tu viens d'inventer le jus de pamplemousse »."},
- {n:"New York Sour", ing:["WILD TURKEY (au choix)","Jus de citron","Sucre","Vin rouge"], base:"Wild Turkey", fam:"Sour", verre:"Rocks", met:"Shaker + float",
+ {n:"New York Sour", grp:"Whiskey américain", dose:[["WILD TURKEY","4 cl"],["Jus de citron jaune","2 cl"],["Sucre","1,5 cl"],["Vin rouge","top, en float"]], alerte:"", tip:"Le float se verse sur le dos de la cuiller.", ing:["WILD TURKEY (au choix)","Jus de citron","Sucre","Vin rouge"], base:"Wild Turkey", fam:"Sour", verre:"Rocks", met:"Shaker + float",
   hist:"Né à <b>Chicago</b> dans les années 1880, pas à New York. Les barmen y finissaient un whiskey sour d'un <b>« claret snap »</b> — un filet de vin rouge flotté en surface. Il a porté plusieurs noms avant de se fixer : Continental Sour, Southern Whiskey Sour, Claret Snap, Brunswick Sour.",
   note:"Le seul imposé avec un float, et le seul à contenir du vin. Verser lentement sur le dos de la cuiller."},
- {n:"Harvard", ing:["MERLET (au choix)","CARPANO (au choix)","Aromatic bitters"], base:"Merlet (cognac)", fam:"Old-Fashioned / Manhattan", verre:"Coupe", met:"Verre à mélange",
+ {n:"Harvard", grp:"Cognac", dose:[["MERLET","4,5 cl"],["CARPANO Classico","4,5 cl"],["Angostura","3 dashes"]], alerte:"", tip:"Parts égales, comme chez Kappeler (1895).", ing:["MERLET (au choix)","CARPANO (au choix)","Aromatic bitters"], base:"Merlet (cognac)", fam:"Old-Fashioned / Manhattan", verre:"Coupe", met:"Verre à mélange",
   hist:"Première trace chez <b>George J. Kappeler</b>, <i>Modern American Drinks</i>, <b>1895</b> : parts égales de brandy et de vermouth italien, sirop de gomme, angostura, allongé au seltz. Un Manhattan au cognac, nommé d'après l'université. <b>Pont en or</b> : Vermeire le donne aussi dans le livre au programme (2 traits d'angostura, 1 trait de sirop, 1/2 fine, 1/2 vermouth italien), cette fois sans seltz.",
   note:"Le seul imposé à base de cognac. Le citer en reliant Kappeler 1895 et Vermeire montre que tu as travaillé les deux annexes."},
 ];
+const IMP_GROUPES=["Gin","Whiskey américain","Rhum","Agave","Cognac","Amer"];
 const IMP_VERRES=["Coupe","Rocks","Highball"];
 function imposesQuestions(n){
   const qs=[];
@@ -1539,6 +1586,8 @@ function showView(id){
   if(id==="vf" && !quizStates.vf) startVF();
   if(id==="degust" && !quizStates.degust) startDegust();
   if(id==="memo") buildMemo();
+  if(id==="dossier") buildDossier();
+  if(id==="exam" && !examState) showExamSetup();
   if(id==="deg" && !quizStates.deg) startDeg();
   if(id==="chrono" && !quizStates.chrono) startChrono();
   if(id==="ponts" && !quizStates.ponts) startSocleQuiz();
@@ -2759,6 +2808,7 @@ const FICHES = [
  {t:"Les 13 cocktails imposés", html:`
   <p class="fiche-lead">Tirés au sort <b>juste avant</b> ton passage. Histoires vérifiées sur sources primaires quand elles existent — quelques recettes de la liste sont des déclinaisons modernes sans paternité établie, c'est signalé. Tous les produits sont déjà en place dans la station. Composition officielle de l'annexe #2 — la verrerie et la méthode proposées ici sont des <i>suggestions de travail</i> à valider au briefing.</p>
   <div class="fiche-grid">
+   ${IMP_GROUPES.map(g=>'<div class="fiche-block" style="grid-column:1/-1"><h4>'+g+'</h4>'+IMPOSES.filter(c=>c.grp===g).map(c=>'<p style="margin:10px 0 2px"><b style="color:var(--copper-2);font-size:1.05rem">'+c.n+'</b> — <span class="mini">'+c.verre+' · '+c.met+'</span></p><p style="margin:2px 0">'+c.dose.map(d=>d[0]+' <b>'+d[1]+'</b>').join(' · ')+'</p>'+(c.alerte?'<p class="mini" style="color:var(--campari);margin:2px 0">⚠ '+c.alerte+'</p>':'')+'<p class="mini" style="margin:2px 0 0">'+c.tip+'</p>').join('')+'</div>').join('')}
    ${IMPOSES.map(c=>'<div class="fiche-block"><h4>'+c.n+'</h4><ul><li>'+c.ing.map(i=>'<b>'+i+'</b>').join('</li><li>')+'</li><li class="mini">Base : '+c.base+' · Famille : '+c.fam+' · Verre suggéré : '+c.verre+' · '+c.met+'</li></ul><p style="margin:8px 0 0;font-size:.93rem">'+c.hist+'</p><p class="mini" style="margin:6px 0 0;font-size:.88rem;font-style:italic;opacity:.85">'+c.note+'</p></div>').join('')}
   </div>
   <p class="fiche-lead" style="margin-top:18px"><b>Les repères qui font gagner du temps sous pression.</b> Base Roku : Gin Fizz, Raspberry Mule, Yellow Daisy, Jasmine (4 sur 13). Base Wild Turkey : Boulevardier, Frisco Sour, New York Sour. Base Appleton : Mai Tai, Planter's Punch, Banana Daiquiri. Un seul cognac (Harvard), un seul mezcal (Mezcal Mule), un seul Campari en base (Tampico). Deux mules seulement, et elles ne prennent pas le même agrume.</p>`},
@@ -3161,6 +3211,362 @@ function renderSP(){
 
 
 
+
+/* =================== DOSSIER TDB — L'EXTRAIT DE VERMEIRE ===================
+   Index des recettes de l'extrait officiel. m = méthode (V verre à mélange,
+   S shaker, D direct). Proportions telles que données dans le livre. */
+const VERM = [
+ {n:"Absinthe à l'américaine (cocktail)", m:"S", r:"1 trait angostura · 3-4 traits sirop de sucre ou anisette · 1/2 verre absinthe · 1/2 verre eau", note:"Frapper jusqu'à ce que le shaker soit glacé, pelure de citron pressée dessus."},
+ {n:"Absinthe frappée (american absinthe)", m:"S", r:"1 verre d'absinthe · 3 fois ce volume d'eau · sirop ou anisette selon goût", note:"Passer dans un tumbler."},
+ {n:"Absinthe à la française", m:"D", r:"1 verre d'absinthe · sucre · eau versée lentement", note:"Sirop de sucre à la place du sucre = mominette. Grenadine = tomate ou purée."},
+ {n:"Absinthe suisse", m:"S", r:"1 blanc d'œuf · 1 cuillerée à café d'anisette · 1 verre d'absinthe · long trait de siphon", note:"Dans un verre à vin. « Le lendemain de la veille »."},
+ {n:"Angler", m:"V", r:"2 traits angostura · 2 traits orange bitter · 1/3 vantogrio (sirop non alcoolisé) · 2/3 gin", note:"Recette V. H. Himmelreich, Prague, 1921."},
+ {n:"Apple Jack", m:"V", r:"1-2 traits angostura · 2-3 traits sirop de sucre, grenadine ou curaçao · 1 verre d'Apple Jack Brandy", note:"Aussi appelé Jersey Lightning. Correspond au calvados en France."},
+ {n:"Bacardi", m:"S", r:"1/3 jus de limon · 2/3 Bacardi Ron · sirop ou grenadine selon goût", note:"Santiago de Cuba : le rhum y est distillé selon les principes du cognac."},
+ {n:"Bamboo", m:"V", r:"1 trait orange bitter · 1/2 sherry pale dry · 1/2 vermouth français", note:"Aussi appelé « Reform Cocktail », très populaire chez les Anglais aux Indes."},
+ {n:"Bennett", m:"S", r:"2 traits angostura · 1/3 jus de limon frais · 2/3 Old Tom gin", note:"Du Chili, nommé d'après un grand propriétaire foncier multimillionnaire."},
+ {n:"Bijou", m:"V", r:"1 trait orange bitter · 1/3 Plymouth gin · 1/3 vermouth italien · 1/3 chartreuse verte", note:"Olive ou cerise."},
+ {n:"Blackthorn n°1", m:"V", r:"3 traits absinthe · 3 traits angostura · 1/2 vermouth français · 1/2 Irish whisky", note:"Recette Harry Johnson, de New-Orléans."},
+ {n:"Blackthorn n°2", m:"V", r:"1 trait orange bitter · 1 trait angostura · 1/3 sloe gin · 1/3 vermouth français · 1/3 vermouth italien", note:"Recette Cocktail Boothby, de San Francisco."},
+ {n:"Blenton", m:"V", r:"1 trait angostura · 1/2 Plymouth gin · 1/2 vermouth français", note:"Très en vogue dans la flotte royale de l'Empire britannique."},
+ {n:"Bloodhound", m:"S", r:"6 belles framboises · 1 cuillerée à café de marasquin · 1/3 dry gin · 1/3 vermouth français · 1/3 vermouth italien", note:"Passer avec soin."},
+ {n:"Boomerang", m:"V", r:"2 traits marasquin · 1 trait angostura · 1/3 gin · 1/3 vermouth français · 1/3 vermouth italien", note:"Cerise, pelure de citron."},
+ {n:"Brandy (plain cocktail)", m:"V/S", r:"1-2 traits angostura · 3 traits sirop de sucre ou curaçao brun · 1 verre de brandy", note:"Les « plain » ne contiennent qu'une seule liqueur de base : brandy, gin, whisky, rhum, sherry, vermouth, rye, marc, schiedam, aquavit, vodka…"},
+ {n:"Brazil", m:"V", r:"Un Bamboo + 2 traits sirop de sucre + 2 traits absinthe", note:""},
+ {n:"Bronx", m:"S", r:"Jus d'un quart d'orange · 1/3 dry gin · 1/3 vermouth français · 1/3 vermouth italien", note:"Le parc et le jardin zoologique de New-York."},
+ {n:"Champagne", m:"D", r:"Sucre imbibé d'angostura · morceau de glace · essence de pelure de citron · champagne bien froid", note:"Six verres par bouteille. Parfois un filet de fine, une fraise ou une demi-pêche."},
+ {n:"Chicago", m:"V", r:"Comme le brandy cocktail, puis un peu de champagne pétillant", note:"« Fancy Brandy Cocktail ». Bord du verre mouillé au citron et trempé dans le sucre en poudre."},
+ {n:"Chinese", m:"V", r:"1-2 traits angostura · 3 traits marasquin · 3 traits curaçao brun · 3 traits grenadine · 1 verre de rhum de la Jamaïque", note:""},
+ {n:"Chocolat", m:"S", r:"1 jaune d'œuf · 1 cuillerée à café de poudre de chocolat sucré · 1/2 porto rouge · 1/2 chartreuse jaune", note:"Spécialement connue au Brésil. Verre à vin."},
+ {n:"Clover Club", m:"S", r:"1 blanc d'œuf · jus d'un petit lime (ou 1/2 citron) · 1 cuillerée à café de sirop de framboises ou grenadine · 1/2 gin · 1/2 vermouth français", note:"Introduit à Londres par Vermeire au R.A.C. en 1915. Royal Clover Club = le jaune au lieu du blanc. Clover Leaf = avec menthe fraîche."},
+ {n:"Club", m:"V", r:"1-2 traits angostura · 3 traits grenadine · 1 verre de scotch whisky", note:""},
+ {n:"Coffee", m:"S", r:"1 jaune d'œuf · 1 cuillerée à café de sucre fin ou sirop · 1/2 fine · 1/2 porto rouge", note:"Aussi appelé « Law's Cocktail ». Muscade râpée."},
+ {n:"Cooperstown", m:"S", r:"Un dry martini avec quelques feuilles de menthe fraîche", note:"Boisson des cowboys américains, introduite à Londres par Vermeire grâce à Lord Victor Paget."},
+ {n:"Cornwell", m:"S", r:"1/3 Séville orange bitter · 2/3 gordon dry gin", note:"Pelure d'olive, pelure de citron pressée."},
+ {n:"Coronation", m:"V", r:"1-2 traits menthe verte · 1-2 traits peach bitters · 3 traits curaçao · 1 verre de fine", note:""},
+ {n:"Daïquiri", m:"S", r:"1/3 jus frais de limon · 2/3 Bacardi Ron · sirop de framboises ou grenadine", note:"Daïquiri est le nom d'une mine de fer située à Cuba."},
+ {n:"Deep Sea", m:"S", r:"1 trait orange bitter · 1 trait absinthe · 1/2 Old Tom gin · 1/2 vermouth français", note:"Olive."},
+ {n:"Dempsey", m:"S", r:"3 traits absinthe · 1 cuillerée à café de grenadine · 1/3 gin · 2/3 calvados", note:"Recette « Guido », de Deauville-Monte Carlo, 1921."},
+ {n:"Depth Bomb", m:"S", r:"1 cuillerée à café de grenadine · 2 cuillerées de jus de citron · 1/2 fine · 1/2 calvados", note:"Cocktail des aviateurs anglais de la guerre de 1914."},
+ {n:"Derby", m:"V", r:"2 traits angostura · 2 traits curaçao brun · 2 traits marasquin ou sirop d'ananas · 1 verre de fine · un peu de champagne", note:"En supprimant le champagne on obtient l'« East India »."},
+ {n:"Devil", m:"S", r:"1/2 fine · 1/2 crème de menthe verte", note:"Une pincée de poivre de Cayenne."},
+ {n:"Diabolo", m:"V", r:"1-2 traits angostura · 3 traits curaçao · 1/2 fine · 1/2 vermouth français", note:"En France : « Young Man ». Avec du whisky à la place de la fine : « Oldman »."},
+ {n:"Diki-Diki", m:"S", r:"1/2 calvados · 1/4 caloric punch · 1/4 jus de pamplemousse", note:"Diki-Diki, monarque de l'île d'Ubian (Philippines Sud) : 23 livres à trente-sept ans, 32 inches. Mort en 1922."},
+ {n:"Diplomate", m:"V", r:"2 traits marasquin · 1/3 vermouth italien · 2/3 vermouth français", note:"Très connue dans les services diplomatiques."},
+ {n:"Doctor", m:"S", r:"1/4 jus de citron · 1/4 jus d'orange · 1/2 caloric punch", note:"Cerise selon goût."},
+ {n:"Dubonnet", m:"V", r:"Doux : 2/3 Dubonnet, 1/3 gin · Demi-sec : moitié-moitié · Sec : 1/3 Dubonnet, 2/3 gin", note:"Pelure d'orange. Version San Francisco : 3 traits orange bitter, 1/3 sherry pale dry, 2/3 Dubonnet."},
+ {n:"Dubonnet spécial (« Robert's Special »)", m:"S", r:"1 trait orange bitter · 1 trait angostura · 1/3 dry pale sherry warri · 1/3 vermouth Chappaz · 1/3 Dubonnet", note:"Créé par Vermeire après la loi Vandervelde de 1919, qui interdisait en Belgique la vente publique de spiritueux de plus de 18°."},
+ {n:"Fairbank", m:"V", r:"2 traits crème de noyau rose · 2 traits orange bitter · 1/2 gin · 1/2 vermouth français", note:"Cerise, pelure d'orange."},
+ {n:"Fernet", m:"V", r:"1 trait angostura · 2 traits sirop de sucre · 1/2 Fernet Branca · 1/2 fine, rye, whisky ou gin", note:"Drink aimé des Canadiens de Toronto."},
+ {n:"Fioupe", m:"V", r:"1 cuillerée à café de bénédictine · 1/2 fine · 1/2 cinzano", note:"M. Fioupe, agent régional du vermouth Cinzano sur la côte d'Azur."},
+ {n:"Gibson", m:"V", r:"Un dry Martini avec un petit oignon blanc", note:"Très connu au Japon, principalement à Yokohama."},
+ {n:"Glad Eye", m:"S", r:"1/3 pipermenthe Get · 2/3 absinthe", note:""},
+ {n:"Gloom Raiser", m:"V", r:"2 traits grenadine · 2 traits absinthe · 2/3 dry gin · 1/3 vermouth NOILLY PRAT", note:"Créé par Vermeire au Royal Automobile Club de Londres en 1915. Les officiers canadiens et australiens en étaient friands."},
+ {n:"Handicap", m:"V", r:"1/3 GRAND-MARNIER · 2/3 verre à vin de Fruchtschaumwein", note:"Le Fruchtschaumwein est une limonade gazeuse aux fruits, très bue à Dresde. Tranche de citron."},
+ {n:"Harvard", m:"V", r:"2 traits angostura · 1 trait sirop de sucre · 1/2 fine · 1/2 vermouth italien", note:"Pelure de citron pressée. Figure aussi dans la liste des cocktails imposés du concours."},
+ {n:"H.P.W.", m:"S", r:"1/3 gin · 2/3 vermouth italien · 1 tranche d'orange", note:"Créé par Charlie, barman du Racket Club de New-York, pour Harry Payne Whitney."},
+ {n:"Houla-Houla", m:"S", r:"2/3 gin · 1/3 jus d'orange · 1 cuillerée à café de curaçao", note:"Origine : les îles Hawaï."},
+ {n:"Inca", m:"V", r:"2 traits sirop d'orgeat · 2 traits orange bitter · 1/3 Plymouth gin · 1/3 vermouth français · 1/3 sherry dry pale", note:"Recette Cliff Harrison, Londres. Morceau d'ananas, pelure d'orange."},
+ {n:"Jack Rose", m:"S", r:"1/3 jus de lime frais · 1 cuillerée à café de sirop de framboises ou grenadine · 2/3 apple Jack Brandy", note:"Le lime peut être remplacé par du citron."},
+ {n:"Klondyke", m:"V", r:"3 traits orange bitter · 1/2 vermouth français · 1/2 apple Jack Brandy", note:"Petite olive verte. En France, l'apple jack = calvados."},
+ {n:"London", m:"V", r:"2 traits orange bitter · 2 traits sirop de gomme · 2 traits absinthe · 1 verre de London dry gin", note:"Olive. Préparé au Plymouth gin il devient l'« Olivette »."},
+ {n:"Luigi", m:"S", r:"1 cuillerée à café de grenadine · 1 cuillerée à café de cointreau · jus d'une demi-mandarine · 1/2 gin · 1/2 vermouth français", note:"Création de Luigi Naintré, restaurateur de Londres (Romano's, Ciro's, Criterion, Embassy Club) — Vermeire fut six ans son Head Barman."},
+ {n:"Manhattan", m:"V", r:"1-2 traits angostura · 2-3 traits sirop de sucre ou curaçao · 1/2 rye whisky · 1/4 vermouth italien · 1/4 vermouth français", note:"Demi-sec. Sec = 1/2 rye + 1/2 vermouth français. Doux = 1/2 rye + 1/2 vermouth italien. La Gilde des barmen d'Angleterre le fait sans bitter ni sirop. Manhattan = l'île sur laquelle New-York est bâtie."},
+ {n:"Dry Martini (recette de Vermeire)", m:"V", r:"1 trait orange bitter · 2 traits curaçao brun · 1/2 Gordon's dry gin · 1/2 vermouth NOILLY PRAT", note:"Olive, pelure de citron. Medium = 1/4 Noilly + 1/4 Martini ou Cinzano. Sweet = vermouth italien. À Londres, sans aucun bitter."},
+ {n:"Martinez", m:"S/V", r:"2 traits orange bitter · 2 traits marasquin · 1/2 dry gin · 1/2 vermouth Noilly Prat (sec) ou italien (doux)", note:"Recette Pedro Chicote, du Bar Pidoux à Madrid. Martinez, l'inventeur présumé du Martini, employait du Noilly Prat."},
+ {n:"May Fair", m:"S", r:"1/2 Gordon's dry gin · 1/2 jus d'orange frais · 3-4 traits de sirop d'abricots parfumé au sirop de clous de girofle", note:"Lancé par Vermeire à l'Embassy de Londres en 1921. Mayfair = la foire de mai, tenue sous Charles II."},
+ {n:"Meehoulong", m:"V", r:"1 trait orange bitter · 1/2 sloe gin · 1/4 vermouth français · 1/4 vermouth italien", note:"Mot chinois signifiant « diable qui mange le feu »."},
+ {n:"Mikado", m:"V", r:"2 traits angostura · 2 traits noyau · 2 traits sirop d'orgeat · 2 traits curaçao · 1 verre de fine", note:"Aussi appelé « Japanese »."},
+ {n:"Millionnaire", m:"S", r:"1 blanc d'œuf · 2 traits curaçao · 1/3 grenadine · 2/3 rye whisky", note:"Né au Ritz Hotel. Version de « Frank », du Ritz de Paris : 1/2 blanc d'œuf, 1 trait d'anis Pernod fils, 1 trait de grenadine, 1 verre de rye."},
+ {n:"Monkey's Gland", m:"S", r:"1 trait absinthe · 1 cuillerée à café de grenadine · 1/2 jus d'orange frais · 1/2 Gordon's dry gin", note:"Création de Harry McElhone au Ciro's de Londres, en 1920."},
+ {n:"Morning", m:"V", r:"2 traits orange bitter · 2 traits absinthe · 2 traits curaçao · 2 traits marasquin · 1/2 fine · 1/2 vermouth français", note:""},
+ {n:"Nick's Own", m:"V", r:"1 trait angostura · 1 trait absinthe · 1/2 fine · 1/2 vermouth italien", note:"Recette A. Nicholls, Londres, 1922."},
+ {n:"Old Fashioned", m:"D", r:"Sucre écrasé imbibé d'angostura · forte dose de rye ou bourbon · éventuellement un morceau de glace", note:"« Vieille mode » : préparé ET bu dans le même verre, à l'époque où le shaker n'existait pas. Un chaser d'eau glacée suivait."},
+ {n:"Orange Blossom", m:"S", r:"1/2 gin · 1/2 jus d'orange frais", note:"Trait de grenadine si on le veut doux. Recette Malloy, de Pittsburg : ajouter un trait d'orange bitter."},
+ {n:"Paradise (Londres)", m:"S", r:"1 trait jus de citron · 1/4 jus d'orange · 1/4 apricot brandy · 1/2 Booth's dry gin", note:"Recette Bartenders Guild."},
+ {n:"Paradise (Madrid)", m:"S", r:"6 traits curaçao · jus d'une demi-orange · 1/2 fine · 1/2 dry gin", note:"Recette Pedro Chicote."},
+ {n:"Paradise (Paris)", m:"S", r:"1/4 jus d'orange frais · 1/4 apricot brandy · 1/2 gin", note:"Recette Frank Meyer, Ritz Bar."},
+ {n:"Eh ! Le Paradis du Zoute", m:"S", r:"1/3 jus d'orange frais · 1/3 apry MARIE BRIZARD · 1/3 Gordon's dry gin", note:"Recette de Vermeire lui-même."},
+ {n:"Ping-Pong", m:"V", r:"Un Manhattan avec du sloe gin à la place du rye ou bourbon", note:"Recette Boothby, de San Francisco."},
+ {n:"Princess Mary", m:"S", r:"1/3 dry gin · 1/3 crème de cacao · 1/3 crème fraîche", note:"Recette Harry McElhone pour le mariage de la princesse Mary avec Lord Lascelles, février 1922."},
+ {n:"Queen's", m:"S", r:"1 tranche d'orange et 1 tranche d'ananas frais écrasées · 1/3 gin · 1/3 vermouth français · 1/3 vermouth italien", note:"Recette Harry Craddock, du Savoy Hotel, Londres."},
+ {n:"Rob Roy", m:"V", r:"2-3 traits sirop de sucre ou curaçao · 1-2 traits angostura · 1/2 scotch whisky · 1/2 vermouth français", note:"Cerise, pelure de citron."},
+ {n:"Rose (Johnie)", m:"V", r:"1 cuillerée à café de sirop de groseilles · 1/3 kirsch · 2/3 vermouth français", note:"Créateur incontestable : « Johnie », du Chatham Bar de Paris. Cerise au marasquin."},
+ {n:"Rose (Sid Knight)", m:"V", r:"3 traits grenadine · 1/2 dry gin · 1/4 vermouth français · 1/4 Dubonnet", note:"Sid Knight, vétéran des barmen de Londres (Alhambra, puis Cecil Hotel avec Vermeire)."},
+ {n:"Rose Cocktail belge", m:"V", r:"1/3 Regal Schmidt · 1/3 dry sherry Rossel · 1/3 vermouth français Chappaz · 1 cuillerée à café de cassis de Dijon", note:"Créé par Vermeire après la suppression de la vente des alcools en Belgique."},
+ {n:"Royal", m:"V", r:"1 trait orange bitter · 1 trait angostura · 2/3 gin · 1/3 Dubonnet", note:"Recette Royal Hôtel Dieppe, 1921."},
+ {n:"San Martin", m:"S", r:"1 cuillerée à café de chartreuse jaune · 1/2 gin · 1/2 vermouth italien (Cinzano de préférence)", note:"Cocktail de l'Amérique du Sud."},
+ {n:"Sensation", m:"S", r:"3 traits marasquin · 3 tiges de menthe fraîche · 1/3 verre de jus de citron · 2/3 verre de dry gin", note:"Recette Jimmy Berkelmans, Paris."},
+ {n:"Side-Car", m:"S", r:"1/3 jus de citron frais · 1/3 cointreau · 1/3 fine", note:"Populaire dans le midi de la France, introduit à Londres par MacGarry, du Buck's Club. Avec du dry gin à la place de la fine : WHITE LADY."},
+ {n:"Silver", m:"V", r:"3-4 traits marasquin · 2 traits orange bitter · 1/2 gin · 1/2 vermouth français", note:"Avec du Burnett gin et un trait d'absinthe : TUXEDO."},
+ {n:"Silver Bullet", m:"S", r:"1/2 gin · 1/4 kummel · 1/4 jus de citron", note:""},
+ {n:"Silver Jubilee", m:"S", r:"1/2 Booth's dry gin · 1/4 crème fraîche · 1/4 liqueur crème de banane", note:"Recette W. Tarling."},
+ {n:"Silver Streak", m:"S", r:"1/2 kummel · 1/2 dry gin", note:"Introduit par Vermeire au Royal Automobile Club de Londres en 1915."},
+ {n:"Sloppy Joe", m:"S", r:"1/2 gin · 1/2 jus d'ananas frais · sucre selon goût", note:""},
+ {n:"Soixante-Quinze", m:"S", r:"2 traits grenadine · 1 cuillerée à café de jus de citron · 1/3 calvados · 2/3 dry gin", note:"Très populaire au Henry's Bar de Paris pendant la guerre 1914-1918. Le nom rappelle le canon de campagne."},
+ {n:"Spanish (Spanish Delight)", m:"V", r:"4 traits angostura · 1 verre de vermouth italien", note:"Essence de 3-4 pelures de citron pressées dans le verre. À Madrid, xérès solera à la place du vermouth."},
+ {n:"Star", m:"V", r:"Un Klondyke avec deux traits de curaçao orange", note:""},
+ {n:"Stinger", m:"S", r:"1/3 pipermenthe blanche + 2/3 fine (recette de Vermeire)", note:"Harry McElhone : 2/3 pipermenthe, 1/3 fine. Gilde anglaise : moitié-moitié."},
+ {n:"Sunshine", m:"S", r:"1 cuillerée à café de sirop de gomme · jus d'un quart de citron · 1/3 fine · 2/3 rhum Kinloch's liquid Sunshine", note:"À l'Olympia Club de San Francisco, au verre à mélange : 2 traits orange bitter, 1/3 Old Tom gin, 1/3 vermouth français, 1/3 vermouth italien."},
+ {n:"Thistle", m:"V", r:"2 traits angostura · 1/3 vermouth italien · 2/3 scotch whisky", note:"Aussi appelé « York Cocktail »."},
+ {n:"Tipperary", m:"S", r:"1 cuillerée à café de jus d'orange · 1 cuillerée à café de grenadine · 2 tiges de menthe fraîche · 1/3 vermouth italien · 2/3 gin", note:"Plus sec : vermouth français à la place de l'italien."},
+ {n:"Trinity", m:"V", r:"1/3 gin · 1/3 vermouth français · 1/3 vermouth italien", note:""},
+ {n:"Trocadéro", m:"V", r:"1 trait orange bitter · 1 trait grenadine · 1/2 vermouth français · 1/2 vermouth italien", note:"Recette du Trocadéro, à Brême, 1910."},
+ {n:"Tuxedo", m:"V", r:"Un Silver Cocktail au Burnett gin, avec un trait d'absinthe", note:""},
+ {n:"Vanderbilt", m:"V", r:"3 traits sirop de gomme · 2 traits angostura · 1/2 fine · 1/2 cherry brandy Rocher", note:"Créé par « Guido » au Kursaal d'Ostende en 1912, lors de la visite du colonel Cornelius Vanderbilt — qui périra sur le Lusitania en mai 1915."},
+ {n:"Velocity", m:"S", r:"1 tranche d'orange · 2/3 gin · 1/3 vermouth italien", note:"Recette major Patterson, Cheltenham."},
+ {n:"Ward Eight", m:"S", r:"1 cuillerée à café de grenadine · 1/4 jus d'orange · 1/4 jus de citron · 1/2 rye whisky", note:"Boston compte huit districts : Ward Eight = 8e district."},
+ {n:"Washington", m:"V", r:"2 traits angostura · 2 traits sirop de sucre · 1/3 fine · 2/3 vermouth français", note:""},
+ {n:"Wax", m:"V", r:"3 traits orange bitter · 1 verre de Plymouth gin", note:"Très connu à Vancouver. Version New-York, au shaker : 1 blanc d'œuf, 1 cuillerée de sirop de gomme, 1/2 gin et 1/2 absinthe (ou 2/3-1/3)."},
+ {n:"Whip", m:"S", r:"1/4 absinthe Pernod · 1/4 vermouth français · 1/4 curaçao · 1/4 fine", note:"Connu en Égypte sous le nom de KURBAG, répandu chez les officiers de la flotte anglaise. Recette transmise par Sir Percival Philips."},
+ {n:"White", m:"V", r:"2 traits orange bitter · 2 traits anisette · 1 verre de dry gin", note:"Recette Harry Brecker, Mascotte Bar, Anvers, 1913. En ajoutant l'anisette APRÈS le passage au verre : « Fil de fer Cocktail »."},
+ {n:"Whizz-Bang", m:"V", r:"2 traits orange bitter · 2 traits grenadine · 2 traits absinthe · 1/3 vermouth français · 2/3 scotch whisky", note:"Créé par Tommy Burton, ancien élève de Vermeire, au Sports Club de Londres, 1920."},
+ {n:"X.Y.Z.", m:"S", r:"Un Bronx au jus de citron, adouci d'un peu de sirop de sucre", note:""},
+ {n:"Yellow Parrot", m:"S", r:"1/3 absinthe · 1/3 chartreuse jaune · 1/3 apricot brandy", note:"Très apprécié à Boston."},
+ {n:"Za-Za", m:"V", r:"1 trait angostura · 1/2 gin · 1/2 Dubonnet", note:"Avant la guerre 1914-1918 : 2 traits de pepson bitter, 1/3 dry gin, 2/3 vermouth italien, avec une cerise."},
+];
+const VERM_DERIV = "Cooperstown (menthe) · Fourth Degree (médium + bon trait d'absinthe) · Gibson (petit oignon) · Gloom Raiser · H.P.W. · Mac Lane ou Perfect (médium + pelure d'orange, selon goût un trait d'absinthe) · R.A.C. (médium + 1 trait grenadine, 1 trait orange bitter, cerise, pelure d'orange) · Rosington (2/3 gin, 1/3 vermouth italien, pelure d'orange frappée) · Rosslyn (1 trait grenadine, 2/3 gin, 1/3 vermouth français — recette Frank Meyer, Ritz Bar) · Third Degree (Martini sec + bon trait d'absinthe) · Turf (2 traits orange bitter, 2 traits marasquin, 2 traits absinthe, 1/2 Plymouth gin, 1/2 vermouth français — recette Harry Johnson ; olive, et surtout ne presser aucune pelure) · Yellow Rattler (dry martini + petits oignons hachés frappés en même temps).";
+
+let dossierBuilt=false;
+function buildDossier(){
+  if(dossierBuilt) return;
+  const el=document.getElementById("dossier-body");
+  const met={V:"verre à mélange",S:"shaker","S/V":"shaker ou verre à mélange","V/S":"verre à mélange ou shaker",D:"direct au verre"};
+  el.innerHTML=`
+<p class="lead">Rien que le dossier officiel : les cocktails de l'annexe #2, la verrerie de l'annexe #3, et l'extrait du livre ancien — préface, verres, matériel, termes, concours, et l'index de ses 108 recettes. Le QCM porte sur <b>l'ensemble</b> du contenu de l'extrait.</p>
+
+<h3>Annexe #2 — les 13 cocktails classiques</h3>
+<p class="lead">Composition officielle, telle qu'elle figure au dossier. Le tirage au sort a lieu juste avant le passage ; tous les produits sont en place dans la station.</p>
+<table>${IMPOSES.map(c=>'<tr><td>'+c.n+'</td><td>'+c.ing.join(' · ')+'</td></tr>').join('')}</table>
+<p><b>Mentions du dossier :</b> les jus d'agrumes et le blanc d'œuf mis à disposition sont des produits frais. Les sirops, bitters et vins pourront être dégustés sur place lors du briefing. La mention « (au choix) » signifie que plusieurs références sont mises à disposition par les fournisseurs officiels.</p>
+
+<h3>Annexe #3 — la verrerie</h3>
+<table>
+<tr><td>Coupe</td><td>220 ml — hauteur 174 mm</td></tr>
+<tr><td>Rocks</td><td>295 ml — hauteur 77 mm</td></tr>
+<tr><td>Highball</td><td>330 ml — hauteur 146 mm</td></tr>
+</table>
+<p>La verrerie du cocktail imposé doit être choisie dans cette liste.</p>
+
+<h3>L'extrait du livre ancien</h3>
+<h4>Identité</h4>
+<p><b>« L'Art du Cocktail »</b>, par <b>Robert Vermeire</b> (« Robert's »). Imprimerie de l'Office de Publicité, <b>16, rue Marcq, Bruxelles</b>. Traduction revue de <b>« Cocktails: How to Mix Them »</b>, publié à <b>Londres en 1922</b> par la firme <b>Herbert Jenkins &amp; C°</b> : <b>onze éditions, 68 317 exemplaires</b>. Préface republiée dans la revue mensuelle <b>Querschnitt</b>, de Berlin, en <b>1925</b>. Édition en langue japonaise assurée par la firme <b>K. Katayama</b>, de Nishinomiya, en <b>1930</b>.</p>
+<h4>Préface — les quatre origines du mot</h4>
+<ol>
+<li>Un historien américain : mot aztèque <b>XOCTI</b>, venu d'<b>OXOCHITI</b>, nom d'une jeune fille noble ayant offert la boisson à un roi. Les Aztèques vivaient dans la vallée de Mexico depuis <b>1325</b> et dominèrent le pays jusqu'à l'arrivée des Espagnols en <b>1520</b>.</li>
+<li><b>Thakeray</b>, romancier anglais (<b>1811-1863</b>), critique des combats de coqs et des beuveries : le dernier verre avant le départ, « <i>to the cocks tail</i> ».</li>
+<li>Une <b>femme de lettres française</b> : mixture de plusieurs liqueurs secouées à la glace, aux teintes diverses comme la queue du coq.</li>
+<li><b>La version que Vermeire privilégie</b> : vers <b>1776</b>, <b>Flanagan</b>, tenancier d'une auberge près de New-York — <b>Elmsford</b> pour les uns, <b>Yorktown</b> pour les autres — possède un coq de combat, <b>« Maître Chante-Clair »</b>, qui disparaît. Il jure de donner la main de sa fille <b>Betsy</b> à qui le lui ramènera vivant. Un officier de l'armée de l'Indépendance le rapporte, mais l'animal a perdu sa queue. Betsy, troublée par la vue de son futur époux, se trompe de bouteilles en servant les convives : le mélange est baptisé sur-le-champ <i>Cocks tail</i>.</li>
+</ol>
+<p>Vermeire ajoute que le cocktail fut ainsi diffusé dans l'armée américaine, puis partout. Il reconnaît que l'abus en est nuisible — un stimulant qui agit « comme un coup de fouet » — et conclut : <b>« Never abuse a good thing »</b>.</p>
+<h4>Les verres</h4>
+<ul>
+<li><b>N° 1 — verre à cocktail</b> : rempli à <b>un demi-centimètre du bord</b>. Rempli de moitié il sert de verre à liqueur ou à pousse-café ; entièrement rempli de glace pilée, il sert aux liqueurs frappées.</li>
+<li><b>N° 2 — verre à porto</b> : rempli aux <b>deux tiers</b>.</li>
+<li><b>N° 3 — verre à sherry, forme flûte</b> : aux <b>deux tiers</b>. Convient aussi aux apéritifs secs — vermouth, quinquina, amer.</li>
+<li><b>N° 4 — verre tulipe, deux grandeurs</b> : le moyen pour les vins, l'eau minérale, les sours, crustas, juleps ; le grand pour tous les longs drinks, et pour le champagne à condition de ne le remplir qu'à moitié.</li>
+<li><b>N° 5 — tumbler, trois dimensions</b> : petit pour les flips, les jus de fruits, le champagne cocktail ; moyen pour les whisky et brandy soda, les apéritifs français à l'eau, les fizzes, collins, toddies ; grand pour les longs drinks — bières anglaises, cobblers, coolers, squashes, limonades.</li>
+</ul>
+<p><b>Insistance de l'auteur : ne jamais remplir les verres jusqu'au bord</b>, par mesure de propreté et pour la facilité du service. Et <b>six verres par bouteille de champagne</b>.</p>
+<h4>Le cocktail « chez soi » — les 8 bouteilles</h4>
+<p>1. dry gin de première qualité · 2. fine champagne de choix · 3. scotch whisky de marque · 4. vermouth français · 5. vermouth italien · 6. grenadine ou framboise · 7. Cointreau ou curaçao brun · 8. une petite bouteille d'angostura. <i>Un seul conseil : impossible de faire un bon cocktail avec de mauvaises liqueurs.</i></p>
+<h4>Le nécessaire indispensable — 13 objets</h4>
+<p>1. un verre à mélange très solide · 2. un <b>shaker</b> : deux timbales en argent qui s'adaptent l'une dans l'autre, ou une timbale à couvercle contenant la passoire — <i>ce dernier est jugé très peu pratique</i> · 3. une petite pelle à glace (ice scoop) · 4. une longue cuiller · 5. une cuiller-pilon · 6. une passoire à ressort · 7. <b>quatre à six flacons stilligouttes</b> · 8. un presse-citron · 9. un pic à glace · 10. un tire-bouchon avec ouvre-bouteilles · 11. un couteau à fruits · 12. une râpe à muscade · 13. une cuiller et fourchette à fruits.<br>
+<b>Épices :</b> sel, poivre en grains, tabasco, poivre de Cayenne, muscade, cannelle, clous de girofle, sauce Worcestershire, vinaigre, ketchup à la tomate — ainsi que des œufs, du lait et tous les fruits de saison.</p>
+<h4>Les termes usuels</h4>
+<ul>
+<li><b>REMUER</b> (stir up) — verre à mélange rempli à moitié de glace, <b>en morceaux de préférence, la glace pilée fondant trop vite</b> ; on remue à la longue cuiller puis on transvase à la passoire.</li>
+<li><b>FRAPPER</b> (shake) — timbale remplie à moitié de glace en morceaux, on adapte le couvercle et on secoue fortement.</li>
+<li><b>PASSER</b> (strain) — transvaser les liqueurs mélangées par une passoire.</li>
+<li><b>PRESSER</b> (squeeze) — enlever le jus d'un fruit ; ou presser entre les doigts une pelure de citron, d'orange ou de pamplemousse au-dessus du verre pour en extraire l'essence.</li>
+<li><b>TRAIT</b> (dash) ou tombée — verser une ou plusieurs gouttes d'un flacon stilligouttes.</li>
+</ul>
+<h4>Concours international de cocktails du « Daily Mail » — Paris, 1<sup>er</sup> mars 1937</h4>
+<p><b>1600</b> barmen professionnels et amateurs, dames et messieurs. <b>Trois prix et quinze prix de consolation</b> ; le jury n'a retenu que <b>25 recettes</b>. <b>L'auteur est le seul concurrent à avoir remporté deux prix.</b></p>
+<table>
+<tr><td>Lizzie's Own</td><td>shaker — 1/2 Gordon's dry gin · 1/4 Courvoisier trois étoiles · 1/4 curaçao brun Fockink. Verre à cocktail, pelure de citron pressée dessus. <b>15<sup>e</sup> et 17<sup>e</sup> prix.</b></td></tr>
+<tr><td>Rikiki</td><td>shaker — 1/3 armagnac · 1/3 calvados du Bon Roy d'Yvetot · 1/3 mandarine Candac. Passer dans un verre à cocktail.</td></tr>
+</table>
+<h4>Les dérivés du Martini listés par l'auteur</h4>
+<p>${VERM_DERIV}</p>
+
+<h3>Index des recettes de l'extrait</h3>
+<p class="lead">${VERM.length} entrées, dans l'ordre du livre. Méthode : V = verre à mélange, S = shaker, D = direct au verre.</p>
+<table>${VERM.map(c=>'<tr><td>'+c.n+'<br><span style="font-weight:400;opacity:.6;font-size:.85em">'+(met[c.m]||c.m)+'</span></td><td>'+c.r+(c.note?'<br><i style="opacity:.8">'+c.note+'</i>':'')+'</td></tr>').join('')}</table>
+
+<h3>Les ponts entre le livre et les partenaires</h3>
+<ul>
+<li><b>GRAND MARNIER</b> → <b>Handicap</b> : 1/3 Grand-Marnier, 2/3 Fruchtschaumwein.</li>
+<li><b>MARIE BRIZARD</b> → <b>Eh ! Le Paradis du Zoute</b>, recette de Vermeire : 1/3 jus d'orange, 1/3 apry Marie Brizard, 1/3 Gordon's.</li>
+<li><b>NOILLY PRAT</b> → le <b>Dry Martini</b> personnel de l'auteur, le <b>Gloom Raiser</b>, et le <b>Martinez</b> (Vermeire note que Martinez employait toujours du Noilly Prat).</li>
+<li><b>BÉNÉDICTINE</b> → <b>Fioupe</b> : une cuillerée à café, avec fine et cinzano.</li>
+<li><b>HARVARD</b> → présent dans le livre <b>et</b> dans la liste des 13 cocktails imposés : le pont le plus direct entre les deux annexes.</li>
+</ul>
+`;
+  dossierBuilt=true;
+}
+
+
+/* =================== MODE EXAMEN =================== */
+/* Périmètre strict : marques partenaires + 13 cocktails imposés.
+   Exclut le socle des 36, le règlement du concours et le livre. */
+const EXAM_CATS_FLASH=["Non alcool","Apéritifs","Eaux-de-vie","Liqueurs","Transversal"];
+const EXAM_FORMATS=[
+ {k:"court",  lab:"Sprint",   n:15, sec:300,  d:"15 questions · 5 min"},
+ {k:"moyen",  lab:"Standard", n:30, sec:720,  d:"30 questions · 12 min"},
+ {k:"long",   lab:"Marathon", n:50, sec:1500, d:"50 questions · 25 min"},
+];
+/* Un mot-clé de ces listes dans l'énoncé = question hors périmètre */
+/* Hors périmètre : le règlement de la finale et la culture générale du bar.
+   Le livre de Vermeire, lui, compte pour 20 % du QCM : il est DANS le périmètre. */
+const EXAM_EXCLURE=/coefficient|épreuve écrite|épreuve sensorielle|épreuve pratique|le jury|finaliste|briefing|bastille|pre-batch|rétro-assemblage|combien de verres|temps de passage|tirage au sort|quelle part du qcm|combien de questions compte|se déroulent|mauvaise réponse|équipe de 3|contenance du verre|où se tient la finale|que peut-on retirer|quantité de pre-batch|prohibition|jerry thomas|harry johnson|ada coleman|le tiki|bradsell|espresso martini|iba a été fondée|association des barmen|torquay|première liste officielle|quelle unité l'iba|phylloxéra|dans l'ue|minimum légal européen|liqueur de cerise|crème de cassis|vieillissement minimum|degré minimum d'un gin|london gin|sucrage maximum|comptes d'âge|crus l'appellation|fine champagne|différence de distillation|tequila reposado vieillit|mixto|vermouth est légalement|entre un sour et un fizz|dry shake|throwing|swizzle|quelle passoire|shaker cobbler|part des anges|solera y criaderas|sirop de gomme|l'orgeat est|milano-torino|sazerac|premier livre de cocktails|manuel de harry|harry's new york bar a ouvert|savoy cocktail book \(1930\) est signé|père du tiki|vieux carré et le singapore/i;
+/* Un mot-clé de cette liste = question dans le périmètre */
+/* Dans le périmètre : les 28 marques partenaires ET le livre au programme. */
+const EXAM_LIVRE=/vermeire|robert's|l'art du cocktail|daily mail|lizzie|rikiki|querschnitt|katayama|flanagan|betsy|chante-clair|aztèque|xocti|oxochiti|thakeray|cocks tail|verre à cocktail|verre à porto|verre à sherry|verre tulipe|tumbler|stilligoutte|remuer|frapper|passer|presser|trait \(dash\)|mominette|absinthe suisse|à la suissesse|gloom raiser|clover club|silver streak|may fair|robert's special|vandervelde|dubonnet spécial|paradis du zoute|handicap|fioupe|midnight|minnehaha|east india|white lady|olivette|ping-pong|klondyke|thistle|bamboo|mikado|meehoulong|diki-diki|ward eight|soixante-quinze|old fashioned|bronx|manhattan|martinez|martini-rossi|luigi|naintré|criterion|embassy|mccarthy|mcelhone|monkey's gland|princess mary|queen's|yellow rattler|turf|whip|kurbag|za-za|millionnaire|glad eye|blackthorn|apple jack|jersey lightning|sunshine|stinger|bacardi ron|limon|plain cocktail|sirop de framboises|chicago|brazil|fil de fer|68 317|1600 barmen|six verres par bouteille|nécessaire indispensable|huit bouteilles|8 bouteilles/i;
+const EXAM_MARQUES=/adriatico|giffard|fever-?tree|ponthier|pcb|ingredium|combier|blanchette|entêté|campari|la ina|rio viejo|viña|noilly|carpano|antica|bows|fiba|benleioc|manguin|oli'still|roku|wild turkey|isautier|appleton|calle 23|nuestra soledad|cuatro gallos|quebranta|dartigalongue|merlet|sab's|boudier|algebra|bénédictine|chinola|grand marnier|kota|marie brizard|suntory|lustau|joy spence|decobecq|marie ferrand|antoinette|choisie|choisne|garcia|sabbagh|hanquiez|bellanger|cosentino|de soto|russell|espadín|palomino|agave|pandan|amaretto|absinthe|sherry|vermouth|pisco|armagnac|mezcal|tequila/i;
+function examPool(){
+  const pool=[];
+  QCM.forEach(q=>{
+    const txt=(q.q||"")+" "+(q.e||"")+" "+q.o.join(" ");
+    if(EXAM_EXCLURE.test(q.q||"")) return;
+    if(!EXAM_MARQUES.test(txt) && !EXAM_LIVRE.test(txt) && !IMPOSES.some(c=>(q.q||"").includes(c.n))) return;
+    pool.push({q:q.q, opts:q.o.map((t,i)=>({t:t, ok:i===q.r})), e:q.e, src:"QCM"});
+  });
+  VF.forEach(v=>{
+    const txt=(v.q||"")+" "+(v.e||"");
+    if(EXAM_EXCLURE.test(v.q||"")) return;
+    if(!EXAM_MARQUES.test(txt) && !EXAM_LIVRE.test(txt) && !IMPOSES.some(c=>(v.q||"").includes(c.n))) return;
+    pool.push({q:v.q, opts:[{t:"VRAI",ok:v.r===true},{t:"FAUX",ok:v.r===false}], e:v.e, src:"V/F"});
+  });
+  DEGREES.forEach(d=>{
+    const wrong=shuffle(DEGREES.filter(x=>x.d!==d.d)).slice(0,3);
+    pool.push({q:"Quel est le degré de <b>"+d.n+"</b> ?",
+      opts:shuffle([{t:d.d,ok:true},...wrong.map(w=>({t:w.d,ok:false}))]),
+      e:d.n+" titre "+d.d+".", src:"Degrés"});
+  });
+  IMPOSES.forEach(c=>{
+    const autres=IMPOSES.filter(x=>x.n!==c.n);
+    const wrongB=shuffle([...new Set(autres.map(x=>x.base))].filter(b=>b!==c.base)).slice(0,3);
+    pool.push({q:"Spiritueux de base du <b>"+c.n+"</b> ?",
+      opts:shuffle([{t:c.base,ok:true},...wrongB.map(w=>({t:w,ok:false}))]),
+      e:c.n+" : "+c.ing.join(" · "), src:"Imposés"});
+    const dehors=[...new Set(autres.flatMap(x=>x.ing))].filter(i=>!c.ing.includes(i));
+    const intrus=shuffle(dehors)[0];
+    if(intrus){
+      pool.push({q:"Lequel n'entre PAS dans le <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:intrus,ok:true},...shuffle(c.ing).slice(0,3).map(v=>({t:v,ok:false}))]),
+        e:"Composition officielle : "+c.ing.join(" · "), src:"Imposés"});
+    }
+    const wrongD=shuffle(autres.filter(x=>x.dose&&x.dose.length)).slice(0,3);
+    if(c.dose&&c.dose.length&&wrongD.length===3){
+      pool.push({q:"À quel cocktail correspond ce dosage ?<br><span class='handnote' style='color:var(--copper-2)'>"+c.dose.map(d=>d[0]+" "+d[1]).join(" · ")+"</span>",
+        opts:shuffle([{t:c.n,ok:true},...wrongD.map(w=>({t:w.n,ok:false}))]),
+        e:c.n+" — "+c.verre+", "+c.met+".", src:"Dosages"});
+    }
+  });
+  /* Recettes de l'extrait : retrouver le cocktail à partir de sa composition */
+  if(typeof VERM!=="undefined"){
+    VERM.forEach(v=>{
+      const autres=VERM.filter(x=>x.n!==v.n);
+      const wrong=shuffle(autres).slice(0,3);
+      if(wrong.length===3 && v.r && v.r.length>12){
+        pool.push({q:"Quel cocktail de l'extrait correspond à cette composition ?<br><span class='handnote' style='color:var(--copper-2)'>"+v.r+"</span>",
+          opts:shuffle([{t:v.n,ok:true},...wrong.map(w=>({t:w.n,ok:false}))]),
+          e:"<b>"+v.n+"</b>"+(v.note?" — "+v.note:""), src:"Livre"});
+      }
+    });
+  }
+  DEGUST.forEach(p=>{
+    const memeCat=DEGUST.filter(x=>x.c===p.c&&x.n!==p.n);
+    let wrong=shuffle(memeCat).slice(0,3);
+    if(wrong.length<3) wrong=wrong.concat(shuffle(DEGUST.filter(x=>x.n!==p.n&&!wrong.includes(x))).slice(0,3-wrong.length));
+    if(wrong.length===3) pool.push({q:"<b>Nez :</b> "+p.nez+"<br><b>Bouche :</b> "+p.bouche+"<br><span class='handnote' style='color:var(--copper-2)'>Quelle marque ?</span>",
+      opts:shuffle([{t:p.n,ok:true},...wrong.map(w=>({t:w.n,ok:false}))]),
+      e:p.n+" ("+p.d+"). "+p.tell, src:"Dégustation"});
+  });
+  return pool;
+}
+let examState=null, examTimer=null;
+function showExamSetup(){
+  clearInterval(examTimer); examState=null;
+  const n=examPool().length;
+  document.getElementById("exam-panel").innerHTML=
+   '<div class="exam-setup"><p class="handnote" style="font-size:1.5rem;color:var(--gold)">Conditions réelles</p>'+
+   '<p style="margin:10px 0 4px">Le chrono tourne, pas de retour en arrière, la correction arrive à la fin.</p>'+
+   '<p class="mini" style="opacity:.8;margin-bottom:16px"><b>Périmètre :</b> les 28 marques partenaires, les degrés, les profils de dégustation, les 13 cocktails imposés avec leurs dosages, et l\'extrait de Vermeire (recettes comprises).<br>'+
+   '<b>Exclus :</b> le socle des 36 cocktails, le règlement de la finale et la culture générale du bar.<br>'+
+   '<span style="opacity:.7">'+n+' questions disponibles dans le vivier.</span></p>'+
+   EXAM_FORMATS.map(f=>'<button class="btn btn-copper" onclick="startExam(\''+f.k+'\')">'+f.lab+'<br><span style="font-size:.8rem;opacity:.85">'+f.d+'</span></button>').join('')+
+   '</div>';
+}
+function startExam(kind){
+  const f=EXAM_FORMATS.find(x=>x.k===kind);
+  const pool=shuffle(examPool()).slice(0,f.n);
+  examState={qs:pool, idx:0, score:0, left:f.sec, total:f.sec, answers:[], fmt:f, over:false};
+  clearInterval(examTimer);
+  examTimer=setInterval(()=>{
+    if(!examState||examState.over) return;
+    examState.left--;
+    if(examState.left<=0){ examState.left=0; endExam(true); }
+    else paintTimer();
+  },1000);
+  renderExam();
+}
+function fmtTime(s){const m=Math.floor(s/60),r=s%60;return m+":"+(r<10?"0":"")+r;}
+function paintTimer(){
+  const t=document.getElementById("exam-time");
+  if(!t||!examState) return;
+  t.textContent=fmtTime(examState.left);
+  const r=examState.left/examState.total;
+  t.className="exam-timer"+(r<=.1?" danger":r<=.3?" warn":"");
+}
+function renderExam(){
+  const st=examState, panel=document.getElementById("exam-panel");
+  if(!st) return;
+  const q=st.qs[st.idx];
+  let dots='<div class="exam-dots">'+st.qs.map((_,i)=>'<span class="exam-dot'+(st.answers[i]===undefined?"":(st.answers[i]?" ok":" ko"))+(i===st.idx?" now":"")+'"></span>').join('')+'</div>';
+  let html='<div class="exam-bar"><span class="scorepill">'+(st.idx+1)+' / '+st.qs.length+'</span>'+
+    '<div id="exam-time" class="exam-timer">'+fmtTime(st.left)+'</div>'+
+    '<span class="scorepill">'+st.score+' pt'+(st.score>1?"s":"")+'</span></div>'+dots+
+    '<div class="quiz-q">'+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"><span class="kbd">'+(i+1)+'</span>'+o.t+'</button>';});
+  html+='</div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">'+q.src+' — pas de correction avant la fin</span>'+
+    '<button class="btn" onclick="endExam(false)">Terminer</button></div>';
+  panel.innerHTML=html;
+  paintTimer();
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      st.answers[st.idx]=good;
+      if(good) { st.score++; clearMistake(q); } else logMistake("Examen",q);
+      st.idx++;
+      if(st.idx>=st.qs.length) endExam(false); else renderExam();
+    };
+  });
+}
+function endExam(timeout){
+  const st=examState; if(!st||st.over) return;
+  st.over=true; clearInterval(examTimer);
+  const done=st.answers.filter(a=>a!==undefined).length;
+  const pct=done?Math.round(100*st.score/done):0;
+  recordResult("Examen", st.score, st.qs.length);
+  const verdict = timeout ? "Temps écoulé. "+done+" question"+(done>1?"s":"")+" traitée"+(done>1?"s":"")+" sur "+st.qs.length+"."
+    : (pct>=80?"Objectif atteint. Ce périmètre est solide.":"Sous les 80 % : les erreurs sont dans ton carnet.");
+  let rev='<div class="exam-review">'+st.qs.map((q,i)=>{
+    if(st.answers[i]===undefined) return '';
+    const bon=q.opts.find(o=>o.ok);
+    return '<div class="qr '+(st.answers[i]?"ok":"ko")+'"><span class="lab">'+(st.answers[i]?"✓":"✗")+'</span> '+q.q+
+      '<br><b style="color:var(--absinthe)">'+(bon?bon.t:"")+'</b><br><span class="mini" style="opacity:.8">'+(q.e||"")+'</span></div>';
+  }).join('')+'</div>';
+  document.getElementById("exam-panel").innerHTML=
+    '<div class="result-panel"><div class="big">'+st.score+' / '+st.qs.length+'</div>'+
+    '<p style="margin:10px 0 6px">'+verdict+'</p>'+
+    '<p class="mini" style="opacity:.8">Temps restant : '+fmtTime(st.left)+'</p>'+
+    '<div style="margin:16px 0"><button class="btn btn-copper" onclick="startExam(\''+st.fmt.k+'\')">Refaire un '+st.fmt.lab+'</button>'+
+    '<button class="btn" onclick="showExamSetup()">Changer de format</button></div></div>'+
+    '<h3 class="viewtitle" style="font-size:1.4rem;margin-top:18px">La correction</h3>'+rev;
+}
+
 /* =================== LE CONDENSÉ =================== */
 let memoBuilt=false;
 function buildMemo(){
@@ -3260,8 +3666,10 @@ function buildMemo(){
 <p><b>BOWS</b> = Brave Occitan Wild Spirit · <b>Benleioc</b> = Ben + Lei + Oc · <b>Fiba</b> = FIgue de BArbarie · <b>Roku</b> = six · <b>Chinola</b> = fruit de la passion · <b>Kota</b> = la ville · <b>Sab's</b> = Société Alambic Bourguignon + Sabbagh · <b>D.O.M.</b> = Deo Optimo Maximo · <b>Fever tree</b> = le quinquina · <b>Calle 23</b> = plaque de rue à Guadalajara · <b>Nuestra Soledad</b> = Vierge de la Solitude · <b>Vermouth</b> = Wermut, armoise · <b>Punt e Mes</b> = un point et demi · <b>L'Entêté</b> = l'entêtement de Franck Choisne.</p>
 
 <h3>6 · Les 13 cocktails imposés</h3>
-<p class="lead">Tirés au sort juste avant le passage. Base Roku : 4 · Wild Turkey : 3 · Appleton : 3. Un seul cognac (Harvard), un seul mezcal, un seul avec absinthe (Yellow Daisy), un seul avec du vin (New York Sour).</p>
-${IMPOSES.map(c=>'<h4>'+c.n+'</h4><p>'+c.ing.join(' · ')+'<br><span class="tag">'+c.fam+'</span><span class="tag">verre suggéré : '+c.verre+'</span><span class="tag">'+c.met+'</span></p><p>'+c.hist+'</p>').join('')}
+<p class="lead">Tirés au sort juste avant le passage. Regroupés par spiritueux de base : quatre au gin, trois au whiskey, trois au rhum, puis les isolés. Les dosages sont les tiens ; la composition officielle figure telle quelle dans l'onglet Dossier TDB.</p>
+${IMP_GROUPES.map(g=>'<h4 style="font-size:1rem;color:var(--copper-2);letter-spacing:.04em">'+g+' — '+IMPOSES.filter(c=>c.grp===g).length+'</h4><table>'+IMPOSES.filter(c=>c.grp===g).map(c=>'<tr><td>'+c.n+'<br><span style="font-weight:400;opacity:.65;font-size:.85em">'+c.verre+'<br>'+c.met+'</span></td><td>'+c.dose.map(d=>d[0]+' <b>'+d[1]+'</b>').join('<br>')+(c.alerte?'<br><span style="color:var(--campari)">⚠ '+c.alerte+'</span>':'')+'<br><i style="opacity:.75">'+c.tip+'</i></td></tr>').join('')+'</table>').join('')}
+<h4>Histoire de chacun</h4>
+${IMPOSES.map(c=>'<p><b>'+c.n+'</b> — '+c.hist+'</p>').join('')}
 
 <h3>7 · Le socle des 36 cocktails</h3>
 <table>${socle.map(c=>'<tr><td>'+c.n+'</td><td>'+c.ing.map(i=>i[0]+' '+i[1]).join(' · ')+'<br><i>'+c.verre+' — '+c.met+' — '+c.tav+' % TAV'+(c.g?' — '+c.g:'')+'</i></td></tr>').join('')}</table>
@@ -3573,7 +3981,7 @@ function renderGrandTest(){
 function refreshDashboard(){
   const el=document.getElementById("dashboard");
   if(!el) return;
-  const modules=["QCM","Vrai/Faux","Degrés","Chronologie","Socle","Socle+","Dégustation","Grand test"];
+  const modules=["QCM","Vrai/Faux","Degrés","Chronologie","Socle","Socle+","Dégustation","Examen","Grand test"];
   const bestCount=modules.filter(m=>STATS.best[m]).length;
   const avg = STATS.totalAnswered ? Math.round(100*STATS.totalCorrect/STATS.totalAnswered) : 0;
   const gt = STATS.best["Grand test"];
