@@ -2912,6 +2912,14 @@ const FICHES = [
  {t:"Nez & bouche — méthode", html:`
   <p class="fiche-lead">Dégustation (coeff. 3) et rétro-assemblage (coeff. 3) pèsent ensemble plus lourd que la mixologie. Ce sont pourtant les deux épreuves qu'on prépare le moins.</p>
   <div class="fiche-grid">
+   <div class="fiche-block" style="grid-column:1/-1"><h4>Ton coffret de mignonettes</h4><ul>
+    <li>Le package reçu un mois avant la finale contient 26 flacons (27 entrées ici, le pisco comptant ses deux cépages), soit <b>une seule référence par maison</b> dans la plupart des cas. C'est lui qui définit le terrain réel de l'épreuve : le module Dégustation propose un filtre « Mon coffret » pour t'entraîner dessus uniquement.</li>
+    <li><b>Deux maisons partenaires n'y figurent pas</b> : <b>Gabriel Boudier</b> et <b>Marie Brizard</b>. Soit elles sont hors dégustation, soit il manque deux flacons — à vérifier.</li>
+    <li><b>Giffard Fleur de Sureau Zero</b> est dans le coffret alors que l'annexe #1 ne liste que les 6 bases sans alcool. La gamme shrub est donc bien en jeu : ne l'écarte pas de tes révisions.</li>
+    <li><b>Le pisco n'a pas de cépage précisé</b> dans ta liste. Quebranta et Italia sont tous deux marqués : le nez muscaté d'Italia contre le profil discret et non aromatique du Quebranta se distingue en deux secondes. Vérifie l'étiquette.</li>
+    <li><b>Algebra Décaf</b> et l'Extra-Dry sont quasi indissociables à l'aveugle. Bonne nouvelle : c'est la <b>marque</b> qui est demandée, pas la référence. Répondre « Algebra » suffit.</li>
+    <li class="mini">Même logique pour Dartigalongue, Calle 23, Isautier ou Merlet : le dossier demande « la marque partenaire ». Identifier la maison rapporte le point, même si tu hésites sur l'expression.</li>
+   </ul></div>
    <div class="fiche-block"><h4>Trancher par élimination</h4><ul>
     <li><b>Le degré d'abord.</b> Une chauffe forte oriente vers Wild Turkey 101 (50,5°), Isautier Fusion (55°) ou les absinthes (60-62°). Une faible vers un vermouth, un sherry ou une liqueur.</li>
     <li><b>Puis la couleur.</b> Blanc laiteux = Adriatico Bianco · vert = L'Entêté ou Kota · rouge = Campari · brun opaque = Algebra ou Viña 25.</li>
@@ -3482,10 +3490,14 @@ function examPool(){
       }
     });
   }
-  DEGUST.forEach(p=>{
-    const memeCat=DEGUST.filter(x=>x.c===p.c&&x.n!==p.n);
+  /* Dégustation : on ne teste que le coffret réellement reçu.
+     Les questions de degré, elles, restent sur toute la gamme :
+     le QCM porte sur les sites officiels des marques, pas sur les flacons. */
+  const DG=DEGUST.filter(p=>p.co);
+  DG.forEach(p=>{
+    const memeCat=DG.filter(x=>x.c===p.c&&x.n!==p.n);
     let wrong=shuffle(memeCat).slice(0,3);
-    if(wrong.length<3) wrong=wrong.concat(shuffle(DEGUST.filter(x=>x.n!==p.n&&!wrong.includes(x))).slice(0,3-wrong.length));
+    if(wrong.length<3) wrong=wrong.concat(shuffle(DG.filter(x=>x.n!==p.n&&!wrong.includes(x))).slice(0,3-wrong.length));
     if(wrong.length===3) pool.push({q:"<b>Nez :</b> "+p.nez+"<br><b>Bouche :</b> "+p.bouche+"<br><span class='handnote' style='color:var(--copper-2)'>Quelle marque ?</span>",
       opts:shuffle([{t:p.n,ok:true},...wrong.map(w=>({t:w.n,ok:false}))]),
       e:p.n+" ("+p.d+"). "+p.tell, src:"Dégustation"});
@@ -3501,6 +3513,7 @@ function showExamSetup(){
    '<p style="margin:10px 0 4px">Le chrono tourne, pas de retour en arrière, la correction arrive à la fin.</p>'+
    '<p class="mini" style="opacity:.8;margin-bottom:16px"><b>Périmètre :</b> les 28 marques partenaires, les degrés, les profils de dégustation, les 13 cocktails imposés avec leurs dosages, et l\'extrait de Vermeire — origines, lieux, auteurs et anecdotes.<br>'+
    '<b>Exclus :</b> le socle des 36 cocktails, le règlement de la finale et la culture générale du bar.<br>'+
+   '<b>Dégustation :</b> limitée aux 26 références de ton coffret.<br>'+
    '<span style="opacity:.7">'+n+' questions disponibles dans le vivier.</span></p>'+
    EXAM_FORMATS.map(f=>'<button class="btn btn-copper" onclick="startExam(\''+f.k+'\')">'+f.lab+'<br><span style="font-size:.8rem;opacity:.85">'+f.d+'</span></button>').join('')+
    '</div>';
@@ -3776,67 +3789,75 @@ ${IMPOSES.map(c=>'<p><b>'+c.n+'</b> — '+c.hist+'</p>').join('')}
    reçues un mois avant la finale. */
 const DEGUST = [
  {n:"Blanchette (Combier)", c:"Absinthe", d:"60°", oeil:"Cristalline, louche au blanc laiteux à l'eau", nez:"Anis vert dominant, herbacé, très parfumé", bouche:"Style suisse, anisé franc, grande absinthe et fenouil, texture soyeuse", tell:"Blanche ET très anisée : si c'est vert, c'est L'Entêté."},
- {n:"L'Entêté (Combier)", c:"Absinthe", d:"62°", oeil:"Verte, coloration naturelle à la chlorophylle", nez:"Grande absinthe en avant, plus végétal que la Blanchette", bouche:"Amertume herbacée marquée, fenouil, anis d'Espagne, finale longue", tell:"La seule verte de la gamme, et le degré le plus haut du concours (62°)."},
- {n:"Campari", c:"Bitter", d:"25°", oeil:"Rouge vif caractéristique", nez:"Orange amère, écorces, note florale", bouche:"Amertume franche et persistante, agrume confit, finale sèche", tell:"Impossible à confondre à l'œil. Amer + rouge = Campari."},
- {n:"La Ina (Fino)", c:"Sherry", d:"15°", oeil:"Jaune paille très pâle", nez:"Amande, pomme verte, pain, note de levure du voile de flor", bouche:"Sec, salin, tranchant, léger", tell:"Le plus léger en bouche des trois sherries et le plus bas en degré."},
+ {n:"L'Entêté (Combier)", co:1, c:"Absinthe", d:"62°", oeil:"Verte, coloration naturelle à la chlorophylle", nez:"Grande absinthe en avant, plus végétal que la Blanchette", bouche:"Amertume herbacée marquée, fenouil, anis d'Espagne, finale longue", tell:"La seule verte de la gamme, et le degré le plus haut du concours (62°)."},
+ {n:"Campari", co:1, c:"Bitter", d:"25°", oeil:"Rouge vif caractéristique", nez:"Orange amère, écorces, note florale", bouche:"Amertume franche et persistante, agrume confit, finale sèche", tell:"Impossible à confondre à l'œil. Amer + rouge = Campari."},
+ {n:"La Ina (Fino)", co:1, c:"Sherry", d:"15°", oeil:"Jaune paille très pâle", nez:"Amande, pomme verte, pain, note de levure du voile de flor", bouche:"Sec, salin, tranchant, léger", tell:"Le plus léger en bouche des trois sherries et le plus bas en degré."},
  {n:"Rio Viejo (Oloroso)", c:"Sherry", d:"20°", oeil:"Ambre soutenu, acajou", nez:"Noix, tabac, bois précieux, rancio", bouche:"Sec mais ample et enveloppant, sans sucre", tell:"Sec ET foncé : le PX serait sirupeux, le fino serait pâle."},
  {n:"Viña 25 (PX)", c:"Sherry", d:"17°", oeil:"Brun noir, très dense, jambes épaisses", nez:"Figue, raisin sec, café, mélasse", bouche:"Liquoreux (~400 g/L), onctueux", tell:"Le seul sucré des trois. Coule comme un sirop."},
- {n:"Noilly Prat Dry", c:"Vermouth français", d:"18°", oeil:"Or pâle", nez:"Camomille, herbes sèches, note iodée d'embruns", bouche:"Sec, salin, légèrement rancio (le passage à l'Enclos)", tell:"Salinité et sécheresse : le marqueur du vieillissement en plein air."},
+ {n:"Noilly Prat Dry", co:1, c:"Vermouth français", d:"18°", oeil:"Or pâle", nez:"Camomille, herbes sèches, note iodée d'embruns", bouche:"Sec, salin, légèrement rancio (le passage à l'Enclos)", tell:"Salinité et sécheresse : le marqueur du vieillissement en plein air."},
  {n:"Noilly Prat Ambré", c:"Vermouth français", d:"16°", oeil:"Ambré doré", nez:"Miel, vanille, cannelle, épices douces", bouche:"Doux et épicé, rondeur", tell:"Même maison que le Dry mais sucré et épicé : ne pas confondre avec un vermouth italien, plus amer."},
- {n:"Carpano Classico", c:"Vermouth italien", d:"16°", oeil:"Rouge acajou", nez:"Herbes amères, agrume, plus frais que l'Antica", bouche:"Digeste, moins dense, pensé pour le volume", tell:"Rouge mais léger : si la vanille explose au nez, c'est l'Antica."},
+ {n:"Carpano Classico", co:1, c:"Vermouth italien", d:"16°", oeil:"Rouge acajou", nez:"Herbes amères, agrume, plus frais que l'Antica", bouche:"Digeste, moins dense, pensé pour le volume", tell:"Rouge mais léger : si la vanille explose au nez, c'est l'Antica."},
  {n:"Carpano Antica Formula", c:"Vermouth italien", d:"16,5°", oeil:"Brun rouge profond", nez:"VANILLE massive, safran, fruits secs, clou de girofle", bouche:"Opulente, riche, longue", tell:"La vanille est le marqueur signature. Le degré le plus atypique du concours : 16,5°."},
- {n:"Fiba (BOWS)", c:"Eau-de-vie de cactus", d:"45°", oeil:"Cristalline", nez:"Végétal, floral, fumé discret de bois d'olivier", bouche:"Végétale, légèrement fumée-boisée, tension", tell:"Fumé + végétal MAIS floral et olive : le mezcal, lui, sent le mesquite et la terre."},
- {n:"Oli'Still (Manguin)", c:"Distillat d'olive", d:"40°", oeil:"Cristalline", nez:"Truffe, sous-bois, violette", bouche:"Olive noire crescendo, finale saline (algue, huître)", tell:"Nez de truffe : aucun autre produit du concours ne fait ça."},
- {n:"Roku Gin", c:"Gin", d:"43°", oeil:"Cristalline", nez:"Genièvre, yuzu, note florale de sakura, thé vert", bouche:"Douce puis picotement du poivre sanshō en finale", tell:"Le picotement du sanshō en fin de bouche est la signature."},
- {n:"Benleioc Sorgho", c:"Whisky français", d:"45°", oeil:"Or clair", nez:"Céréalier, exotique, légèrement sucré", bouche:"Ronde, céréale grillée, note de baijiu", tell:"Whisky sans fumée et sans profil orge classique : c'est le sorgho."},
+ {n:"Fiba (BOWS)", co:1, c:"Eau-de-vie de cactus", d:"45°", oeil:"Cristalline", nez:"Végétal, floral, fumé discret de bois d'olivier", bouche:"Végétale, légèrement fumée-boisée, tension", tell:"Fumé + végétal MAIS floral et olive : le mezcal, lui, sent le mesquite et la terre."},
+ {n:"Oli'Still (Manguin)", co:1, c:"Distillat d'olive", d:"40°", oeil:"Cristalline", nez:"Truffe, sous-bois, violette", bouche:"Olive noire crescendo, finale saline (algue, huître)", tell:"Nez de truffe : aucun autre produit du concours ne fait ça."},
+ {n:"Roku Gin", co:1, c:"Gin", d:"43°", oeil:"Cristalline", nez:"Genièvre, yuzu, note florale de sakura, thé vert", bouche:"Douce puis picotement du poivre sanshō en finale", tell:"Le picotement du sanshō en fin de bouche est la signature."},
+ {n:"Benleioc Sorgho", co:1, c:"Whisky français", d:"45°", oeil:"Or clair", nez:"Céréalier, exotique, légèrement sucré", bouche:"Ronde, céréale grillée, note de baijiu", tell:"Whisky sans fumée et sans profil orge classique : c'est le sorgho."},
  {n:"Benleioc Tourbé", c:"Whisky français", d:"45°", oeil:"Or", nez:"Fumée nette (~53 ppm) mais fruité derrière", bouche:"Tourbe, puis fruit et céréale du Sud-Ouest, finish Pacherenc", tell:"Fumé + fruité gourmand : un Islay serait plus iodé et médicinal."},
- {n:"Wild Turkey 81", c:"Bourbon", d:"40,5°", oeil:"Ambre clair", nez:"Vanille, caramel, épice douce", bouche:"Souple, dosée pour le highball", tell:"Même profil que le 101 mais nettement moins de chaleur alcoolique."},
+ {n:"Wild Turkey 81", co:1, c:"Bourbon", d:"40,5°", oeil:"Ambre clair", nez:"Vanille, caramel, épice douce", bouche:"Souple, dosée pour le highball", tell:"Même profil que le 101 mais nettement moins de chaleur alcoolique."},
  {n:"Wild Turkey 101", c:"Bourbon", d:"50,5°", oeil:"Ambre profond", nez:"Vanille, caramel, écorce d'orange, poivre du seigle", bouche:"Puissante, épicée, chauffe franche, char n°4", tell:"Le seul produit du concours entre 50 et 55° avec un profil bois-vanille."},
- {n:"Isautier Double Agent Fusion", c:"Rhum blanc", d:"55°", oeil:"Cristalline", nez:"Canne fraîche ET mélasse, menthe, réglisse", bouche:"Briochée, touche saline, forte", tell:"Le degré le plus haut des spiritueux du concours (55°) et ce mélange canne + mélasse impossible ailleurs."},
+ {n:"Isautier Double Agent Fusion", co:1, c:"Rhum blanc", d:"55°", oeil:"Cristalline", nez:"Canne fraîche ET mélasse, menthe, réglisse", bouche:"Briochée, touche saline, forte", tell:"Le degré le plus haut des spiritueux du concours (55°) et ce mélange canne + mélasse impossible ailleurs."},
  {n:"Isautier Barrik", c:"Rhum maturé", d:"40°", oeil:"Ambre pâle", nez:"Caramel, miel, vanille", bouche:"Douce, courte, l'ambré à cocktails", tell:"Boisé léger : passage bref en fût (12-18 mois)."},
  {n:"Isautier 5 ans", c:"Rhum vieux", d:"45°", oeil:"Ambre soutenu", nez:"Pâtissier, épices, fruits confits", bouche:"Plus structurée que le Barrik, bois intégré", tell:"Entre Barrik et Appleton 8 ans : moins de funk que le jamaïcain."},
- {n:"Appleton Signature", c:"Rhum jamaïcain", d:"40°", oeil:"Or", nez:"Orange confite, banane rôtie, muscade", bouche:"Souple, esters modérés", tell:"Le funk jamaïcain est là mais discret : si c'est plus intense et boisé, c'est le 8 ans."},
+ {n:"Appleton Signature", co:1, c:"Rhum jamaïcain", d:"40°", oeil:"Or", nez:"Orange confite, banane rôtie, muscade", bouche:"Souple, esters modérés", tell:"Le funk jamaïcain est là mais discret : si c'est plus intense et boisé, c'est le 8 ans."},
  {n:"Appleton 8 Years Old", c:"Rhum jamaïcain", d:"43°", oeil:"Ambre doré", nez:"Esters marqués, fruits mûrs, chêne, vanille", bouche:"Funk civilisé, longueur, vieillissement tropical", tell:"Funk + bois net. Attention : 43°, comme le Roku et les Dartigalongue."},
  {n:"Calle 23 Blanco", c:"Tequila", d:"40°", oeil:"Cristalline", nez:"Agave cuit, poivre, agrumes", bouche:"Vive, végétale, minérale, sans fumée", tell:"Agave cuit SANS fumée = tequila. Avec fumée = mezcal."},
- {n:"Calle 23 Reposado", c:"Tequila", d:"40°", oeil:"Or très pâle", nez:"Agave, vanille légère d'ex-bourbon", bouche:"Bois discret, agave encore dominant", tell:"8 mois seulement : le bois reste en retrait, contrairement à l'Añejo."},
+ {n:"Calle 23 Reposado", co:1, c:"Tequila", d:"40°", oeil:"Or très pâle", nez:"Agave, vanille légère d'ex-bourbon", bouche:"Bois discret, agave encore dominant", tell:"8 mois seulement : le bois reste en retrait, contrairement à l'Añejo."},
  {n:"Calle 23 Añejo", c:"Tequila", d:"40°", oeil:"Or ambré", nez:"Vanille, caramel, agave en retrait", bouche:"Bois présent, rondeur", tell:"16 mois : le bois prend le dessus sur l'agave."},
- {n:"Nuestra Soledad Valles", c:"Mezcal", d:"40°", oeil:"Cristalline", nez:"Fumée de four de terre (mesquite, chêne), agave cuit, minéral", bouche:"Fumée franche, terreuse, poivrée, finale sèche", tell:"Fumé TERREUX et minéral. Le Fiba est fumé mais floral et végétal."},
- {n:"Cuatro Gallos Quebranta", c:"Pisco", d:"40°", oeil:"Cristalline", nez:"NON aromatique : banane, fruits secs, cacao, discret", bouche:"Ronde, grasse, sans bois", tell:"Eau-de-vie de raisin sans bois et sans parfum muscaté."},
- {n:"Cuatro Gallos Italia", c:"Pisco", d:"40°", oeil:"Cristalline", nez:"AROMATIQUE : jasmin, litchi, muscat, agrumes", bouche:"Parfumée, florale, sans bois", tell:"Le nez muscaté tranche immédiatement avec le Quebranta."},
+ {n:"Nuestra Soledad Valles", co:1, c:"Mezcal", d:"40°", oeil:"Cristalline", nez:"Fumée de four de terre (mesquite, chêne), agave cuit, minéral", bouche:"Fumée franche, terreuse, poivrée, finale sèche", tell:"Fumé TERREUX et minéral. Le Fiba est fumé mais floral et végétal."},
+ {n:"Cuatro Gallos Quebranta", co:1, c:"Pisco", d:"40°", oeil:"Cristalline", nez:"NON aromatique : banane, fruits secs, cacao, discret", bouche:"Ronde, grasse, sans bois", tell:"Eau-de-vie de raisin sans bois et sans parfum muscaté."},
+ {n:"Cuatro Gallos Italia", co:1, c:"Pisco", d:"40°", oeil:"Cristalline", nez:"AROMATIQUE : jasmin, litchi, muscat, agrumes", bouche:"Parfumée, florale, sans bois", tell:"Le nez muscaté tranche immédiatement avec le Quebranta."},
  {n:"Dartigalongue Un-Oaked", c:"Armagnac", d:"43°", oeil:"Cristalline", nez:"Poire, pomme, fleurs blanches", bouche:"Ample, onctueuse, finale amande douce, ZÉRO bois", tell:"Eau-de-vie de vin blanche : à ne pas confondre avec l'Eau de Vigne Merlet (40°, plus violette-mirabelle)."},
  {n:"Dartigalongue Single-Oaked", c:"Armagnac", d:"43°", oeil:"Or pâle à doré", nez:"Vanille, prune, pêche", bouche:"Intense et droite, épices en finale, fûts roux", tell:"Boisé fruité sans torréfaction : si ça sent le pain grillé et le cacao, c'est le Double."},
- {n:"Dartigalongue Double-Oaked", c:"Armagnac", d:"43°", oeil:"Ambre", nez:"Pain grillé, cacao, torréfaction", bouche:"Empyreumatique, fûts neufs à chauffe forte", tell:"Le plus « bourbon-friendly » du concours sur base de raisin."},
- {n:"Merlet VS", c:"Cognac", d:"40°", oeil:"Or clair", nez:"Vif, fruité, floral, jeune (2 ans min.)", bouche:"Nerveuse, courte, pensée pour le bar", tell:"Cognac jeune et vif : le Brothers Blend est plus rond et confit."},
+ {n:"Dartigalongue Double-Oaked", co:1, c:"Armagnac", d:"43°", oeil:"Ambre", nez:"Pain grillé, cacao, torréfaction", bouche:"Empyreumatique, fûts neufs à chauffe forte", tell:"Le plus « bourbon-friendly » du concours sur base de raisin."},
+ {n:"Merlet VS", co:1, c:"Cognac", d:"40°", oeil:"Or clair", nez:"Vif, fruité, floral, jeune (2 ans min.)", bouche:"Nerveuse, courte, pensée pour le bar", tell:"Cognac jeune et vif : le Brothers Blend est plus rond et confit."},
  {n:"Merlet Brothers Blend", c:"Cognac", d:"40°", oeil:"Or ambré", nez:"Abricot confit, coing, fleurs blanches", bouche:"Ronde, 4 à 12 ans, Fins Bois + 1/5 Grande Champagne", tell:"L'abricot confit est le marqueur maison."},
  {n:"Merlet Eau de Vigne", c:"Cognac blanc", d:"40°", oeil:"Cristalline", nez:"Violette, mirabelle, poire", bouche:"Élégante, florale, non vieillie (Ugni Blanc/Colombard)", tell:"Blanche florale : l'Un-Oaked armagnac tire plutôt sur la poire et l'amande."},
  {n:"Sab's Le Blanc", c:"Marc", d:"43°", oeil:"Cristalline", nez:"Raisin frais, floral, 100 % pinot noir", bouche:"Franche, marc identifiable (peaux, pépins), 1 an inox", tell:"Le côté « peau de raisin » du marc, absent des eaux-de-vie de vin."},
- {n:"Sab's Le Marc", c:"Marc vieux", d:"46°", oeil:"Ambre", nez:"Fruits, jus de raisin, vanille du finish cognac", bouche:"Riche, réglisse en finale, 4 ans en 228 L", tell:"46° : c'est le seul du concours à ce degré."},
+ {n:"Sab's Le Marc", co:1, c:"Marc vieux", d:"46°", oeil:"Ambre", nez:"Fruits, jus de raisin, vanille du finish cognac", bouche:"Riche, réglisse en finale, 4 ans en 228 L", tell:"46° : c'est le seul du concours à ce degré."},
  {n:"Adriatico Classico (Roasted)", c:"Amaretto", d:"28°", oeil:"Ambré", nez:"Amande torréfiée, vanille, cacao, café", bouche:"Peu sucrée pour un amaretto, touche saline finale", tell:"La pointe de sel marin en finale signe la maison."},
- {n:"Adriatico Bianco (Crushed)", c:"Amaretto", d:"16°", oeil:"Blanc opaque, laiteux", nez:"Amande crue, lait d'amande", bouche:"Soyeuse, crémeuse sans crème (vegan)", tell:"À l'œil, impossible à rater : c'est le seul blanc laiteux."},
+ {n:"Adriatico Bianco (Crushed)", co:1, c:"Amaretto", d:"16°", oeil:"Blanc opaque, laiteux", nez:"Amande crue, lait d'amande", bouche:"Soyeuse, crémeuse sans crème (vegan)", tell:"À l'œil, impossible à rater : c'est le seul blanc laiteux."},
  {n:"Algebra Extra-Dry", c:"Liqueur de café", d:"19°", oeil:"Brun très foncé, presque opaque", nez:"Café torréfié intense, chocolat noir", bouche:"SÈCHE, corps léger (100 g/L), amertume de café", tell:"Une liqueur de café qui n'est pas sirupeuse : c'est le marqueur."},
- {n:"Bénédictine", c:"Liqueur de plantes", d:"40°", oeil:"Or ambré", nez:"Miel, safran, épices douces, angélique", bouche:"Ronde, mielleuse, 27 plantes, finale herbacée", tell:"Miel + safran à 40° : le seul de ce profil au concours."},
+ {n:"Bénédictine", co:1, c:"Liqueur de plantes", d:"40°", oeil:"Or ambré", nez:"Miel, safran, épices douces, angélique", bouche:"Ronde, mielleuse, 27 plantes, finale herbacée", tell:"Miel + safran à 40° : le seul de ce profil au concours."},
  {n:"Chinola Passion Fruit", c:"Liqueur de fruit", d:"21°", oeil:"Jaune orangé vif", nez:"Fruit de la passion frais, très net", bouche:"Équilibre sucre/acidité du fruit cru", tell:"L'acidité naturelle : une purée serait plus épaisse, un sirop plus plat."},
- {n:"Grand Marnier", c:"Liqueur", d:"40°", oeil:"Ambre orangé", nez:"Bigarade, cognac, bois", bouche:"Orange amère et eau-de-vie, 51 % cognac", tell:"Le fond de cognac le distingue d'un triple sec sec et neutre."},
- {n:"Kota", c:"Liqueur de pandan", d:"18°", oeil:"Vert pâle translucide", nez:"Vanille, riz au lait, biscuit beurré, gazon frais", bouche:"Crémeuse, herbacée en finale", tell:"« Vanille d'Asie » + note de gazon coupé : rien d'autre ne ressemble à ça."},
+ {n:"Grand Marnier", co:1, c:"Liqueur", d:"40°", oeil:"Ambre orangé", nez:"Bigarade, cognac, bois", bouche:"Orange amère et eau-de-vie, 51 % cognac", tell:"Le fond de cognac le distingue d'un triple sec sec et neutre."},
+ {n:"Kota", co:1, c:"Liqueur de pandan", d:"18°", oeil:"Vert pâle translucide", nez:"Vanille, riz au lait, biscuit beurré, gazon frais", bouche:"Crémeuse, herbacée en finale", tell:"« Vanille d'Asie » + note de gazon coupé : rien d'autre ne ressemble à ça."},
  {n:"Marie Brizard", c:"Anisette", d:"25°", oeil:"Cristalline", nez:"Anis vert doux, floral", bouche:"Douce, ronde, sans la puissance d'une absinthe", tell:"Anisé mais à 25° et sucré : une absinthe serait à 60° et amère."},
- {n:"Adriatico Zero", c:"Sans alcool", d:"0 %", oeil:"Ambré clair", nez:"Amande torréfiée, notes pâtissières", bouche:"Profil du Classico sans chaleur alcoolique, touche saline", tell:"Le nez d'amaretto sans aucune brûlure en bouche = la version Zero."},
+ {n:"Adriatico Zero", co:1, c:"Sans alcool", d:"0 %", oeil:"Ambré clair", nez:"Amande torréfiée, notes pâtissières", bouche:"Profil du Classico sans chaleur alcoolique, touche saline", tell:"Le nez d'amaretto sans aucune brûlure en bouche = la version Zero."},
+
+ {n:"Chinola Mango", c:"Liqueur de fruit", d:"21°", oeil:"Jaune orangé opaque, plus dense que la Passion", nez:"Mangue mûre, floral, note résineuse", bouche:"Ronde, moins acide que la Passion Fruit, sucre du fruit frais", tell:"Assemblage de trois variétés dominicaines (Banilejo, Keitt, Kent). Rond et floral là où la Passion est acidulée et tranchante.", co:1},
+ {n:"Giffard Fleur de Sureau Zero", c:"Sans alcool", d:"0 %", oeil:"Jaune paille très pâle, limpide", nez:"Fleur de sureau franche, muscat, note végétale", bouche:"Acidité vive de shrub (vinaigre de vin blanc), sucre de liqueur, aucune chaleur alcoolique", tell:"Le marqueur, c'est l'acidité acétique nette en attaque, qui remplace la structure de l'alcool. Aucun autre produit du coffret n'a ça.", co:1},
+ {n:"Algebra Décaf Extra-Dry", c:"Liqueur de café", d:"19°", oeil:"Brun très foncé, presque opaque", nez:"Café torréfié, chocolat noir — profil très proche de l'Extra-Dry", bouche:"Sèche, corps léger (100 g/L), amertume de café, sans la pointe nerveuse de la caféine", tell:"Quasi indissociable de l'Extra-Dry à l'aveugle. Si les deux sont sur le plateau, jouer la différence de vivacité — sinon répondre Algebra suffit, c'est la marque qui est demandée.", co:1},
 ];
 const DEG_MODES=[{k:"produit", lab:"🥃 Devine le produit"},{k:"famille", lab:"🍶 Devine la catégorie"},{k:"cocktail", lab:"🍸 Devine le cocktail"}];
 let degustMode="produit";
+/* Le coffret de mignonettes reçu un mois avant la finale. */
+let degustCoffret=true;
+function degSource(){ return degustCoffret ? DEGUST.filter(p=>p.co) : DEGUST; }
 function degustQuestions(){
   const qs=[];
+  const SRC=degSource();
   if(degustMode==="produit"){
-    DEGUST.forEach(p=>{
-      const memeCat=DEGUST.filter(x=>x.c===p.c && x.n!==p.n);
+    SRC.forEach(p=>{
+      const memeCat=SRC.filter(x=>x.c===p.c && x.n!==p.n);
       let wrong=shuffle(memeCat).slice(0,3);
-      if(wrong.length<3) wrong=wrong.concat(shuffle(DEGUST.filter(x=>x.n!==p.n && !wrong.includes(x))).slice(0,3-wrong.length));
+      if(wrong.length<3) wrong=wrong.concat(shuffle(SRC.filter(x=>x.n!==p.n && !wrong.includes(x))).slice(0,3-wrong.length));
       qs.push({q:"<b>Œil :</b> "+p.oeil+"<br><b>Nez :</b> "+p.nez+"<br><b>Bouche :</b> "+p.bouche+"<br><span class='handnote' style='color:var(--copper-2)'>Quelle marque partenaire ?</span>",
         opts:shuffle([{t:p.n,ok:true},...wrong.map(w=>({t:w.n,ok:false}))]),
         e:"<b>"+p.n+"</b> ("+p.d+"). "+p.tell});
     });
   } else if(degustMode==="famille"){
-    const cats=[...new Set(DEGUST.map(x=>x.c))];
-    DEGUST.forEach(p=>{
+    const cats=[...new Set(SRC.map(x=>x.c))];
+    SRC.forEach(p=>{
       const wrong=shuffle(cats.filter(c=>c!==p.c)).slice(0,3);
       qs.push({q:"<b>Nez :</b> "+p.nez+"<br><b>Bouche :</b> "+p.bouche+"<br><span class='handnote' style='color:var(--copper-2)'>Quelle catégorie de produit ?</span>",
         opts:shuffle([{t:p.c,ok:true},...wrong.map(w=>({t:w,ok:false}))]),
@@ -3861,9 +3882,17 @@ function degustQuestions(){
 let degustBuilt=false;
 function buildDegustModes(){
   const bar=document.getElementById("degust-modes");
-  bar.innerHTML=DEG_MODES.map(m=>'<button class="chip'+(m.k===degustMode?" active":"")+'" data-k="'+m.k+'">'+m.lab+'</button>').join("");
+  const nCo=DEGUST.filter(p=>p.co).length;
+  bar.innerHTML=DEG_MODES.map(m=>'<button class="chip'+(m.k===degustMode?" active":"")+'" data-k="'+m.k+'">'+m.lab+'</button>').join("")+
+    '<span style="width:14px"></span>'+
+    '<button class="chip'+(degustCoffret?" active":"")+'" data-co="1">📦 Mon coffret ('+nCo+')</button>'+
+    '<button class="chip'+(degustCoffret?"":" active")+'" data-co="0">Toute la gamme ('+DEGUST.length+')</button>';
   bar.querySelectorAll("button").forEach(b=>{
-    b.onclick=()=>{degustMode=b.dataset.k;buildDegustModes();startDegust();};
+    b.onclick=()=>{
+      if(b.dataset.co!==undefined) degustCoffret = b.dataset.co==="1";
+      else degustMode=b.dataset.k;
+      buildDegustModes(); startDegust();
+    };
   });
   degustBuilt=true;
 }
