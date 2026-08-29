@@ -3464,15 +3464,21 @@ function examPool(){
         e:c.n+" — "+c.verre+", "+c.met+".", src:"Dosages"});
     }
   });
-  /* Recettes de l'extrait : retrouver le cocktail à partir de sa composition */
+  /* Le livre : les à-côtés qui se racontent — origines, lieux, auteurs, équivalences.
+     Pas de question sur les dosages : un QCM ne se joue pas sur des fractions. */
   if(typeof VERM!=="undefined"){
-    VERM.forEach(v=>{
+    /* On écarte les notes qui contiennent un dosage (variantes chiffrées)
+       et celles qui décrivent un geste générique, non identifiable. */
+    const utile=v=>v.note && v.note.length>40
+      && !/\d\s*\/\s*\d|traits? de|cuillerée|\d+\s*(tr|cl|c\.)\b/i.test(v.note)
+      && !/^(Frapper|Remuer|Passer|Dans un verre|Verre à|Au shaker)/i.test(v.note);
+    VERM.filter(utile).forEach(v=>{
       const autres=VERM.filter(x=>x.n!==v.n);
       const wrong=shuffle(autres).slice(0,3);
-      if(wrong.length===3 && v.r && v.r.length>12){
-        pool.push({q:"Quel cocktail de l'extrait correspond à cette composition ?<br><span class='handnote' style='color:var(--copper-2)'>"+v.r+"</span>",
+      if(wrong.length===3){
+        pool.push({q:"De quel cocktail de l'extrait Vermeire écrit-il ceci ?<br><span class='handnote' style='color:var(--copper-2)'>"+v.note+"</span>",
           opts:shuffle([{t:v.n,ok:true},...wrong.map(w=>({t:w.n,ok:false}))]),
-          e:"<b>"+v.n+"</b>"+(v.note?" — "+v.note:""), src:"Livre"});
+          e:"<b>"+v.n+"</b> — "+v.m+" · "+v.r, src:"Livre"});
       }
     });
   }
@@ -3493,7 +3499,7 @@ function showExamSetup(){
   document.getElementById("exam-panel").innerHTML=
    '<div class="exam-setup"><p class="handnote" style="font-size:1.5rem;color:var(--gold)">Conditions réelles</p>'+
    '<p style="margin:10px 0 4px">Le chrono tourne, pas de retour en arrière, la correction arrive à la fin.</p>'+
-   '<p class="mini" style="opacity:.8;margin-bottom:16px"><b>Périmètre :</b> les 28 marques partenaires, les degrés, les profils de dégustation, les 13 cocktails imposés avec leurs dosages, et l\'extrait de Vermeire (recettes comprises).<br>'+
+   '<p class="mini" style="opacity:.8;margin-bottom:16px"><b>Périmètre :</b> les 28 marques partenaires, les degrés, les profils de dégustation, les 13 cocktails imposés avec leurs dosages, et l\'extrait de Vermeire — origines, lieux, auteurs et anecdotes.<br>'+
    '<b>Exclus :</b> le socle des 36 cocktails, le règlement de la finale et la culture générale du bar.<br>'+
    '<span style="opacity:.7">'+n+' questions disponibles dans le vivier.</span></p>'+
    EXAM_FORMATS.map(f=>'<button class="btn btn-copper" onclick="startExam(\''+f.k+'\')">'+f.lab+'<br><span style="font-size:.8rem;opacity:.85">'+f.d+'</span></button>').join('')+
