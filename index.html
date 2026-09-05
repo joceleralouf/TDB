@@ -697,6 +697,21 @@ function pingDay(){
   STATS.lastDay=t;
   saveStats();
 }
+
+/* --- Enchaînement automatique ---
+   Bonne réponse : on laisse voir le vert, puis on passe seul.
+   Mauvaise réponse : on s'arrête, c'est là qu'on apprend. */
+const AUTO_NEXT_MS=850;
+let autoNextT=null;
+function autoNext(id, good){
+  clearTimeout(autoNextT);
+  if(!good) return;
+  autoNextT=setTimeout(()=>{
+    const b=document.getElementById(id);
+    if(b && b.offsetParent!==null) b.click();
+  }, AUTO_NEXT_MS);
+}
+
 function recordResult(module, score, total){
   pingDay();
   STATS.totalAnswered+=total; STATS.totalCorrect+=score;
@@ -1522,6 +1537,7 @@ function renderSocleQuiz(){
       fb.innerHTML='<span class="handnote">'+(good?"dans le mille !":"pas tout à fait…")+'</span> '+q.e;
       document.getElementById("ponts-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById("ponts-next").style.display="";
+      autoNext("ponts-next", good);
     };
   });
   document.getElementById("ponts-next").onclick=()=>{st.idx++;renderSocleQuiz();};
@@ -1749,6 +1765,7 @@ function renderQuiz(key){
       fb.innerHTML='<span class="handnote">'+(good?"exact !":"raté…")+'</span> '+q.e;
       document.getElementById(key+"-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById(key+"-next").style.display="";
+      autoNext(key+"-next", good);
     };
   });
   document.getElementById(key+"-next").onclick=()=>{st.idx++;renderQuiz(key);};
@@ -1787,6 +1804,7 @@ function renderVF(){
     fb.innerHTML='<span class="handnote">'+(good?"bien vu !":"piégé…")+'</span> C\u2019était '+(q.r?"VRAI":"FAUX")+'. '+q.e;
     document.getElementById("vf-score").textContent=st.score+" pt"+(st.score>1?"s":"");
     document.getElementById("vf-next").style.display="";
+      autoNext("vf-next", good);
   };
   document.getElementById("vf-true").onclick=()=>answer(true);
   document.getElementById("vf-false").onclick=()=>answer(false);
@@ -1830,6 +1848,7 @@ function renderDeg(){
       fb.innerHTML='<span class="handnote">'+(good?"santé !":"aïe…")+'</span> '+q.e;
       document.getElementById("deg-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById("deg-next").style.display="";
+      autoNext("deg-next", good);
     };
   });
   document.getElementById("deg-next").onclick=()=>{st.idx++;renderDeg();};
@@ -1896,6 +1915,7 @@ function nextChrono(){
     fb.innerHTML='<span class="handnote">'+(pts===4?"frise parfaite !":pts+" / 4 bien placés")+'</span> Ordre correct : '+cur.sorted.map(p=>p.n+" ("+p.y+")").join(" → ");
     document.getElementById("chrono-score").textContent=st.score+" pts";
     document.getElementById("chrono-next").style.display="";
+    autoNext("chrono-next", pts===4);
     document.getElementById("chrono-reset").style.display="none";
   }
 }
@@ -3247,6 +3267,7 @@ function renderSP(){
       fb.innerHTML='<span class="handnote">'+(good?"exact !":"raté…")+'</span> '+q.e;
       document.getElementById("sp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById("sp-next").style.display="";
+      autoNext("sp-next", good);
     };
   });
   document.getElementById("sp-next").onclick=()=>{st.idx++;renderSP();};
@@ -3656,6 +3677,8 @@ function renderImp(){
       fb.innerHTML=(q.flash?'':'<span class="handnote">'+(good?"exact !":"raté…")+'</span> ')+q.e;
       document.getElementById("imp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById("imp-next").style.display="";
+      /* Les cartes mémoire sont là pour être lues : pas d'enchaînement. */
+      autoNext("imp-next", good && !q.flash);
     };
   });
   document.getElementById("imp-next").onclick=()=>{st.idx++;renderImp();};
@@ -4175,6 +4198,7 @@ function renderDegust(){
       fb.innerHTML='<span class="handnote">'+(good?"trouvé !":"raté…")+'</span> '+q.e;
       document.getElementById("degust-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById("degust-next").style.display="";
+      autoNext("degust-next", good);
     };
   });
   document.getElementById("degust-next").onclick=()=>{st.idx++;renderDegust();};
@@ -4252,6 +4276,7 @@ function renderGrandTest(){
       fb.innerHTML='<span class="handnote">'+(good?"oui !":"non…")+'</span> '+q.e;
       document.getElementById("gt-score").textContent=st.score+" pt"+(st.score>1?"s":"");
       document.getElementById("gt-next").style.display="";
+      autoNext("gt-next", good);
     };
   });
   document.getElementById("gt-next").onclick=()=>{st.idx++;renderGrandTest();};
@@ -4316,6 +4341,7 @@ function renderRev(){
       fb.innerHTML='<span class="handnote">'+(good?"maîtrisée, elle sort du carnet !":"pas encore — elle reste à revoir")+'</span> '+q.e;
       document.getElementById("rev-score").textContent=MISTAKES.length+" en attente";
       document.getElementById("rev-next").style.display="";
+      autoNext("rev-next", good);
     };
   });
   document.getElementById("rev-next").onclick=()=>{st.idx++;renderRev();};
