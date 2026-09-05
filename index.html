@@ -38,8 +38,13 @@ body{
 }
 
 
+/* ---------- Recettes concurrentes ---------- */
+.answers button.recipe{text-align:left;line-height:1.45;font-size:.94rem;align-items:flex-start;padding-top:11px;padding-bottom:11px}
+.answers button.recipe b{color:var(--gold);white-space:nowrap}
+.answers button.recipe.correct b{color:var(--ok)}
+.answers button.recipe.wrong b{color:var(--ko)}
 /* ---------- Mode examen ---------- */
-.exam-timer{font-family:Caveat,cursive;font-size:3rem;line-height:1;color:var(--gold);text-align:center;margin:4px 0}
+.exam-timer{font-family:'Fraunces',serif;font-weight:900;font-size:2.6rem;font-variant-numeric:tabular-nums;line-height:1;color:var(--gold);text-align:center;margin:4px 0}
 .exam-timer.warn{color:var(--copper)}
 .exam-timer.danger{color:var(--campari);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
@@ -224,11 +229,12 @@ h2.viewtitle{
 .face .a{font-size:1rem;line-height:1.55}
 .face .flip-hint{position:absolute;bottom:14px;font-size:.75rem;opacity:.55}
 .flash-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.flash-count{font-family:'Caveat',cursive;font-size:1.3rem;color:var(--gold)}
+.flash-count{font-family:'Karla',sans-serif;font-weight:700;font-size:1rem;color:var(--gold)}
 
 /* ---------- Quiz (QCM / VF / Degrés / Ponts) ---------- */
 .quiz-q{
-  font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem;margin-bottom:18px;line-height:1.35;
+  font-family:'Karla',sans-serif;font-weight:600;font-size:1.12rem;margin-bottom:18px;line-height:1.5;
+  letter-spacing:.005em;
 }
 .answers{display:grid;gap:10px}
 .answers button{
@@ -241,12 +247,23 @@ h2.viewtitle{
 .answers button.correct{background:#e3f0e4;border-color:var(--ok);color:#25502e}
 .answers button.wrong{background:#f6e3e0;border-color:var(--ko);color:#7c2418}
 .feedback{
-  margin-top:16px;padding:14px 16px;border-radius:10px;font-size:.92rem;display:none;
+  margin-top:16px;padding:14px 16px;border-radius:10px;display:none;
+  font-family:'Karla',sans-serif;font-size:.98rem;line-height:1.55;
 }
 .feedback.show{display:block;animation:fadein .25s ease}
 .feedback.good{background:#e3f0e4;color:#25502e;border-left:5px solid var(--ok)}
 .feedback.bad{background:#f6e3e0;color:#7c2418;border-left:5px solid var(--ko)}
 .feedback .handnote{color:inherit;font-size:1.15rem}
+/* Le manuscrit reste décoratif : dès qu'un handnote porte de l'information
+   (dosage, consigne, profil), on repasse en Karla, lisible. */
+.quiz-q .handnote,
+.feedback .handnote,
+.answers .handnote,
+.exam-review .handnote{
+  font-family:'Karla',sans-serif;font-size:1rem;font-weight:700;
+  letter-spacing:.01em;line-height:1.5;
+}
+.quiz-q .handnote{display:inline-block;margin-top:6px}
 .quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:12px;flex-wrap:wrap}
 .result-panel{text-align:center;padding:40px 24px}
 .result-panel .big{font-family:'Fraunces',serif;font-weight:900;font-size:3rem;color:var(--copper)}
@@ -375,6 +392,7 @@ h2.viewtitle{
     <button data-view="mind" onclick="showView('mind')">Carte mentale</button>
     <button data-view="sketch" onclick="showView('sketch')">Sketchnotes</button>
     <button data-view="memo" onclick="showView('memo')">Condensé</button>
+    <button data-view="imp" onclick="showView('imp')">Les 13 imposés</button>
     <button data-view="exam" onclick="showView('exam')">⏱ Examen</button>
     <button data-view="dossier" onclick="showView('dossier')">Dossier TDB</button>
     <button data-view="degust" onclick="showView('degust')">Dégustation</button>
@@ -445,6 +463,20 @@ h2.viewtitle{
     <span class="scorepill" id="qcm-score">0 pt</span>
   </div>
   <div class="panel" id="qcm-panel"></div>
+</section>
+
+<!-- ============ LES 13 IMPOSÉS ============ -->
+<section class="view" id="view-imp">
+  <div class="viewhead">
+    <h2 class="viewtitle">Les 13 imposés</h2>
+    <span class="handnote">recettes, dosages et histoires — rien d'autre</span>
+  </div>
+  <div class="toolbar" id="imp-modes"></div>
+  <div class="toolbar">
+    <div class="progressline"><div id="imp-progress"></div></div>
+    <span class="scorepill" id="imp-score">0 pt</span>
+  </div>
+  <div class="panel" id="imp-panel"></div>
 </section>
 
 <!-- ============ EXAMEN ============ -->
@@ -711,7 +743,8 @@ const MODULES = [
   {id:"socleplus", name:"Socle+", desc:"4 exercices ciblés : devine le cocktail, son verre, sa famille, sa garniture.", deg:"100 % socle", icon:"target"},
   {id:"mind", name:"Carte mentale", desc:"Toute la liste partenaires en un coup d'œil, nœud par nœud.", deg:"vue d'ensemble", icon:"mind"},
   {id:"sketch", name:"Sketchnotes", desc:"Méthodes, familles, verres, TAV, techniques… 26 schémas dessinés.", deg:"26 schémas", icon:"sketch"},
-  {id:"exam", name:"Mode examen", desc:"Chrono, sans filet : marques partenaires, cocktails imposés et livre de Vermeire. Rien sur le socle ni sur le règlement.", deg:"conditions réelles", icon:"chrono"},
+  {id:"imp", name:"Les 13 imposés", desc:"Le module dédié : dosages au centilitre, ingrédients, verre, méthode et histoire de chacun des treize.", deg:"tirage au sort", icon:"shaker2"},
+  {id:"exam", name:"Mode examen", desc:"Chrono, sans filet : marques partenaires, cocktails imposés et livre de Vermeire. Rien sur le socle ni sur le règlement.", deg:"conditions réelles", icon:"stopw"},
   {id:"dossier", name:"Dossier TDB", desc:"Rien que le dossier officiel : les 13 cocktails, l'extrait de Vermeire et l'index de ses 108 recettes.", deg:"la source", icon:"dossier"},
   {id:"memo", name:"Le condensé", desc:"Tout le programme en texte suivi, sans quiz : à relire d'une traite, ou à imprimer.", deg:"à relire la veille", icon:"memo"},
   {id:"degust", name:"Dégustation à l'aveugle", desc:"Reconnais un produit à son profil, ou un cocktail à sa composition. L'épreuve à coefficient 3.", deg:"nez & bouche", icon:"nose"},
@@ -727,7 +760,8 @@ const ICONS = {
   deg:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><rect x="19" y="6" width="10" height="26" rx="5" fill="none" stroke="#22302b" stroke-width="2.5"/><circle cx="24" cy="36" r="8" fill="#b23a2b" stroke="#22302b" stroke-width="2.5"/><path d="M24 30V16" stroke="#b23a2b" stroke-width="4" stroke-linecap="round"/></svg>',
   chrono:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M6 32h36" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="32" r="4" fill="#c8813a"/><circle cx="24" cy="32" r="4" fill="#9fbf6b"/><circle cx="36" cy="32" r="4" fill="#b23a2b"/><path d="M12 26v-8M24 26V12M36 26v-6" stroke="#22302b" stroke-width="2" stroke-linecap="round"/></svg>',
   bridge:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M6 34h36" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><path d="M10 34c0-10 6-16 14-16s14 6 14 16" stroke="#c8813a" stroke-width="3" fill="none"/><path d="M17 34v-8M24 34V18M31 34v-8" stroke="#22302b" stroke-width="2"/></svg>',
-  chrono:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="27" r="14" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M24 19v8l6 4" fill="none" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 7h10M24 7v6" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  shaker2:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M18 8h12l-1 6H19z" fill="none" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M19 14h10l2 22a3 3 0 0 1-3 3H20a3 3 0 0 1-3-3z" fill="none" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 24h12" stroke="#c8813a" stroke-width="2.5"/><path d="M36 12l4-2M38 20l5 1" stroke="#9fbf6b" stroke-width="2" stroke-linecap="round"/></svg>',
+  stopw:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><circle cx="24" cy="27" r="14" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M24 19v8l6 4" fill="none" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 7h10M24 7v6" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/></svg>',
   dossier:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M8 12h13l3 4h16v22a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z" fill="none" stroke="#22302b" stroke-width="2.5" stroke-linejoin="round"/><path d="M15 25h18M15 31h12" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round"/></svg>',
   memo:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><rect x="11" y="7" width="26" height="34" rx="3" fill="none" stroke="#22302b" stroke-width="2.5"/><path d="M16 15h16M16 21h16M16 27h11" stroke="#c8813a" stroke-width="2.5" stroke-linecap="round"/><path d="M16 33h7" stroke="#9fbf6b" stroke-width="2.5" stroke-linecap="round"/></svg>',
   nose:'<svg viewBox="0 0 48 48" class="icon" aria-hidden="true"><path d="M20 6 L20 20 Q20 26 15 30 Q10 34 14 38 Q18 42 26 42 Q34 42 34 34 L34 24" fill="none" stroke="#22302b" stroke-width="2.5" stroke-linecap="round"/><circle cx="22" cy="36" r="2.5" fill="#c8813a"/><path d="M38 12 q4 4 0 8 M42 10 q6 6 0 12" stroke="#9fbf6b" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
@@ -1587,6 +1621,7 @@ function showView(id){
   if(id==="degust" && !quizStates.degust) startDegust();
   if(id==="memo") buildMemo();
   if(id==="dossier") buildDossier();
+  if(id==="imp" && !quizStates.imp) startImp();
   if(id==="exam" && !examState) showExamSetup();
   if(id==="deg" && !quizStates.deg) startDeg();
   if(id==="chrono" && !quizStates.chrono) startChrono();
@@ -3415,6 +3450,217 @@ function buildDossier(){
 }
 
 
+
+/* =================== LES 13 IMPOSÉS =================== */
+
+/* --- Fabrique de recettes concurrentes ---
+   Trois leurres par cocktail, construits par déformation de la vraie recette :
+   permutation de deux doses, glissement d'une valeur, substitution d'un
+   ingrédient par son confusable. Objectif : que les quatre se ressemblent. */
+const IMP_CONFUS={
+ "Jus de citron jaune":["Jus de citron vert"],
+ "Jus de citron vert":["Jus de citron jaune"],
+ "FEVER-TREE Soda water":["FEVER-TREE Ginger beer","FEVER-TREE Tonic water"],
+ "FEVER-TREE Ginger beer":["FEVER-TREE Soda water","FEVER-TREE Tonic water"],
+ "FEVER-TREE Tonic water":["FEVER-TREE Soda water","FEVER-TREE Ginger beer"],
+ "Sucre":["Sirop d'orgeat","Sirop grenadine"],
+ "Sirop d'orgeat":["Sucre","Sirop grenadine"],
+ "Sirop grenadine":["Sucre","Sirop d'orgeat"],
+ "CARPANO Classico":["NOILLY PRAT Dry"],
+ "NOILLY PRAT Dry":["CARPANO Classico"],
+ "GRAND MARNIER":["BOUDIER Triple sec"],
+ "BOUDIER Triple sec":["GRAND MARNIER"],
+ "CAMPARI":["BÉNÉDICTINE"],
+ "BÉNÉDICTINE":["CAMPARI"],
+ "Angostura":["Aromatic bitters"],
+ "Vin rouge":["Vin blanc moelleux"],
+ "PONTHIER Framboise":["PONTHIER Fruit de la Passion"],
+ "PONTHIER Fruit de la Passion":["PONTHIER Framboise"],
+ "PONTHIER Banane":["PONTHIER Abricot"],
+};
+const IMP_ECHELLE=["0,5 cl","1 cl","1,5 cl","2 cl","2,5 cl","3 cl","4 cl","4,5 cl","5 cl","6 cl"];
+function impVoisin(v){
+  const i=IMP_ECHELLE.indexOf(v);
+  if(i<0) return null;
+  const c=[];
+  if(i>0) c.push(IMP_ECHELLE[i-1]);
+  if(i<IMP_ECHELLE.length-1) c.push(IMP_ECHELLE[i+1]);
+  return c.length?shuffle(c)[0]:null;
+}
+function impTexte(d){ return d.map(x=>x[0]+" <b>"+x[1]+"</b>").join(" · "); }
+function impLeurres(c){
+  const vrai=c.dose.map(d=>[d[0],d[1]]);
+  const out=[], vus=new Set([impTexte(vrai)]);
+  const pousse=v=>{const t=impTexte(v); if(!vus.has(t)){vus.add(t); out.push(v);} };
+  /* a) permuter deux doses chiffrées */
+  const idx=vrai.map((d,i)=>/\d/.test(d[1])?i:-1).filter(i=>i>=0);
+  if(idx.length>=2){
+    for(const p of shuffle(idx).slice(0,2)){
+      for(const q of shuffle(idx.filter(x=>x!==p)).slice(0,1)){
+        if(vrai[p][1]===vrai[q][1]) continue;
+        const v=vrai.map(d=>[d[0],d[1]]);
+        v[p][1]=vrai[q][1]; v[q][1]=vrai[p][1];
+        pousse(v);
+      }
+    }
+  }
+  /* b) glisser une dose d'un cran */
+  for(const i of shuffle(idx).slice(0,3)){
+    const n=impVoisin(vrai[i][1]);
+    if(!n) continue;
+    const v=vrai.map(d=>[d[0],d[1]]); v[i][1]=n; pousse(v);
+  }
+  /* c) substituer un ingrédient par son confusable */
+  for(const i of shuffle(vrai.map((d,j)=>j))){
+    const alt=IMP_CONFUS[vrai[i][0]];
+    if(!alt) continue;
+    const v=vrai.map(d=>[d[0],d[1]]); v[i][0]=shuffle(alt)[0]; pousse(v);
+  }
+  return shuffle(out).slice(0,3);
+}
+const IMP_MODES=[
+ {k:"dosage",  lab:"🥃 La bonne recette"},
+ {k:"recette", lab:"📋 La composition"},
+ {k:"service", lab:"🍸 Verre & méthode"},
+ {k:"histoire",lab:"📖 L'histoire"},
+ {k:"tout",    lab:"🎲 Tout mélangé"},
+];
+let impMode="dosage";
+function impQuestions(){
+  const qs=[];
+  const veut=k=>impMode==="tout"||impMode===k;
+  IMPOSES.forEach(c=>{
+    const autres=IMPOSES.filter(x=>x.n!==c.n);
+
+    /* --- DOSAGE : quelle quantité pour tel ingrédient --- */
+    if(veut("dosage")){
+      /* Quatre recettes voisines, une seule juste */
+      const leurres=impLeurres(c);
+      if(leurres.length===3) qs.push({
+        q:"Laquelle est la <b>bonne</b> recette du <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:impTexte(c.dose),ok:true},...leurres.map(l=>({t:impTexte(l),ok:false}))]),
+        e:"<b>"+c.n+"</b> — "+c.verre+", "+c.met+". "+c.tip, recipe:true});
+      /* retrouver le cocktail depuis le dosage complet */
+      const wrongC=shuffle(autres).slice(0,3);
+      qs.push({q:"À quel cocktail correspond ce dosage ?<br><span class='handnote' style='color:var(--copper-2)'>"+c.dose.map(d=>d[0]+" "+d[1]).join(" · ")+"</span>",
+        opts:shuffle([{t:c.n,ok:true},...wrongC.map(w=>({t:w.n,ok:false}))]),
+        e:"<b>"+c.n+"</b> — "+c.verre+", "+c.met+". "+c.tip});
+      /* deux recettes de cocktails différents, laquelle est celle-ci */
+      /* Le leurre croisé ne vaut que si les deux partagent le spiritueux de base :
+         une recette d'une autre famille se repère d'un coup d'œil. */
+      const cible=shuffle(autres.filter(x=>x.grp===c.grp))[0];
+      if(cible){
+        const l2=impLeurres(cible);
+        if(l2.length>=2) qs.push({
+          q:"Laquelle est la <b>bonne</b> recette du <b>"+cible.n+"</b> ?",
+          opts:shuffle([{t:impTexte(cible.dose),ok:true},...l2.slice(0,2).map(l=>({t:impTexte(l),ok:false})),{t:impTexte(c.dose),ok:false}]),
+          e:"<b>"+cible.n+"</b> — "+cible.verre+", "+cible.met+". "+cible.tip+"<br><span class='mini'>Le leurre venait du "+c.n+".</span>", recipe:true});
+      }
+    }
+
+    /* --- COMPOSITION : ingrédients officiels --- */
+    if(veut("recette")){
+      const dehors=[...new Set(autres.flatMap(x=>x.ing))].filter(i=>!c.ing.includes(i));
+      const intrus=shuffle(dehors)[0];
+      if(intrus) qs.push({
+        q:"Lequel n'entre PAS dans le <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:intrus,ok:true},...shuffle(c.ing).slice(0,3).map(v=>({t:v,ok:false}))]),
+        e:"Composition officielle (annexe #2) : "+c.ing.join(" · ")});
+      const wrongB=shuffle([...new Set(autres.map(x=>x.base))].filter(b=>b!==c.base)).slice(0,3);
+      if(wrongB.length===3) qs.push({
+        q:"Quel est le spiritueux de base du <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:c.base,ok:true},...wrongB.map(w=>({t:w,ok:false}))]),
+        e:"<b>"+c.n+"</b> : "+c.ing.join(" · ")});
+      const wrongG=shuffle(IMP_GROUPES.filter(g=>g!==c.grp)).slice(0,3);
+      if(wrongG.length===3) qs.push({
+        q:"Dans quelle famille de spiritueux ranges-tu le <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:c.grp,ok:true},...wrongG.map(w=>({t:w,ok:false}))]),
+        e:"Groupe <b>"+c.grp+"</b> — "+IMPOSES.filter(x=>x.grp===c.grp).map(x=>x.n).join(", ")+"."});
+    }
+
+    /* --- SERVICE : verre, méthode, famille --- */
+    if(veut("service")){
+      qs.push({q:"Dans quel verre sers-tu le <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:c.verre,ok:true},...IMP_VERRES.filter(v=>v!==c.verre).map(v=>({t:v,ok:false}))]),
+        e:"<b>"+c.n+"</b> — "+c.verre+", "+c.met+". Rappel : coupe 220 ml, rocks 295 ml, highball 330 ml."});
+      const mets=[...new Set(IMPOSES.map(x=>x.met))];
+      const wrongM=shuffle(mets.filter(m=>m!==c.met)).slice(0,3);
+      if(wrongM.length===3) qs.push({
+        q:"Quelle méthode pour le <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:c.met,ok:true},...wrongM.map(w=>({t:w,ok:false}))]),
+        e:"<b>"+c.n+"</b> — "+c.met+". "+c.tip});
+      const fams=[...new Set(IMPOSES.map(x=>x.fam))];
+      const wrongF=shuffle(fams.filter(f=>f!==c.fam)).slice(0,3);
+      if(wrongF.length===3) qs.push({
+        q:"À quelle famille de cocktails appartient le <b>"+c.n+"</b> ?",
+        opts:shuffle([{t:c.fam,ok:true},...wrongF.map(w=>({t:w,ok:false}))]),
+        e:"<b>"+c.n+"</b> — "+c.fam+"."});
+    }
+
+    /* --- HISTOIRE --- */
+    if(veut("histoire")){
+      const txt=c.hist.replace(/<[^>]+>/g,"");
+      const wrongH=shuffle(autres).slice(0,3);
+      qs.push({q:"De quel cocktail s'agit-il ?<br><span class='handnote' style='color:var(--copper-2)'>"+txt.slice(0,240)+(txt.length>240?"…":"")+"</span>",
+        opts:shuffle([{t:c.n,ok:true},...wrongH.map(w=>({t:w.n,ok:false}))]),
+        e:"<b>"+c.n+"</b> — "+c.hist});
+      qs.push({q:"Raconte l'histoire du <b>"+c.n+"</b>.",
+        opts:[{t:"Afficher la réponse",ok:true}],
+        e:c.hist+"<br><br><i>"+c.note+"</i>", flash:true});
+    }
+  });
+  return shuffle(qs).slice(0, impMode==="tout"?25:20);
+}
+let impBuilt=false;
+function buildImpModes(){
+  const bar=document.getElementById("imp-modes");
+  bar.innerHTML=IMP_MODES.map(m=>'<button class="chip'+(m.k===impMode?" active":"")+'" data-k="'+m.k+'">'+m.lab+'</button>').join("");
+  bar.querySelectorAll("button").forEach(b=>{
+    b.onclick=()=>{impMode=b.dataset.k;buildImpModes();startImp();};
+  });
+  impBuilt=true;
+}
+function startImp(){
+  if(!impBuilt) buildImpModes();
+  quizStates.imp={qs:impQuestions(), idx:0, score:0, max:0};
+  renderImp();
+}
+function renderImp(){
+  const st=quizStates.imp, panel=document.getElementById("imp-panel");
+  document.getElementById("imp-progress").style.width=(100*st.idx/st.qs.length)+"%";
+  document.getElementById("imp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+  if(st.idx>=st.qs.length){
+    const pct=st.max?Math.round(100*st.score/st.max):0;
+    recordResult("Imposés",st.score,st.max||st.qs.length);
+    panel.innerHTML='<div class="result-panel"><div class="big">'+st.score+' / '+st.max+'</div>'+
+      '<p style="margin:10px 0 20px">'+(pct>=85?"Les treize sont en place. C\'est ce qu\'il faut : le tirage au sort tombe juste avant ton passage.":"Reprends la fiche « Les 13 cocktails imposés » : elle les range par spiritueux de base.")+'</p>'+
+      '<button class="btn btn-copper" onclick="startImp()">Nouvelle série</button></div>';
+    document.getElementById("imp-progress").style.width="100%";
+    return;
+  }
+  const q=st.qs[st.idx];
+  let html='<div class="quiz-q">'+q.q+'</div><div class="answers">';
+  q.opts.forEach((o,i)=>{html+='<button data-i="'+i+'"'+(q.recipe?' class="recipe"':'')+'>'+(q.flash?'':'<span class="kbd">'+(i+1)+'</span>')+o.t+'</button>';});
+  html+='</div><div class="feedback" id="imp-fb"></div><div class="quiz-footer"><span class="handnote" style="color:var(--copper-2)">'+(st.idx+1)+' / '+st.qs.length+(q.flash?' — carte mémoire, non notée':'')+'</span><button class="btn btn-copper" id="imp-next" style="display:none">Suivant →</button></div>';
+  panel.innerHTML=html;
+  panel.querySelectorAll(".answers button").forEach(btn=>{
+    btn.onclick=()=>{
+      const good=q.opts[+btn.dataset.i].ok;
+      panel.querySelectorAll(".answers button").forEach(b=>{b.disabled=true;if(q.opts[+b.dataset.i].ok)b.classList.add("correct");});
+      if(!q.flash){
+        st.max++;
+        if(!good){ btn.classList.add("wrong"); logMistake("Imposés",q); } else { st.score++; clearMistake(q); }
+      }
+      const fb=document.getElementById("imp-fb");
+      fb.className="feedback show "+(q.flash?"good":(good?"good":"bad"));
+      fb.innerHTML=(q.flash?'':'<span class="handnote">'+(good?"exact !":"raté…")+'</span> ')+q.e;
+      document.getElementById("imp-score").textContent=st.score+" pt"+(st.score>1?"s":"");
+      document.getElementById("imp-next").style.display="";
+    };
+  });
+  document.getElementById("imp-next").onclick=()=>{st.idx++;renderImp();};
+}
+
 /* =================== MODE EXAMEN =================== */
 /* Périmètre strict : marques partenaires + 13 cocktails imposés.
    Exclut le socle des 36, le règlement du concours et le livre. */
@@ -4016,7 +4262,7 @@ function renderGrandTest(){
 function refreshDashboard(){
   const el=document.getElementById("dashboard");
   if(!el) return;
-  const modules=["QCM","Vrai/Faux","Degrés","Chronologie","Socle","Socle+","Dégustation","Examen","Grand test"];
+  const modules=["QCM","Vrai/Faux","Degrés","Chronologie","Socle","Socle+","Dégustation","Imposés","Examen","Grand test"];
   const bestCount=modules.filter(m=>STATS.best[m]).length;
   const avg = STATS.totalAnswered ? Math.round(100*STATS.totalCorrect/STATS.totalAnswered) : 0;
   const gt = STATS.best["Grand test"];
